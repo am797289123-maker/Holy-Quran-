@@ -108,7 +108,7 @@
         .tasbih-circle:active { transform: scale(0.95); }
         .ai-float-btn { position: fixed; bottom: 90px; left: 20px; background: linear-gradient(135deg, var(--purple), #8e44ad); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; cursor: pointer; box-shadow: 0 4px 20px rgba(155,89,182,0.4); z-index: 2000; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(155,89,182,0.7); } 70% { box-shadow: 0 0 0 15px rgba(155,89,182,0); } 100% { box-shadow: 0 0 0 0 rgba(155,89,182,0); } }
-        .ai-chat-window { display: none; position: fixed; bottom: 165px; left: 20px; width: 340px; height: 460px; background: var(--white); border-radius: 15px; box-shadow: 0 5px 30px rgba(0,0,0,0.3); z-index: 2001; flex-direction: column; overflow: hidden; border: 2px solid var(--purple); }
+        .ai-chat-window { display: none; position: fixed; top:0; left:0; right:0; bottom:0; width:100%; height:100%; background: var(--white); z-index: 2001; flex-direction: column; overflow: hidden; }
         .ai-chat-window.open { display: flex; }
         .ai-chat-header { background: var(--purple); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
         .ai-chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 10px; }
@@ -128,8 +128,7 @@
         .language-selector select { width: 100%; padding: 12px; border: 2px solid var(--light-gray); border-radius: 8px; font-size: 1rem; font-family: 'Tajawal', sans-serif; cursor: pointer; background: var(--white); color: var(--text); }
         .notification { position: fixed; top: 20px; left: 50%; transform: translateX(-50%) translateY(-120px); background: var(--primary); color: white; padding: 15px 30px; border-radius: 30px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); z-index: 4000; transition: 0.3s; font-weight: 600; white-space: nowrap; }
         .notification.show { transform: translateX(-50%) translateY(0); }
-        .scroll-top { position: fixed; bottom: 90px; right: 20px; background: var(--secondary); color: white; width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 3px 15px rgba(0,0,0,0.3); z-index: 999; opacity: 0; transition: 0.3s; font-size: 1.2rem; border: none; }
-        .scroll-top.visible { opacity: 1; }
+/* scroll-top removed */
         .share-btn { background: var(--info); color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-size: 0.9rem; margin-top: 10px; font-family: 'Tajawal', sans-serif; }
         .name-card { background: var(--white); border-radius: 10px; padding: 15px; text-align: center; border: 1px solid var(--light-gray); cursor: pointer; transition: 0.2s; }
         .name-card:hover { border-color: var(--secondary); background: #fffdf5; transform: translateY(-2px); }
@@ -163,6 +162,40 @@
     </style>
 </head>
 <body>
+
+<div id="splash-screen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:linear-gradient(135deg,#004d00,#006400,#1a5c1a);z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'Tajawal',sans-serif;color:white;transition:opacity 0.8s">
+  <div style="font-size:5rem;margin-bottom:10px;animation:splBounce 1s ease infinite alternate">🕌</div>
+  <div style="font-family:'Amiri',serif;font-size:1.8rem;margin-bottom:8px;text-align:center">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+  <div style="font-size:1.2rem;font-weight:700;margin-bottom:4px">المساعد الإسلامي</div>
+  <div id="spl-status" style="font-size:0.85rem;opacity:0.85;margin-bottom:25px;margin-top:8px">⏳ جاري الاتصال...</div>
+  <div style="width:220px;height:5px;background:rgba(255,255,255,0.2);border-radius:3px;overflow:hidden">
+    <div id="spl-bar" style="height:100%;width:0%;background:#d4af37;border-radius:3px;transition:width 1.5s ease"></div>
+  </div>
+</div>
+<style>@keyframes splBounce{from{transform:translateY(0)}to{transform:translateY(-14px)}}</style>
+<script>
+(function(){
+  function hide(){var s=document.getElementById('splash-screen');if(s){s.style.opacity='0';setTimeout(function(){s.remove();},900);}}
+  function check(){
+    var bar=document.getElementById('spl-bar');
+    var st=document.getElementById('spl-status');
+    setTimeout(function(){if(bar)bar.style.width='55%';},200);
+    fetch('https://www.google.com/favicon.ico',{mode:'no-cors',cache:'no-cache'})
+      .then(function(){
+        if(bar)bar.style.width='100%';
+        if(st)st.textContent='✅ متصل بالإنترنت';
+        setTimeout(hide,900);
+      })
+      .catch(function(){
+        if(bar)bar.style.width='100%';
+        if(st)st.textContent='⚠️ لا يوجد اتصال — بعض الميزات محدودة';
+        setTimeout(hide,2000);
+      });
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',function(){setTimeout(check,300);});}
+  else{setTimeout(check,300);}
+})();
+</script>
 
 <header>
     <div class="top-bar">
@@ -214,6 +247,7 @@
             <div class="menu-item" onclick="showSection('ethics')"><span>🤲</span><p>الأخلاق</p></div>
             <div class="menu-item" onclick="showSection('quiz')"><span>📝</span><p>اختبارات</p></div>
             <div class="menu-item" onclick="showSection('mosques')"><span>🕌</span><p>المساجد</p></div>
+            <div class="menu-item" onclick="showSection('audio-player')"><span>🎧</span><p>تسميع</p></div>
         </div>
     </div>
 </div>
@@ -234,6 +268,105 @@
         </div>
     </div>
     <div id="surah-list"><div class="loading"><div class="loading-spinner"></div><p>جاري التحميل...</p></div></div>
+</div>
+
+
+<!-- قسم التسميع -->
+<div id="audio-player" class="section">
+  <h2 id="recitation-title" style="text-align:center;color:var(--primary);margin-bottom:15px">🎤 تسميع القرآن</h2>
+
+  <!-- تبويبات -->
+  <div class="tabs" style="margin-bottom:15px">
+    <button class="tab-btn active" id="rec-tab-btn-listen" onclick="recTab('listen',this)">🎧 استماع</button>
+    <button class="tab-btn" id="rec-tab-btn-recite" onclick="recTab('recite',this)">🎤 تسميع</button>
+    <button class="tab-btn" id="rec-tab-btn-dl" onclick="recTab('dl',this)">⬇️ تنزيل</button>
+  </div>
+
+  <!-- تبويب الاستماع -->
+  <div id="rec-tab-listen">
+    <div class="card" style="text-align:center;margin-bottom:15px">
+      <div id="ap-icon" style="width:80px;height:80px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 12px">🕌</div>
+      <div id="ap-title" style="font-family:'Amiri',serif;font-size:1.25rem;color:var(--primary);font-weight:700;margin-bottom:3px">اختر سورة للاستماع</div>
+      <div id="ap-sub" style="font-size:0.8rem;color:var(--gray);margin-bottom:14px">مشاري راشد العفاسي</div>
+      <audio id="main-audio" style="width:100%;border-radius:10px;margin-bottom:14px" controls></audio>
+      <div style="display:flex;justify-content:center;gap:14px;margin-bottom:12px">
+        <button onclick="apPrev()" style="background:var(--light-gray);border:none;width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer">⏮</button>
+        <button onclick="apToggle()" id="ap-btn" style="background:var(--primary);border:none;width:55px;height:55px;border-radius:50%;font-size:1.5rem;color:white;cursor:pointer">▶</button>
+        <button onclick="apNext()" style="background:var(--light-gray);border:none;width:44px;height:44px;border-radius:50%;font-size:1.3rem;cursor:pointer">⏭</button>
+      </div>
+      <select id="ap-reciter" style="padding:8px 14px;border-radius:20px;border:1px solid var(--light-gray);font-family:'Tajawal',sans-serif;background:var(--white);color:var(--text)">
+        <option value="0">عبد الباسط عبد الصمد</option>
+        <option value="1">محمود خليل الحصري</option>
+        <option value="2" selected>مشاري راشد العفاسي</option>
+        <option value="3">سعد الغامدي</option>
+      </select>
+    </div>
+    <div class="card">
+      <h3>📖 اختر السورة</h3>
+      <div id="ap-surah-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin-top:10px"></div>
+    </div>
+  </div>
+
+  <!-- تبويب التسميع التفاعلي -->
+  <div id="rec-tab-recite" style="display:none">
+    <!-- اختيار السورة -->
+    <div class="card" style="margin-bottom:12px">
+      <h3>🎤 <span id="rec-h3">اختر سورة للتسميع</span></h3>
+      <select id="rec-surah-select" onchange="recSelectSurah(this.value)" style="width:100%;padding:10px;border:1px solid var(--light-gray);border-radius:10px;font-family:'Tajawal',sans-serif;background:var(--white);color:var(--text);margin-top:8px">
+        <option value="">-- اختر السورة --</option>
+      </select>
+    </div>
+
+    <!-- الآية الحالية -->
+    <div id="rec-ayah-card" class="card" style="display:none;margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span id="rec-ayah-num" style="background:var(--primary);color:white;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.85rem">1</span>
+        <span id="rec-progress-txt" style="font-size:0.82rem;color:var(--gray)">آية 1 من 7</span>
+        <button onclick="recSkip()" style="background:var(--light-gray);border:none;padding:5px 12px;border-radius:15px;cursor:pointer;font-size:0.8rem;font-family:'Tajawal',sans-serif">تخطي ⏭</button>
+      </div>
+
+      <!-- الآية بالعربي مع تلوين الأخطاء -->
+      <div id="rec-ayah-text" style="font-family:'Amiri',serif;font-size:1.6rem;line-height:2.2;text-align:center;direction:rtl;margin-bottom:16px;padding:15px;background:var(--light-gray);border-radius:10px;min-height:80px"></div>
+
+      <!-- شريط التقدم -->
+      <div style="background:var(--light-gray);border-radius:10px;height:8px;margin-bottom:16px">
+        <div id="rec-progress-bar" style="background:var(--primary);height:100%;border-radius:10px;width:0%;transition:width 0.3s"></div>
+      </div>
+
+      <!-- نتيجة التسميع -->
+      <div id="rec-result-box" style="display:none;padding:12px;border-radius:10px;margin-bottom:12px;font-size:0.9rem;direction:rtl;font-family:'Tajawal',sans-serif"></div>
+
+      <!-- أزرار التحكم -->
+      <div style="display:flex;gap:10px;justify-content:center">
+        <button id="rec-mic-btn" onclick="recStart()" style="background:var(--primary);color:white;border:none;padding:14px 28px;border-radius:25px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700;font-size:1rem;display:flex;align-items:center;gap:8px">
+          🎤 ابدأ التسميع
+        </button>
+        <button onclick="recPlayAyah()" style="background:var(--secondary);color:white;border:none;padding:14px 20px;border-radius:25px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700">
+          🔊 استمع
+        </button>
+      </div>
+    </div>
+
+    <!-- ملخص الجلسة -->
+    <div id="rec-summary" style="display:none" class="card">
+      <h3 style="text-align:center;color:var(--primary)">📊 نتيجة التسميع</h3>
+      <div id="rec-summary-content"></div>
+      <button onclick="recRestart()" style="width:100%;margin-top:12px;padding:12px;background:var(--primary);color:white;border:none;border-radius:10px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700;font-size:0.95rem">🔄 إعادة التسميع</button>
+    </div>
+  </div>
+
+  <!-- تبويب التنزيل -->
+  <div id="rec-tab-dl" style="display:none">
+    <div class="card">
+      <h3>⬇️ تنزيل التلاوات</h3>
+      <p style="font-size:0.82rem;color:var(--gray);margin-bottom:12px">مساحة تنزيل <strong>غير محدودة</strong></p>
+      <div id="ap-dl-list"></div>
+      <div style="text-align:center;margin-top:12px">
+        <button onclick="apLoadMoreDl()" style="padding:10px 28px;background:var(--primary);color:white;border:none;border-radius:20px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.9rem">⬇️ تحميل المزيد</button>
+        <p id="ap-dl-count" style="font-size:0.75rem;color:var(--gray);margin-top:8px">لا يوجد حد للتنزيل</p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <!-- عارض السورة -->
@@ -321,11 +454,11 @@
     <div class="card" style="text-align:center">
         <h3>🔢 المسبحة الإلكترونية</h3>
         <div class="tabs" style="justify-content:center;margin-top:10px">
-            <button class="tab-btn active" onclick="setPhrase('سُبْحَانَ اللَّهِ',33)">تسبيح</button>
-            <button class="tab-btn" onclick="setPhrase('الْحَمْدُ لِلَّهِ',33)">تحميد</button>
-            <button class="tab-btn" onclick="setPhrase('اللَّهُ أَكْبَرُ',33)">تكبير</button>
-            <button class="tab-btn" onclick="setPhrase('أَسْتَغْفِرُ اللَّهَ',100)">استغفار</button>
-            <button class="tab-btn" onclick="setPhrase('لَا إِلَهَ إِلَّا اللَّهُ',100)">تهليل</button>
+            <button id="tb-tasbih" class="tab-btn active" onclick="setPhrase('سُبْحَانَ اللَّهِ',33)">تسبيح</button>
+            <button id="tb-tahmid" class="tab-btn" onclick="setPhrase('الْحَمْدُ لِلَّهِ',33)">تحميد</button>
+            <button id="tb-takbir" class="tab-btn" onclick="setPhrase('اللَّهُ أَكْبَرُ',33)">تكبير</button>
+            <button id="tb-istighfar" class="tab-btn" onclick="setPhrase('أَسْتَغْفِرُ اللَّهَ',100)">استغفار</button>
+            <button id="tb-tahlil" class="tab-btn" onclick="setPhrase('لَا إِلَهَ إِلَّا اللَّهُ',100)">تهليل</button>
         </div>
         <p id="tasbih-text" style="font-family:'Amiri',serif;font-size:1.5rem;margin:15px 0;color:var(--primary)">سُبْحَانَ اللَّهِ</p>
         <div class="tasbih-circle" onclick="incrementTasbih()" id="tasbih-circle">
@@ -419,9 +552,39 @@
     </div>
     <div class="card" style="margin-top:20px">
         <h3>📊 إحصائيات التطبيق</h3>
-        <p>عدد مرات الاستخدام: <strong id="app-usage">0</strong></p>
-        <p style="margin-top:8px">آخر استخدام: <strong id="last-usage">-</strong></p>
+        <p id="label-usage">عدد مرات الاستخدام: <strong id="app-usage">0</strong></p>
+        <p style="margin-top:8px" id="label-last-usage">آخر استخدام: <strong id="last-usage">-</strong></p>
         <button class="tab-btn" onclick="clearData()" style="background:var(--danger);color:white;border-color:var(--danger);margin-top:15px">🗑️ مسح البيانات</button>
+    </div>
+    <!-- إعدادات AI -->
+    <div class="card" style="margin-top:15px;border-right:4px solid var(--purple)">
+        <h3 style="color:var(--purple)">🤖 إعدادات المساعد الذكي</h3>
+        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:12px">أدخل مفتاح API لتفعيل المساعد — Groq مجاني 100%</p>
+        
+        <label style="font-weight:600;font-size:0.88rem;display:block;margin-bottom:6px">مزود الـ AI</label>
+        <select id="ai-provider-select" onchange="saveAIProvider(this.value)" style="width:100%;padding:10px;border:1px solid var(--light-gray);border-radius:8px;font-family:'Tajawal',sans-serif;background:var(--white);color:var(--text);margin-bottom:10px">
+            <option value="groq">🆓 Groq (مجاني - groq.com)</option>
+            <option value="gemini">🆓 Google Gemini (مجاني - aistudio.google.com)</option>
+            <option value="openai">💰 OpenAI (مدفوع)</option>
+        </select>
+        
+        <label style="font-weight:600;font-size:0.88rem;display:block;margin-bottom:6px">مفتاح API</label>
+        <div style="display:flex;gap:8px">
+            <input type="password" id="ai-key-input" placeholder="gsk_..." 
+                style="flex:1;padding:10px;border:1px solid var(--light-gray);border-radius:8px;font-family:monospace;font-size:0.85rem;background:var(--white);color:var(--text)"
+                value="">
+            <button onclick="saveAIKey()" style="background:var(--purple);color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700">حفظ</button>
+        </div>
+        <div style="margin-top:8px;padding:8px 10px;background:var(--light-gray);border-radius:6px;font-size:0.78rem;color:var(--gray)">
+            💡 للحصول على مفتاح Groq مجاني: اذهب إلى <strong>console.groq.com</strong> → API Keys → Create API Key
+        </div>
+        <div id="ai-key-status" style="margin-top:8px;font-size:0.82rem;display:none"></div>
+    </div>
+
+    <div style="margin-top:22px;margin-bottom:8px">
+        <button id="admin-open-btn" onclick="openAdmin()" style="width:100%;padding:15px;background:linear-gradient(135deg,#1a1a2e,#16213e);color:#d4af37;border:2px solid #d4af37;border-radius:13px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:1.05rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:10px">
+            🛡️ لوحة الإدارة
+        </button>
     </div>
 </div>
 
@@ -441,23 +604,40 @@
 
 <!-- AI Chat -->
 <div class="ai-chat-window" id="ai-chat-window">
-    <div class="ai-chat-header">
-        <span>🤖 المساعد الإسلامي</span>
-        <button onclick="toggleAIChat()" style="background:none;border:none;color:white;font-size:1.3rem;cursor:pointer">×</button>
+  <div style="background:linear-gradient(135deg,#006400,#004d00);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:38px;height:38px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem">🤖</div>
+      <div>
+        <div style="color:white;font-weight:700;font-size:1rem;font-family:'Tajawal',sans-serif">المساعد الإسلامي</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.72rem;font-family:'Tajawal',sans-serif">جاهز للإجابة على أي سؤال</div>
+      </div>
     </div>
-    <div class="ai-chat-body" id="ai-chat-body">
-        <div class="ai-message bot">السلام عليكم! 👋<br>اسألني عن أي شيء في الإسلام — القرآن، الحديث، الفقه، العقيدة...</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="clearAIHistory()" style="background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 11px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem">🗑️ مسح</button>
+      <button onclick="toggleAIChat()" style="background:rgba(255,255,255,0.15);border:none;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:1.2rem">×</button>
     </div>
-    <div class="ai-chat-input">
-        <input type="text" id="ai-input" placeholder="اكتب سؤالك..." onkeypress="if(event.key==='Enter')sendAIQuestion()">
-        <button onclick="sendAIQuestion()">إرسال</button>
+  </div>
+  <div id="ai-chat-body" style="flex:1;overflow-y:auto;padding:16px;background:#f4f4f4;display:flex;flex-direction:column;gap:12px">
+    <div style="text-align:center;padding:25px 10px">
+      <div style="font-size:3.5rem;margin-bottom:10px">🕌</div>
+      <div style="font-family:'Amiri',serif;font-size:1.15rem;color:var(--primary);margin-bottom:8px">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <div style="font-size:0.88rem;color:#666;font-family:'Tajawal',sans-serif">اسألني عن أي شيء — القرآن، الفقه، العلوم، أو أي سؤال عام</div>
     </div>
+  </div>
+  <div style="padding:10px 12px;background:var(--white);border-top:1px solid #e0e0e0;display:flex;gap:8px;align-items:flex-end;flex-shrink:0">
+    <textarea id="ai-input" placeholder="اكتب سؤالك هنا..." rows="1"
+      style="flex:1;padding:10px 14px;border:1.5px solid #ddd;border-radius:20px;font-family:'Tajawal',sans-serif;font-size:0.95rem;resize:none;outline:none;background:var(--white);color:var(--text);max-height:120px;overflow-y:auto"
+      onkeypress="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendAIQuestion();}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+    <button onclick="sendAIQuestion()" id="ai-send-btn" style="background:var(--primary);color:white;border:none;width:44px;height:44px;border-radius:50%;cursor:pointer;font-size:1.3rem;flex-shrink:0;display:flex;align-items:center;justify-content:center">↑</button>
+  </div>
 </div>
 
 <!-- Bottom Nav -->
 <nav>
     <button onclick="showSection('home')" id="nav-home" class="active"><span>🏠</span><span>الرئيسية</span></button>
     <button onclick="showSection('quran')" id="nav-quran"><span>📖</span><span>القرآن</span></button>
+    <button onclick="showSection('audio-player')" id="nav-audio-player"><span>🎧</span><span>تسميع</span></button>
     <button onclick="showSection('athkar')" id="nav-athkar"><span>📿</span><span>الأذكار</span></button>
     <button onclick="showSection('tasbih')" id="nav-tasbih"><span>🔢</span><span>المسبحة</span></button>
     <button onclick="showSection('duas')" id="nav-duas"><span>🤲</span><span>الأدعية</span></button>
@@ -465,7 +645,7 @@
     <button onclick="showSection('qibla')" id="nav-qibla"><span>🧭</span><span>القبلة</span></button>
 </nav>
 
-<button class="scroll-top" id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">⬆️</button>
+
 <div class="notification" id="notification"></div>
 
 <script>
@@ -930,7 +1110,7 @@ window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('stat-prayers').textContent = appState.statPrayers;
   document.getElementById('stat-athkar').textContent = appState.statAthkar;
   window.addEventListener('scroll', () => {
-    document.getElementById('scroll-top').classList.toggle('visible', window.scrollY > 300);
+    const _st=document.getElementById('scroll-top');if(_st)_st.classList.toggle('visible', window.scrollY > 300);
   });
   if (localStorage.getItem('theme') === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
@@ -947,9 +1127,40 @@ window.addEventListener('DOMContentLoaded', () => {
 function updateClock() {
   const now = new Date();
   const h = toHijri(now);
-  const HM = ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الثانية','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'];
-  const DA = ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
-  document.getElementById('hijri-date').textContent = `${DA[now.getDay()]} ${h.d} ${HM[h.m-1]} ${h.y} هـ`;
+
+  const MONTHS = {
+    ar: ['محرم','صفر','ربيع الأول','ربيع الثاني','جمادى الأولى','جمادى الثانية','رجب','شعبان','رمضان','شوال','ذو القعدة','ذو الحجة'],
+    en: ["Muharram","Safar","Rabi I","Rabi II","Jumada I","Jumada II","Rajab","Shaban","Ramadan","Shawwal","Dhul Qidah","Dhul Hijjah"],
+    ko: ['무하람','사파르','라비 1','라비 2','주마다 1','주마다 2','라잡','샤반','라마단','샤왈','둘까다','둘히자'],
+    ja: ['ムハッラム','サファル','ラビーウ1','ラビーウ2','ジュマーダー1','ジュマーダー2','ラジャブ','シャアバーン','ラマダーン','シャッワール','ズー・アル＝カアダ','ズー・アル＝ヒッジャ'],
+    fr: ["Mouharram","Safar","Rabi I","Rabi II","Joumada I","Joumada II","Rajab","Chaabane","Ramadan","Chawwal","Dhou al-Qida","Dhou al-Hijja"],
+    de: ["Muharram","Safar","Rabi I","Rabi II","Dschumada I","Dschumada II","Radschab","Schaban","Ramadan","Schawwal","Dhul Qada","Dhul Hijja"],
+    tr: ["Muharrem","Safer","Rebiulevvel","Rebiulahir","Cemaziyelevvel","Cemaziyelahir","Recep","Saban","Ramazan","Sevval","Zilkade","Zilhicce"],
+    ru: ['Мухаррам','Сафар','Раби I','Раби II','Джумада I','Джумада II','Раджаб','Шаабан','Рамадан','Шавваль','Зуль-каада','Зуль-хиджа'],
+    zh: ['穆哈兰姆','萨法尔','赖比尔1','赖比尔2','主马达1','主马达2','赖哲布','舍尔邦','莱麦丹','闪瓦鲁','都卡尔达','都尔黑哲'],
+    ur: ['محرم','صفر','ربیع الاول','ربیع الثانی','جمادی الاول','جمادی الثانی','رجب','شعبان','رمضان','شوال','ذوالقعدہ','ذوالحجہ'],
+  };
+  const DAYS = {
+    ar: ['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'],
+    en: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+    ko: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'],
+    ja: ['日曜日','月曜日','火曜日','水曜日','木曜日','金曜日','土曜日'],
+    fr: ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'],
+    de: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+    tr: ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'],
+    ru: ['Воскресенье','Понедельник','Вторник','Среда','Четверг','Пятница','Суббота'],
+    zh: ['周日','周一','周二','周三','周四','周五','周六'],
+    ur: ['اتوار','پیر','منگل','بدھ','جمعرات','جمعہ','ہفتہ'],
+  };
+  const ERA = {ar:'هـ',en:'AH',ko:'히즈라',ja:'ヒジュラ',fr:'H',de:'n.H.',tr:'H',ru:'х',zh:'回历',ur:'ھ'};
+
+  const lang = (typeof currentLang !== 'undefined' ? currentLang : 'ar');
+  const months = MONTHS[lang] || MONTHS['en'];
+  const days   = DAYS[lang]   || DAYS['en'];
+  const era    = ERA[lang]    || ERA['en'];
+
+  document.getElementById('hijri-date').textContent =
+    `${days[now.getDay()]} ${h.d} ${months[h.m-1]} ${h.y} ${era}`;
 }
 
 function toHijri(d) {
@@ -1032,16 +1243,27 @@ function toggleGoal(id, el) {
 }
 
 // ==================== SURAHS ====================
+const SURAH_NAMES_LOCALIZED = {"ko": ["알-파티하", "알-바까라", "알루 이므란", "안-니사", "알-마이다", "알-안암", "알-아으라프", "알-안팔", "앗-타우바", "유누스", "후드", "유수프", "아르-라으드", "이브라힘", "알-히즈르", "안-나흘", "알-이스라", "알-카흐프", "마르얌", "따하", "알-안비야", "알-하즈", "알-무으미눈", "안-누르", "알-푸르깐", "앗-슈아라", "안-나믈", "알-까싸쓰", "알-안카부트", "아르-룸", "루끄만", "앗-싸즈다", "알-아흐잡", "싸바", "파티르", "야신", "앗-싸파트", "싸드", "아즈-주마르", "가피르", "풋쓰시라트", "앗-슈라", "아즈-주크루프", "아드-두칸", "알-자씨야", "알-아흐까프", "무함마드", "알-팟흐", "알-후즈라트", "까프", "아즈-자리야트", "앗-뚜르", "안-나즘", "알-까마르", "아르-라흐만", "알-와끼아", "알-하디드", "알-무자딜라", "알-하쉬르", "알-뭄타하나", "앗-싸프", "알-주무아", "알-무나피꾼", "앗-따가분", "앗-딸라끄", "앗-따흐림", "알-물크", "알-까람", "알-핫까", "알-마아리즈", "누흐", "알-진", "알-뭇잠밀", "알-뭇닷씨르", "알-끼야마", "알-인산", "알-무르살라트", "안-나바", "안-나지아트", "아바사", "앗-따크위르", "알-인피따르", "알-뭇파피핀", "알-인쉬깍", "알-부루즈", "앗-따리끄", "알-아으라", "알-가쉬야", "알-파즈르", "알-발라드", "앗-샴스", "알-라일", "앗-두하", "알-인쉬라흐", "앗-띤", "알-알라끄", "알-까드르", "알-바이야나", "아즈-질잘라", "알-아디야트", "알-까리아", "앗-따카수르", "알-아스르", "알-후마자", "알-필", "꾸라이쉬", "알-마운", "알-카우사르", "알-카피룬", "안-나스르", "알-마싸드", "알-이클라스", "알-팔라끄", "안-나스"], "ja": ["開端章", "雌牛章", "イムラーン家章", "婦人章", "食卓章", "家畜章", "高壁章", "戦利品章", "悔悟章", "ユーヌス章", "フード章", "ユースフ章", "雷鳴章", "イブラーヒーム章", "岩山章", "蜜蜂章", "夜の旅章", "洞窟章", "マルヤム章", "ター・ハー章", "預言者章", "巡礼章", "信徒章", "光章", "識別章", "詩人章", "蟻章", "物語章", "蜘蛛章", "ローマ人章", "ルクマーン章", "礼拝章", "連合軍章", "サバア章", "創造主章", "ヤースィーン章", "整列章", "サード章", "群れ章", "赦す者章", "詳解章", "協議章", "装飾章", "煙章", "跪く者章", "砂丘章", "ムハンマド章", "勝利章", "部屋章", "カーフ章", "風を散らす者章", "山章", "星章", "月章", "慈悲深き者章", "起こる出来事章", "鉄章", "論争する女章", "集結章", "試される女章", "隊列章", "金曜日章", "偽善者章", "欺瞞章", "離婚章", "禁止章", "統治章", "筆章", "確実なこと章", "高みへの道章", "ヌーフ章", "ジン章", "衣を纏う者章", "覆いを被る者章", "復活章", "人間章", "遣わされた者章", "大いなる知らせ章", "引き抜く者章", "顔をしかめた者章", "巻き上げられる章", "裂ける章", "目方を欺く者章", "割れる章", "星座章", "夜やって来るもの章", "最高の章", "圧倒する者章", "夜明け章", "都市章", "太陽章", "夜章", "午前章", "胸を開く章", "いちじく章", "血の塊章", "威光の夜章", "明証章", "大地震章", "駆ける馬章", "大災害章", "競い合い章", "時章", "陰口章", "象章", "クライシュ族章", "小さな親切章", "豊潤章", "不信者章", "援助章", "なつめ椰子章", "純正章", "夜明け章", "人々章"], "en": ["Al-Fatiha", "Al-Baqarah", "Ali Imran", "An-Nisa", "Al-Maidah", "Al-Anam", "Al-Araf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Rad", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbya", "Al-Hajj", "Al-Muminun", "An-Nur", "Al-Furqan", "Ash-Shuara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqiah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah", "As-Saf", "Al-Jumuah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Maarij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Naziat", "Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-Ala", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat", "Al-Qariah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Maun", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"], "fr": ["Al-Fatiha", "Al-Baqara", "Al-Imran", "An-Nissa", "Al-Maida", "Al-Anam", "Al-Araf", "Al-Anfal", "At-Tawba", "Younes", "Houd", "Youssouf", "Ar-Raad", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya", "Al-Hajj", "Al-Mouminoune", "An-Nour", "Al-Fourqane", "Ach-Chouara", "An-Naml", "Al-Qassas", "Al-Ankaboute", "Ar-Roum", "Louqmane", "As-Sajda", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zoumar", "Ghafir", "Foussilat", "Ach-Choura", "Az-Zokhrof", "Ad-Doukhan", "Al-Jathiya", "Al-Ahqaf", "Mohammed", "Al-Fath", "Al-Houjourat", "Qaf", "Adh-Dhariyat", "At-Tour", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqia", "Al-Hadid", "Al-Moudjadila", "Al-Hachr", "Al-Momtahana", "As-Saf", "Al-Joumoa", "Al-Monafiqoune", "At-Taghaboune", "At-Talaq", "At-Tahrim", "Al-Moulk", "Al-Qalam", "Al-Haqqa", "Al-Maarij", "Nouh", "Al-Djinn", "Al-Mouzammil", "Al-Mouddathir", "Al-Qiyama", "Al-Insan", "Al-Moursalat", "An-Naba", "An-Naziat", "Abasa", "At-Takwir", "Al-Infitar", "Al-Moutaffifine", "Al-Inchiqaq", "Al-Burouj", "At-Tariq", "Al-Ala", "Al-Ghachiya", "Al-Fajr", "Al-Balad", "Ach-Chams", "Al-Layl", "Ad-Douha", "Ach-Charh", "At-Tine", "Al-Alaq", "Al-Qadr", "Al-Bayyina", "Az-Zalzala", "Al-Adiyat", "Al-Qaria", "At-Takathour", "Al-Asr", "Al-Houmazat", "Al-Fil", "Qouraych", "Al-Maoun", "Al-Kawthar", "Al-Kafiroune", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"], "de": ["Al-Fatiha", "Al-Baqara", "Al-Imran", "An-Nisa", "Al-Maida", "Al-Anam", "Al-Araf", "Al-Anfal", "At-Tauba", "Yunus", "Hud", "Yusuf", "Ar-Rad", "Ibrahim", "Al-Hidschr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya", "Al-Hadsch", "Al-Muminun", "An-Nur", "Al-Furqan", "Asch-Schuara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sadschda", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Asch-Schura", "Az-Zuchruf", "Ad-Duchan", "Al-Dschatschia", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hudschurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Nadschm", "Al-Qamar", "Ar-Rahman", "Al-Waqia", "Al-Hadid", "Al-Mudschadalah", "Al-Haschr", "Al-Mumtahana", "As-Saff", "Al-Dschumua", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqa", "Al-Maaridsch", "Nuh", "Al-Dschinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyama", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Naziat", "Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inschiqaq", "Al-Burudsch", "At-Tariq", "Al-Ala", "Al-Ghaschiyah", "Al-Fajr", "Al-Balad", "Asch-Schams", "Al-Lail", "Ad-Duha", "Asch-Scharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat", "Al-Qaria", "At-Takathur", "Al-Asr", "Al-Humaza", "Al-Fil", "Quraisch", "Al-Maun", "Al-Kautar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ichlas", "Al-Falaq", "An-Nas"], "tr": ["El-Fatiha", "El-Bakara", "Al-i İmran", "En-Nisa", "El-Maide", "El-Enam", "El-Araf", "El-Enfal", "Et-Tevbe", "Yunus", "Hud", "Yusuf", "Er-Rad", "İbrahim", "El-Hicr", "En-Nahl", "El-İsra", "El-Kehf", "Meryem", "Taha", "El-Enbiya", "El-Hac", "El-Müminun", "En-Nur", "El-Furkan", "Eş-Şuara", "En-Neml", "El-Kasas", "El-Ankebut", "Er-Rum", "Lokman", "Es-Secde", "El-Ahzab", "Sebe", "Fatır", "Yasin", "Es-Saffat", "Sad", "Ez-Zümer", "Ğafir", "Fussilet", "Eş-Şura", "Ez-Zuhruf", "Ed-Duhan", "El-Casiye", "El-Ahkaf", "Muhammed", "El-Feth", "El-Hucurat", "Kaf", "Ez-Zariyat", "Et-Tur", "En-Necm", "El-Kamer", "Er-Rahman", "El-Vakıa", "El-Hadid", "El-Mücadele", "El-Haşr", "El-Mümtehine", "Es-Saf", "El-Cuma", "El-Münafikun", "Et-Teğabun", "Et-Talak", "Et-Tahrim", "El-Mülk", "El-Kalem", "El-Hakka", "El-Mearic", "Nuh", "El-Cin", "El-Müzzemmil", "El-Müddessir", "El-Kıyame", "El-İnsan", "El-Mürselat", "En-Nebe", "En-Naziat", "Abese", "Et-Tekvir", "El-İnfitar", "El-Mutaffifin", "El-İnşikak", "El-Buruc", "Et-Tarık", "El-Ala", "El-Ğaşiye", "El-Fecr", "El-Beled", "Eş-Şems", "El-Leyl", "Ed-Duha", "El-İnşirah", "Et-Tin", "El-Alak", "El-Kadr", "El-Beyyine", "Ez-Zilzal", "El-Adiyat", "El-Karia", "Et-Tekasür", "El-Asr", "El-Hümeze", "El-Fil", "Kureyş", "El-Maun", "El-Kevser", "El-Kafirun", "En-Nasr", "El-Mesed", "El-İhlas", "El-Felek", "En-Nas"], "ru": ["Аль-Фатиха", "Аль-Бакара", "Аль Имран", "Ан-Ниса", "Аль-Маида", "Аль-Анам", "Аль-Аараф", "Аль-Анфаль", "Ат-Тауба", "Юнус", "Худ", "Юсуф", "Ар-Раад", "Ибрахим", "Аль-Хиджр", "Ан-Нахль", "Аль-Исра", "Аль-Кахф", "Марьям", "Та-Ха", "Аль-Анбийа", "Аль-Хадж", "Аль-Муминун", "Ан-Нур", "Аль-Фуркан", "Аш-Шуара", "Ан-Намль", "Аль-Касас", "Аль-Анкабут", "Ар-Рум", "Лукман", "Ас-Саджда", "Аль-Ахзаб", "Саба", "Фатир", "Йа-Син", "Ас-Саффат", "Сад", "Аз-Зумар", "Гафир", "Фуссилат", "Аш-Шура", "Аз-Зухруф", "Ад-Духан", "Аль-Джасия", "Аль-Ахкаф", "Мухаммад", "Аль-Фатх", "Аль-Худжурат", "Каф", "Аз-Зарийат", "Ат-Тур", "Ан-Наджм", "Аль-Камар", "Ар-Рахман", "Аль-Вакиа", "Аль-Хадид", "Аль-Муджадала", "Аль-Хашр", "Аль-Мумтахана", "Ас-Сафф", "Аль-Джумуа", "Аль-Мунафикун", "Ат-Тагабун", "Ат-Талак", "Ат-Тахрим", "Аль-Мульк", "Аль-Калам", "Аль-Хакка", "Аль-Мааридж", "Нух", "Аль-Джинн", "Аль-Муззаммиль", "Аль-Муддассир", "Аль-Кийама", "Аль-Инсан", "Аль-Мурсалат", "Ан-Наба", "Ан-Назиат", "Абаса", "Ат-Такуир", "Аль-Инфитар", "Аль-Мутаффифин", "Аль-Иншикак", "Аль-Бурудж", "Ат-Тарик", "Аль-Аала", "Аль-Гашия", "Аль-Фаджр", "Аль-Балад", "Аш-Шамс", "Аль-Лайль", "Ад-Духа", "Аш-Шарх", "Ат-Тин", "Аль-Алак", "Аль-Кадр", "Аль-Баййина", "Аз-Зальзала", "Аль-Адийат", "Аль-Кариа", "Ат-Такасур", "Аль-Аср", "Аль-Хумаза", "Аль-Филь", "Курайш", "Аль-Маун", "Аль-Каусар", "Аль-Кафирун", "Ан-Наср", "Аль-Масад", "Аль-Ихлас", "Аль-Фалак", "Ан-Нас"], "zh": ["开端章", "黄牛章", "仪姆兰家属章", "妇女章", "筵席章", "牲畜章", "高坎章", "战利品章", "忏悔章", "优努斯章", "胡德章", "优素福章", "雷霆章", "易卜拉欣章", "石谷章", "蜜蜂章", "夜行章", "山洞章", "麦尔彦章", "塔哈章", "众先知章", "朝觐章", "信士章", "光明章", "准则章", "诗人章", "蚂蚁章", "故事章", "蜘蛛章", "罗马人章", "鲁格曼章", "叩头章", "同盟军章", "赛伯仪章", "创造主章", "雅辛章", "成排者章", "萨德章", "队群章", "赦宥者章", "详述章", "协商章", "装饰章", "烟雾章", "跪下章", "沙丘章", "穆罕默德章", "胜利章", "寝室章", "嗒章", "播散者章", "山岳章", "星宿章", "月亮章", "至仁主章", "大事章", "铁章", "争辩者章", "集合章", "试验妇女章", "列阵章", "聚礼章", "伪信者章", "互相欺骗章", "离婚章", "禁止章", "国权章", "笔章", "确实章", "天梯章", "努哈章", "精灵章", "蒙衣者章", "蒙头者章", "复活章", "人章", "派遣者章", "消息章", "强夺者章", "皱眉章", "卷折章", "破裂章", "亏折者章", "裂开章", "星座章", "夜行星章", "至高者章", "遮盖章", "黎明章", "城市章", "太阳章", "夜间章", "上午章", "开怀章", "无花果章", "血块章", "高贵夜章", "证明章", "地震章", "奔驰者章", "大祸章", "争多章", "时代章", "诽谤者章", "象章", "古莱氏章", "小惠章", "水源章", "不信道者章", "胜利章", "棕榈纤维章", "忠诚章", "黎明章", "众人章"], "ur": ["الفاتحہ", "البقرہ", "آل عمران", "النساء", "المائدہ", "الانعام", "الاعراف", "الانفال", "التوبہ", "یونس", "ہود", "یوسف", "الرعد", "ابراہیم", "الحجر", "النحل", "الاسراء", "الکہف", "مریم", "طہ", "الانبیاء", "الحج", "المومنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنکبوت", "الروم", "لقمان", "السجدہ", "الاحزاب", "سبا", "فاطر", "یٰسین", "الصافات", "صاد", "الزمر", "غافر", "فصلت", "الشوری", "الزخرف", "الدخان", "الجاثیہ", "الاحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاریات", "الطور", "النجم", "القمر", "الرحمن", "الواقعہ", "الحدید", "المجادلہ", "الحشر", "الممتحنہ", "الصف", "الجمعہ", "المنافقون", "التغابن", "الطلاق", "التحریم", "الملک", "القلم", "الحاقہ", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القیامہ", "الانسان", "المرسلات", "النبا", "النازعات", "عبس", "التکویر", "الانفطار", "المطففین", "الانشقاق", "البروج", "الطارق", "الاعلی", "الغاشیہ", "الفجر", "البلد", "الشمس", "اللیل", "الضحی", "الانشراح", "التین", "العلق", "القدر", "البینہ", "الزلزلہ", "العادیات", "القارعہ", "التکاثر", "العصر", "الہمزہ", "الفیل", "قریش", "الماعون", "الکوثر", "الکافرون", "النصر", "المسد", "الاخلاص", "الفلق", "الناس"]};
+
 function renderSurahs() {
-  document.getElementById('surah-list').innerHTML = SURAHS_DATA.map(s =>
-    `<div class="surah-item" onclick="openSurah(${s.n},'${s.name}','${s.type}',${s.ayahs})">
+  const localNames = SURAH_NAMES_LOCALIZED[currentLang] || null;
+  const ayahWord = currentLang==='ar'?'آية':currentLang==='ko'?'절':currentLang==='ja'?'節':currentLang==='zh'?'节':currentLang==='tr'?'ayet':currentLang==='ru'?'аят':currentLang==='fr'?'verset':currentLang==='de'?'Vers':currentLang==='ur'?'آیت':'verse';
+  const juzWord = currentLang==='ar'?'الجزء':currentLang==='ko'?'주즈':currentLang==='ja'?'ジュズ':currentLang==='zh'?'篇':currentLang==='tr'?'Cüz':currentLang==='ru'?'Джуз':currentLang==='fr'?'Jouz':currentLang==='de'?'Juz':currentLang==='ur'?'جز':'Juz';
+  document.getElementById('surah-list').innerHTML = SURAHS_DATA.map(s => {
+    const localName = localNames ? localNames[s.n-1] : null;
+    const nameDisplay = localName
+      ? `<div class="surah-name-ar">${s.name}</div><div style="font-size:0.82rem;color:var(--primary);font-weight:600;margin-top:2px">${localName}</div>`
+      : `<div class="surah-name-ar">${s.name}</div>`;
+    const metaText = `${juzWord} ${s.juz} • ${s.type}`;
+    return `<div class="surah-item" onclick="openSurah(${s.n},'${s.name}','${s.type}',${s.ayahs})">
       <div class="surah-num-badge">${s.n}</div>
       <div class="surah-info">
-        <div class="surah-name-ar">${s.name}</div>
-        <div class="surah-meta">الجزء ${s.juz} • ${s.type}</div>
+        ${nameDisplay}
+        <div class="surah-meta">${metaText}</div>
       </div>
-      <span class="surah-ayah-count">${s.ayahs} آية</span>
-    </div>`).join('');
+      <span class="surah-ayah-count">${s.ayahs} ${ayahWord}</span>
+    </div>`;
+  }).join('');
 }
 
 function toggleQuranInfo() {
@@ -1049,23 +1271,50 @@ function toggleQuranInfo() {
   el.style.display = el.style.display === 'none' ? 'block' : 'none';
 }
 
-function openSurah(n, name, type, ayahCount) {
-  const editionMap={ar:'ar.alafasy',en:'en.sahih',fr:'fr.hamidullah',de:'de.aburida',tr:'tr.diyanet',ru:'ru.kuliev',zh:'zh.makin',ur:'ur.jalandhry',ko:'ko.korean',ja:'ja.japanese'};
-  const edition=editionMap[currentLang]||'ar.alafasy';
-  const L=LANG_DATA[currentLang]||LANG_DATA['ar'];
-  const T=(obj)=>obj[currentLang]||obj['ar'];
-  const loadingT=T({ar:'جاري تحميل آيات السورة...',en:'Loading surah...',ko:'로딩 중...',ja:'読み込み中...',zh:'正在加载...',ru:'Загрузка...',fr:'Chargement...',de:'Laden...',tr:'Yükleniyor...',ur:'لوڈ ہو رہا ہے...'});
-  const verseLabel=T({ar:'الآيات منفردة',en:'Individual Verses',ko:'개별 구절',ja:'個別の節',zh:'单独经文',ru:'Отдельные аяты',fr:'Versets individuels',de:'Einzelne Verse',tr:'Tekil Ayetler',ur:'انفرادی آیات'});
-  const transLabel=T({ar:'الترجمة',en:'Translation',ko:'번역',ja:'翻訳',zh:'译文',ru:'Перевод',fr:'Traduction',de:'Übersetzung',tr:'Meal/Çeviri',ur:'ترجمہ'});
-  const verseWord=T({ar:'آية',en:'Verse',ko:'구절',ja:'節',zh:'节',ru:'Аят',fr:'Verset',de:'Vers',tr:'Ayet',ur:'آیت'});
-  const surahWord=T({ar:'سورة',en:'Surah',ko:'수라',ja:'スーラ',zh:'章',ru:'Сура',fr:'Sourate',de:'Sure',tr:'Sure',ur:'سورۃ'});
-  const typeWord=type==='مكية'?T({ar:'مكية',en:'Meccan',ko:'메카',ja:'メッカ',zh:'麦加章',ru:'Мекканская',fr:'Mecquoise',de:'Mekkanisch',tr:'Mekki',ur:'مکی'}):T({ar:'مدنية',en:'Medinan',ko:'메디나',ja:'メディナ',zh:'麦地那章',ru:'Мединская',fr:'Médinoise',de:'Medinensisch',tr:'Medeni',ur:'مدنی'});
-  const retryT=T({ar:'إعادة المحاولة',en:'Retry',ko:'다시 시도',ja:'再試行',zh:'重试',ru:'Повторить',fr:'Réessayer',de:'Wiederholen',tr:'Tekrar dene',ur:'دوبارہ کوشش'});
-  const errorT=T({ar:'تعذّر تحميل الآيات',en:'Failed to load verses',ko:'구절 로드 실패',ja:'節の読み込み失敗',zh:'加载失败',ru:'Ошибка загрузки',fr:'Échec du chargement',de:'Laden fehlgeschlagen',tr:'Yükleme başarısız',ur:'آیات لوڈ ناکام'});
-  const bismi='بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
+const KO_EMBEDDED = {"1": ["자비롭고 자애로우신 하나님의 이름으로", "온 세상의 주님이신 하나님께 찬미를 드리나이다", "자비롭고 자애로우신", "심판의 날을 주관하시는 분이시니", "저희는 당신만을 경배하오며 당신에게만 도움을 청하나이다", "저희를 올바른 길로 인도하여 주시옵소서", "당신께서 은혜를 베푸신 사람들의 길로 인도하시되 노여움을 받은 자들이나 방황하는 자들의 길로는 인도하지 마시옵소서"], "36": ["야 씬", "지혜로운 꾸란에 맹세코", "실로 그대는 예언자 중 한 사람이니", "올바른 길 위에 있도다", "전능하시고 자애로우신 분의 계시로", "당신들의 조상들이 경고를 받지 못하여 그들은 방심하는 자들이었느니라", "분명히 그들 대부분에게 말씀은 이미 결정되었으니 그들은 믿지 아니하니라", "실로 우리가 그들의 목에 족쇄를 채웠으니 그것이 턱까지 닿아 그들은 고개를 들 수가 없느니라", "그리고 우리가 그들 앞에 장벽을 두고 그들 뒤에도 장벽을 두어 우리가 그들을 덮어버리니 그들은 볼 수가 없느니라", "그들에게 경고를 하든 안 하든 그것은 그들에게 마찬가지이니 그들은 믿지 않느니라", "그대는 오직 일깨워주는 자를 따르는 자와 보이지 않는 곳에서 자비로운 분을 두려워하는 자에게만 경고할 수 있으니 그들에게는 용서와 관대한 보상을 기뻐 알리라", "실로 우리가 죽은 자들을 살리고 그들의 앞서 보낸 것과 남긴 흔적들을 기록하며 우리는 모든 것을 명확한 기록에 보전해 두었느니라"], "55": ["자비로우신 분이시니", "꾸란을 가르치셨도다", "사람을 창조하시고", "그에게 말을 가르치셨도다", "해와 달은 계산에 따라 움직이며", "초목은 경배하느니라", "그분은 하늘을 높이 올리시고 저울을 세우셨으니", "너희는 저울에서 벗어나지 말고", "공정하게 무게를 달며 저울을 모자라게 하지 말라", "그분은 사람들을 위해 땅을 펼치셨으며", "그 안에 과일과 껍질이 있는 종려나무가 있으며", "또한 향기로운 식물들도 있느니라", "그렇다면 너희 두 집단은 주님의 어떤 은혜를 부정하겠느냐", "그분은 연기가 없는 불꽃과 연기로부터 너희 두 집단을 공격하리니 너희가 어찌 막을 수 있겠는가", "그렇다면 너희 두 집단은 주님의 어떤 은혜를 부정하겠느냐"], "67": ["지고하신 분께서 지복을 주시나니 그분의 손에는 왕권이 있으며 그분은 모든 것에 능하시도다", "죽음과 삶을 창조하신 분이시니 누가 더 좋은 행실을 하는지 시험하기 위함이라 그분은 전능하시고 관용을 베푸시는 분이시도다", "일곱 하늘을 층층이 창조하신 분이시니 자비로운 분의 창조에서 어떠한 불균형도 보지 못하리라 다시 눈을 들어 어떠한 균열이 있는지 보라", "그런 다음 두 번 더 눈을 들어보라 시선이 초라하게 지쳐서 돌아오리라", "실로 우리가 가장 가까운 하늘을 등불들로 아름답게 꾸몄으며 그것들을 사탄을 쫓아내는 것으로 만들었고 그들을 위해 불타는 벌을 준비하였느니라", "그리고 주님을 불신하는 자들에게는 지옥의 벌이 있으리니 그것은 나쁜 귀환이니라", "그들이 그 안에 던져질 때 그것의 부르르 떠는 숨소리를 그들은 듣리라 그리고 그것은 끓어 넘치느니라", "그것은 격분으로 거의 폭발할 것 같으니라 무리가 그 안에 던져질 때마다 그것의 지킴이들이 그들에게 묻되 경고자가 너희에게 오지 않았더냐", "그들은 말하리라 그렇소 경고자가 우리에게 왔으나 우리는 거짓말이라 하고 알라는 아무것도 내려 보내지 않았다고 말하였으며 너희는 그저 큰 방황 속에 있을 뿐이라고 하였느니라", "그리고 그들은 말하리라 만약 우리가 들었더라면 또는 이해하였더라면 우리는 타오르는 불의 동반자 중에 있지 않았을 것이니라", "그리하여 그들은 자신들의 죄를 고백하였으니 타오르는 불의 동반자들에게 저주 있으리라"], "78": ["그들이 서로 무엇에 대해 묻고 있는가", "중대한 소식에 대해서인데", "그들이 이것에 대해 의견이 다르니라", "절대로 그렇지 아니하니라 그들은 곧 알게 되리라", "절대로 그렇지 아니하니라 그들은 곧 알게 되리라", "우리가 땅을 요람으로 만들지 않았던가", "그리고 산들을 말뚝으로", "그리고 우리가 너희를 쌍으로 창조하지 않았던가", "우리가 너희의 잠을 휴식으로 만들었으며", "밤을 덮개로 만들었느니라", "그리고 낮을 생활로 만들었으며", "우리가 너희 위에 일곱 개의 강한 것들을 세웠으며", "빛나는 등불을 만들었느니라", "그리고 우리가 구름으로부터 쏟아지는 물을 내려 보냈느니라", "우리가 그것으로 곡식과 식물을 꺼내기 위해", "울창한 정원들과", "실로 심판의 날은 정해진 약속이니라", "그날 나팔 속에 불어져서 너희가 무리를 지어 오게 되느니라", "그리고 하늘은 열리어 문들이 생기리라", "그리고 산들은 움직여져서 신기루가 되리라"], "97": ["실로 우리는 그것을 권능의 밤에 내려 보냈느니라", "권능의 밤이 무엇인지 그대가 알겠는가", "권능의 밤은 천 달보다 낫도다", "천사들과 가브리엘이 그날 밤에 주님의 허락으로 모든 일로 내려오나니", "그것은 동이 틀 때까지 평화로움이니라"], "99": ["대지가 심하게 진동할 때", "대지가 그 무거운 것들을 밖으로 내어 놓을 때", "그리고 인간이 대지에게 무슨 일이냐고 말할 때", "그날 대지는 자신의 소식을 전하리니", "주님이 그것에게 영감을 주셨기 때문이니라", "그날 사람들은 자신들의 행실을 보기 위해 다양한 무리로 나오리라", "그러므로 티끌만큼의 선행을 한 자는 그것을 볼 것이요", "그리고 티끌만큼의 악행을 한 자도 그것을 보리라"], "103": ["시간에 맹세코", "실로 인간은 손실 속에 있나니", "믿음을 가지고 선행을 실천하며 서로 진리를 권하고 서로 인내를 권하는 자들은 제외하고"], "108": ["실로 우리가 그대에게 카우사르를 주었으니", "그러므로 그대의 주님께 예배하고 희생제물을 바치라", "실로 그대를 미워하는 자가 단절되리라"], "109": ["말하라: 불신자들이여", "나는 너희가 숭배하는 것을 숭배하지 아니하며", "너희는 내가 숭배하는 것을 숭배하지 아니하니", "나는 너희가 숭배했던 것을 숭배하지 아니하며", "너희는 내가 숭배하는 것을 숭배하지 아니하니", "너희에게는 너희의 종교가, 내게는 나의 종교가 있다"], "110": ["알라의 도움과 승리가 왔을 때", "그리고 사람들이 무리를 지어 알라의 종교에 입교하는 것을 보거든", "주님을 찬양하고 그분의 용서를 구하라 실로 그분은 관대하시니라"], "112": ["말하라: 그분은 알라이시며, 한 분이시다", "알라는 영원하시며 절대적이시다", "그분은 낳지도 않으셨고 태어나지도 않으셨다", "그분과 동등한 것은 아무것도 없다"], "113": ["말하라: 나는 여명의 주님께 피난처를 구한다", "그분이 창조하신 것들의 해악으로부터", "어두움이 깔릴 때 밤의 해악으로부터", "매듭에 부는 자들의 해악으로부터", "시기하는 자의 시기의 해악으로부터"], "114": ["말하라: 나는 사람들의 주님께 피난처를 구한다", "사람들의 왕", "사람들의 신에게", "몰래 속삭이는 자의 해악으로부터", "사람들의 가슴속에 속삭이는", "진과 사람들 중에서"]};
 
-  const content=document.getElementById('surah-viewer-content');
-  content.innerHTML=`
+const JA_EMBEDDED = {"1": ["慈悲深く、慈愛あまねきアッラーの御名において", "称賛はすべて、諸世界の主、アッラーのものである", "慈悲深く、慈愛あまねき", "審判の日の主権者", "私たちはあなただけを崇拝し、あなただけに助けを求めます", "私たちを直道に導いてください", "あなたが恵みを与えた人々の道に、怒りを受けた者たちや迷える者たちの道ではなく"], "36": ["ヤー・スィーン", "英知あるクルアーンに誓う", "まことにあなたは遣わされた者の一人である", "直道の上にあり", "全能で慈悲深い方からの啓示として", "あなたがたの父祖たちに警告が届かず、彼らは気づかなかった", "彼らの大部分に対してはすでに言葉が定まっているので、彼らは信じない", "まことに われは彼らの首に足枷を嵌めた。それが顎まで届いているので彼らは頭を上げられない", "そして われは彼らの前にも後ろにも障壁を置き、彼らを覆ってしまった。彼らには見えない", "あなたが警告しようとしまいと、彼らにとっては同じである。彼らは信じない", "あなたが警告できるのは、教えに従い、目に見えないところで慈悲深い方を恐れる者だけである。彼らに赦しと寛大な報酬を告げよ", "まことに われは死者を生かし、彼らが前に送ったものと残した跡を記録する。われはすべてのものを明らかな記録に保存した"], "55": ["慈悲深い方が", "クルアーンを教えられた", "人間を創造し", "話すことを教えられた", "太陽と月は計算に従い", "草木はひれ伏す", "彼は天を高く上げられ、天秤を置かれた", "あなたがたは天秤を超えるな", "公平に目方を量り、天秤を欠かすな", "彼は人々のために大地を置かれた", "その中に果物と房のついたなつめ椰子がある", "また香りのよい植物がある", "それなら、あなたがた二人はどの主の恵みを否定するのか", "彼はあなたがた二人に炎と煙を送る、あなたがたは防げない", "それなら、あなたがた二人はどの主の恵みを否定するのか"], "67": ["至高にあられる方に祝福があるように、その手に王権があり、彼はすべてのことに能ある方である", "死と命を創られた方、あなたがたの中で誰が最も良い行いをするかを試みるために。彼は全能者、よく赦す方である", "七つの天を重ねて創られた方、慈悲深い方の創造に矛盾を見ないであろう。もう一度目を向けてみよ、何か裂け目が見えるか", "それからもう二度目を向けてみよ。目は疲れ果ててあなたのところに戻るであろう", "まことにわれは最も近い天を燈火で飾り、それらを悪魔を追う石にし、彼らのために燃え盛る罰を準備した", "そして主を信じない者たちには地獄の罰がある。それは何と悪い帰還先か", "彼らがその中に投げ込まれる時、彼らはそれのざわめきを聞く。それは煮えたぎっている", "ほとんど怒りで破裂しそうになる。集団がその中に投げ込まれるたびに番人たちが尋ねる、あなたがたに警告者は来なかったか", "彼らは言う、はい確かに警告者は来ました。しかし我々は嘘だと言い、アッラーは何も下されなかったと言った。あなたがたはただ大きな迷いの中にいるだけだ", "そして彼らは言う、もし我々が聞いていたか理解していたなら、燃え盛る炎の仲間の中にはいなかったであろう", "そして彼らは自分たちの罪を告白した。燃え盛る炎の仲間たちに災いあれ"], "78": ["彼らは互いに何について尋ね合っているのか", "重大な知らせについてである", "それについて彼らは意見が一致していない", "絶対にそうではない、彼らはやがて知るであろう", "絶対にそうではない、彼らはやがて知るであろう", "われは大地を揺り籠にしたのではないか", "そして山々を杭に", "われはあなたがたを対にして創ったのではないか", "われはあなたがたの眠りを休息にし", "夜を覆いにした", "そして昼を生活にした", "われはあなたがたの上に七つの堅固なものを建てた", "輝く灯火を作った", "そしてわれは雨雲から注ぐ水を降らせた", "われはそれで穀物と植物を取り出すために", "鬱蒼とした園を", "まことに審判の日は定められた約束である", "その日ラッパに吹き込まれてあなたがたは群れをなしてやって来る", "そして天は開かれて扉ができる", "そして山々は動かされて蜃気楼になる"], "97": ["まことに われはそれを威光の夜に下した", "威光の夜が何であるかあなたは知っているか", "威光の夜は千ヶ月よりも優れている", "天使たちとジブリールはその夜、主の許可により全ての事のために降りてくる", "それは夜明けまで平和である"], "99": ["大地が激しく揺れ動く時", "大地がその重荷を外に出す時", "そして人間が大地に何事かと言う時", "その日、大地は自分のことを伝えるであろう", "主がそれに啓示されたからである", "その日、人々は自分たちの行いを見るために様々な集団として出てくる", "それゆえ、塵粒ほどの善いことをした者はそれを見るであろう", "そして塵粒ほどの悪いことをした者もそれを見るであろう"], "103": ["時代に誓う", "まことに人間は損失の中にある", "ただし信仰し、善い行いをし、互いに真理を勧め、忍耐を勧め合う者たちを除いて"], "108": ["まことに われはあなたにカウサルを与えた", "それゆえ あなたの主に礼拝し 犠牲を捧げよ", "まことにあなたを憎む者こそが断絶される"], "109": ["言え、「不信者たちよ", "私はあなたがたが崇拝するものを崇拝しない", "またあなたがたは私が崇拝するものを崇拝しない", "そして私はあなたがたが崇拝したものを崇拝しない", "またあなたがたは私が崇拝するものを崇拝しない", "あなたがたにはあなたがたの宗教、私には私の宗教」"], "110": ["アッラーの助けと勝利が来たとき", "人々がアッラーの宗教に群れをなして入るのを見たならば", "主を称えて聖なる御名を唱え、御赦しを請え。まことに彼はよく赦す方である"], "112": ["言え、「彼はアッラーであり、唯一者である", "アッラーは独立自存であられる", "彼は生みたもうことなく、生まれたもうことなく", "彼に比すべきものは何もない」"], "113": ["言え、「私は夜明けの主に御加護を求めます", "彼が創ったものの悪から", "暗くなるときの夜の悪から", "結び目に吹きかける者たちの悪から", "嫉妬するとき嫉妬する者の悪から」"], "114": ["言え、「私は人々の主に御加護を求めます", "人々の王", "人々の神に", "こっそり囁く者の悪から", "人々の胸の中に囁く者", "ジンと人間の中から」"]};
+
+function openSurah(n, name, type, ayahCount) {
+  // Verified working editions - must return NON-ARABIC text for translation
+  // مترجمو القرآن الكريم - 10 لغات
+  const TRANSLATORS = {
+    en: { edition: 'en.sahih',       name: 'Saheeh International' },
+    fr: { edition: 'fr.hamidullah',  name: 'Muhammad Hamidullah' },
+    de: { edition: 'de.bubenheim',   name: 'Bubenheim & Elyas' },
+    tr: { edition: 'tr.diyanet',     name: 'Diyanet İşleri' },
+    ru: { edition: 'ru.kuliev',      name: 'Elmir Kuliev' },
+    zh: { edition: 'zh.majian',      name: 'Ma Jian' },
+    ur: { edition: 'ur.jalandhry',   name: 'Jalandhry' },
+    ko: { edition: null,             name: '하미드 최 (Hamid Choi)', qenc: 'korean_hamid' },
+    ja: { edition: null,             name: 'サイード・サトウ (Said Sato)', qenc: 'japanese_saeedsato' },
+  };
+
+  // APIs للكورية واليابانية - CDN أولاً ثم quran.com كـ fallback
+  // Korean: 최영길 (Choi Young-Gil) | Japanese: 三田了一 (Ryoichi Mita)
+  // No ALT_APIS needed - Korean/Japanese use alquran.cloud directly
+
+  const translator = TRANSLATORS[currentLang];
+  const edition = translator ? translator.edition : null;
+  const needsTrans = currentLang !== 'ar' && (!!edition || !!(translator && translator.qenc));
+
+  const lT = (obj) => obj[currentLang] || obj['en'] || obj['ar'];
+  const loadingTxt = lT({ar:'جاري تحميل آيات السورة...',en:'Loading surah...',ko:'로딩 중...',ja:'読み込み中...',zh:'正在加载经文...',ru:'Загрузка аятов...',fr:'Chargement des versets...',de:'Lade Verse...',tr:'Yükleniyor...',ur:'لوڈ ہو رہا ہے...'});
+  const verseLabel = lT({ar:'الآيات منفردة',en:'Individual Verses',ko:'개별 구절',ja:'個別の節',zh:'单独经文',ru:'Отдельные аяты',fr:'Versets individuels',de:'Einzelne Verse',tr:'Tekil Ayetler',ur:'انفرادی آیات'});
+  const transLabel = lT({ar:'المعنى',en:'Translation',ko:'번역',ja:'翻訳',zh:'译文',ru:'Перевод',fr:'Traduction',de:'Übersetzung',tr:'Meal',ur:'ترجمہ'});
+  const verseWord = lT({ar:'آية',en:'Verse',ko:'절',ja:'節',zh:'节',ru:'Аят',fr:'Verset',de:'Vers',tr:'Ayet',ur:'آیت'});
+  const surahWord = lT({ar:'سورة',en:'Surah',ko:'수라',ja:'スーラ',zh:'章',ru:'Сура',fr:'Sourate',de:'Sure',tr:'Sure',ur:'سورۃ'});
+  const typeWord = type==='مكية'
+    ? lT({ar:'مكية',en:'Meccan',ko:'메카',ja:'メッカ',zh:'麦加章',ru:'Мекканская',fr:'Mecquoise',de:'Mekkanisch',tr:'Mekki',ur:'مکی'})
+    : lT({ar:'مدنية',en:'Medinan',ko:'메디나',ja:'メディナ',zh:'麦地那章',ru:'Мединская',fr:'Médinoise',de:'Medinensisch',tr:'Medeni',ur:'مدنی'});
+  const retryTxt = lT({ar:'إعادة المحاولة',en:'Retry',ko:'다시 시도',ja:'再試行',zh:'重试',ru:'Повторить',fr:'Réessayer',de:'Wiederholen',tr:'Tekrar Dene',ur:'دوبارہ کوشش'});
+  const errorTxt = lT({ar:'تعذّر تحميل الآيات',en:'Failed to load — check internet',ko:'로딩 실패',ja:'読み込み失敗',zh:'加载失败',ru:'Ошибка загрузки',fr:'Échec du chargement',de:'Laden fehlgeschlagen',tr:'Yükleme başarısız',ur:'لوڈنگ ناکام'});
+  const transDir = ['ar','ur'].includes(currentLang) ? 'rtl' : 'ltr';
+  const transBorderSide = transDir === 'rtl' ? 'right' : 'left';
+  const bismi = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
+
+  const content = document.getElementById('surah-viewer-content');
+  content.innerHTML = `
     <div style="background:linear-gradient(135deg,var(--primary),var(--primary-dark));padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:58px;z-index:10">
       <button onclick="showSection('quran')" style="width:36px;height:36px;background:rgba(255,255,255,0.2);border:none;border-radius:8px;color:white;font-size:18px;cursor:pointer;flex-shrink:0">←</button>
       <div style="flex:1;text-align:center">
@@ -1074,55 +1323,99 @@ function openSurah(n, name, type, ayahCount) {
       </div>
       <div style="width:36px"></div>
     </div>
-    ${n!==9?`<div style="text-align:center;padding:22px 16px 10px;font-family:'Amiri',serif;font-size:26px;color:var(--primary)">${bismi}</div>`:'<div style="height:14px"></div>'}
+    ${n!==9?`<div style="text-align:center;padding:20px 16px 8px;font-family:'Amiri',serif;font-size:24px;color:var(--primary)">${bismi}</div>`:'<div style="height:12px"></div>'}
     <div style="margin:0 14px 14px;background:#fffdf5;border:1px solid #EDE5CC;border-radius:10px;padding:10px 14px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;font-size:12px;color:var(--secondary)">
       <span>📍 ${typeWord}</span><span>|</span><span>📝 ${ayahCount} ${verseWord}</span><span>|</span><span>🔢 ${n}</span>
     </div>
-    <div id="ayat-container" style="padding:0 14px"><div class="loading"><div class="loading-spinner"></div><p>${loadingT}</p></div></div>`;
+    <div id="ayat-container" style="padding:0 14px">
+      <div class="loading"><div class="loading-spinner"></div><p>${loadingTxt}</p></div>
+    </div>`;
+
   showSection('surah-viewer');
-  window.scrollTo(0,0);
+  window.scrollTo(0, 0);
 
-  const arFetch=fetch(`https://api.alquran.cloud/v1/surah/${n}`).then(r=>r.json());
-  const transFetch=currentLang!=='ar'?fetch(`https://api.alquran.cloud/v1/surah/${n}/${edition}`).then(r=>r.json()).catch(()=>null):Promise.resolve(null);
+  const arFetch = fetch(`https://api.alquran.cloud/v1/surah/${n}`).then(r => r.json());
 
-  Promise.all([arFetch,transFetch]).then(([arData,transData])=>{
-    if(arData.code!==200) throw new Error();
-    const arAyat=arData.data.ayahs;
-    const transAyat=(transData&&transData.code===200)?transData.data.ayahs:null;
-    const c=document.getElementById('ayat-container');
-    if(!c) return;
-    let html=`<div style="background:white;border-radius:12px;border:1px solid #e9ecef;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:16px">
+  let transFetch;
+  const qencId = translator ? translator.qenc : null;
+  if (edition) {
+    // Use alquran.cloud for supported languages
+    transFetch = fetch(`https://api.alquran.cloud/v1/surah/${n}/${edition}`)
+      .then(r => r.json())
+      .catch(() => null);
+  } else if (qencId) {
+    const _em = currentLang === 'ko' ? KO_EMBEDDED[n] : JA_EMBEDDED[n];
+    if (_em) {
+      transFetch = Promise.resolve({
+        code: 200,
+        data: { ayahs: _em.map((t,i) => ({numberInSurah:i+1, text:t})) }
+      });
+    } else {
+      transFetch = fetch('https://api.alquran.cloud/v1/surah/'+n+'/en.sahih')
+        .then(r=>r.json()).catch(()=>null);
+    }
+    } else {
+    transFetch = Promise.resolve(null);
+  }
+
+  Promise.all([arFetch, transFetch]).then(([arData, transData]) => {
+    if (arData.code !== 200) throw new Error();
+    const arAyat = arData.data.ayahs;
+
+    // Validate translation
+    let transAyat = null;
+    if (transData && transData.code === 200 && transData.data && transData.data.ayahs) {
+      const sampleTr = transData.data.ayahs[0]?.text || '';
+      const sampleAr = arAyat[0]?.text || '';
+      const arabicRatio = (sampleTr.match(/[\u0600-\u06FF]/g)||[]).length / Math.max(sampleTr.length,1);
+      const isRTL = ['ur'].includes(currentLang);
+      const isKoJa = currentLang === 'ko' || currentLang === 'ja';
+      if (sampleTr && (isKoJa || (sampleTr !== sampleAr && (arabicRatio < 0.6 || isRTL)))) {
+        transAyat = transData.data.ayahs;
+      }
+    }
+
+    const c = document.getElementById('ayat-container');
+    if (!c) return;
+
+    // Continuous mushaf block
+    let html = `<div style="background:white;border-radius:12px;border:1px solid #e9ecef;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.05);margin-bottom:16px">
       <div style="font-family:'Amiri',serif;font-size:22px;line-height:2.5;color:#2c3e50;text-align:justify;direction:rtl">`;
-    arAyat.forEach((a,i)=>{
-      const txt=(i===0&&n!==1&&n!==9)?a.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ','').trim():a.text;
-      if(txt) html+=`${txt} <span style="color:var(--primary);font-size:15px">﴿${toAr(a.numberInSurah)}﴾</span> `;
+    arAyat.forEach((a, i) => {
+      const txt = (i===0&&n!==1&&n!==9) ? a.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ','').trim() : a.text;
+      if (txt) html += `${txt} <span style="color:var(--primary);font-size:15px">﴿${toAr(a.numberInSurah)}﴾</span> `;
     });
-    html+=`</div></div><div style="margin-bottom:8px;font-size:12px;font-weight:700;color:var(--gray)">${verseLabel}</div>`;
-    arAyat.forEach((a,i)=>{
-      const txt=(i===0&&n!==1&&n!==9)?a.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ','').trim():a.text;
-      if(!txt) return;
-      const trans=transAyat?transAyat[i]?.text:'';
-      html+=`<div style="background:white;border-radius:10px;border:1px solid #e9ecef;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
+    html += `</div></div><div style="margin-bottom:8px;font-size:12px;font-weight:700;color:var(--gray)">${verseLabel}</div>`;
+
+    // Individual ayah cards with translation
+    arAyat.forEach((a, i) => {
+      const txt = (i===0&&n!==1&&n!==9) ? a.text.replace('بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ','').trim() : a.text;
+      if (!txt) return;
+      const trans = transAyat ? (transAyat[i]?.text || '') : '';
+      html += `<div style="background:white;border-radius:10px;border:1px solid #e9ecef;padding:14px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,0.04)">
         <div style="font-family:'Amiri',serif;font-size:20px;line-height:2;text-align:right;direction:rtl;margin-bottom:${trans?'10px':'0'}">${txt}</div>
-        ${trans?`<div style="padding:8px 12px;background:#f0f7f0;border-radius:8px;font-size:0.9rem;color:#1a3d1a;direction:${L.dir};border-${L.dir==='rtl'?'right':'left'}:3px solid var(--primary)"><strong style="color:var(--primary);font-size:0.78rem;display:block;margin-bottom:3px">${transLabel}</strong>${trans}</div>`:''}
+        ${trans ? `<div style="padding:10px 12px;background:#f0f7f0;border-radius:8px;font-size:0.9rem;color:#1a3d1a;direction:${transDir};border-${transBorderSide}:3px solid var(--primary)">
+          <strong style="color:var(--primary);font-size:0.75rem;display:block;margin-bottom:3px">${transLabel}</strong>
+          ${trans}
+        </div>` : ''}
         <div style="display:flex;align-items:center;gap:8px;border-top:1px solid #f0f0f0;padding-top:8px;margin-top:8px">
           <div style="width:24px;height:24px;background:var(--primary);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">${a.numberInSurah}</div>
           <span style="font-size:11px;color:var(--gray)">${verseWord} ${a.numberInSurah} • ${surahWord} ${name}</span>
         </div>
       </div>`;
     });
-    html+='<div style="height:20px"></div>';
-    c.innerHTML=html;
-  }).catch(()=>{
-    const c=document.getElementById('ayat-container');
-    if(c) c.innerHTML=`<div style="text-align:center;padding:30px;background:var(--light-gray);border-radius:12px">
+    html += '<div style="height:20px"></div>';
+    c.innerHTML = html;
+
+  }).catch(() => {
+    const c = document.getElementById('ayat-container');
+    if (c) c.innerHTML = `<div style="text-align:center;padding:30px;background:var(--light-gray);border-radius:12px">
       <div style="font-size:32px;margin-bottom:10px">📵</div>
-      <p style="color:var(--primary);font-weight:600;margin-bottom:16px">${errorT}</p>
-      <button onclick="openSurah(${n},'${name}','${type}',${ayahCount})" style="background:var(--primary);color:white;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-family:'Tajawal',sans-serif">${retryT}</button>
+      <p style="color:var(--primary);font-weight:600;margin-bottom:16px">${errorTxt}</p>
+      <button onclick="openSurah(${n},'${name}','${type}',${ayahCount})" style="background:var(--primary);color:white;border:none;padding:10px 20px;border-radius:20px;cursor:pointer;font-family:'Tajawal',sans-serif">${retryTxt}</button>
     </div>`;
   });
 }
-
 function toAr(n) { return String(n).replace(/\d/g, d=>'٠١٢٣٤٥٦٧٨٩'[d]); }
 
 // ==================== HADITH ====================
@@ -1226,7 +1519,7 @@ function filterDuas(f) { renderDuas(f); }
 const NAMES_MEANINGS_TRANS = {
   ar: NAMES_DATA.map(n=>n.m),
   en: ['The Greatest Name','The Most Gracious','The Most Merciful','The King','The Most Holy','The Source of Peace','The Guardian of Faith','The Preserver','The Almighty','The Compeller','The Supremely Great','The Creator','The Originator','The Fashioner','The Repeatedly Forgiving','The Subduer','The Bestower','The Provider','The Opener','The All-Knowing','The Withholder','The Extender','The Abaser','The Exalter','The Honorer','The Dishonorer','The All-Hearing','The All-Seeing','The Judge','The Just','The Subtle One','The Aware','The Forbearing','The Magnificent','The Forgiving','The Appreciative','The Most High','The Most Great','The Preserver','The Sustainer','The Reckoner','The Majestic','The Generous','The Watchful','The Responsive','The Vast','The Wise','The Loving','The Glorious','The Resurrector','The Witness','The Truth','The Trustee','The Strong','The Firm','The Protecting Friend','The Praiseworthy','The Accounter','The Originator','The Restorer','The Giver of Life','The Taker of Life','The Ever Living','The Self-Subsisting','The Finder','The Glorious One','The One','The Unique','The Eternal','The Capable','The Powerful','The Expediter','The Delayer','The First','The Last','The Manifest','The Hidden','The Governor','The Most Exalted','The Source of All Goodness','The Accepter of Repentance','The Avenger','The Pardoner','The Compassionate','The Owner of Sovereignty','The Lord of Majesty','The Equitable','The Gatherer','The Rich','The Enricher','The Preventer','The Creator of Harm','The Creator of Good','The Light','The Guide','The Incomparable','The Everlasting','The Inheritor','The Righteous Teacher','The Patient'],
-  fr: ['Le Nom Suprême','Le Tout Miséricordieux','Le Très Miséricordieux','Le Roi','Le Très Saint','La Source de Paix','Le Gardien de la Foi','Le Préservateur','Le Tout Puissant','Le Contraignant','Le Suprêmement Grand','Le Créateur','L\'Originateur','Le Façonneur','Celui qui pardonne beaucoup','Le Dominateur','Le Donateur','Le Pourvoyeur','L\'Ouvreur','L\'Omniscient','Celui qui retient','Celui qui étend','L\'Abaisseur','L\'Éleveur','L\'Honoreur','L\'Humiliateur','Celui qui entend tout','Celui qui voit tout','Le Juge','Le Juste','Le Subtil','Le Bien Informé','Le Patient','Le Magnifique','Le Pardonneur','Le Reconnaissant','Le Très Élevé','Le Très Grand','Le Préservateur','Le Nourricier','Le Juge Suprême','Le Majestueux','Le Généreux','Le Vigilant','Celui qui répond','L\'Immense','Le Sage','L\'Aimant','Le Glorieux','Celui qui ressuscite','Le Témoin','La Vérité','Le Mandataire','Le Fort','Le Solide','Le Protecteur','Le Louable','Le Comptable','L\'Initiateur','Le Restaurateur','Celui qui donne la vie','Celui qui donne la mort','Le Vivant','Le Subsistant','Celui qui trouve','Le Glorieux','L\'Unique','L\'Un','L\'Éternel','Le Capable','Le Tout Puissant','Celui qui devance','Celui qui retarde','Le Premier','Le Dernier','L\'Apparent','Le Caché','Le Gouverneur','L\'Élevé','Le Pieux','Celui qui accepte le repentir','Le Vengeur','Le Pardonneur','Le Compatissant','Le Propriétaire','Le Seigneur de Majesté','L\'Équitable','Le Rassembleur','Le Riche','L\'Enrichisseur','Celui qui empêche','Celui qui nuit','Celui qui profite','La Lumière','Le Guide','L\'Incomparable','L\'Éternel','L\'Héritier','Le Juste','Le Patient'],
+  fr: ['Le Nom Suprême','Le Tout Miséricordieux','Le Très Miséricordieux','Le Roi','Le Très Saint','La Source de Paix','Le Gardien de la Foi','Le Préservateur','Le Tout Puissant','Le Contraignant','Le Suprêmement Grand','Le Créateur','L Originateur','Le Façonneur','Celui qui pardonne beaucoup','Le Dominateur','Le Donateur','Le Pourvoyeur','L\'Ouvreur','L\'Omniscient','Celui qui retient','Celui qui étend','L\'Abaisseur','L\'Éleveur','L\'Honoreur','L\'Humiliateur','Celui qui entend tout','Celui qui voit tout','Le Juge','Le Juste','Le Subtil','Le Bien Informé','Le Patient','Le Magnifique','Le Pardonneur','Le Reconnaissant','Le Très Élevé','Le Très Grand','Le Préservateur','Le Nourricier','Le Juge Suprême','Le Majestueux','Le Généreux','Le Vigilant','Celui qui répond','L\'Immense','Le Sage','L\'Aimant','Le Glorieux','Celui qui ressuscite','Le Témoin','La Vérité','Le Mandataire','Le Fort','Le Solide','Le Protecteur','Le Louable','Le Comptable','L\'Initiateur','Le Restaurateur','Celui qui donne la vie','Celui qui donne la mort','Le Vivant','Le Subsistant','Celui qui trouve','Le Glorieux','L\'Unique','L\'Un','L\'Éternel','Le Capable','Le Tout Puissant','Celui qui devance','Celui qui retarde','Le Premier','Le Dernier','L\'Apparent','Le Caché','Le Gouverneur','L\'Élevé','Le Pieux','Celui qui accepte le repentir','Le Vengeur','Le Pardonneur','Le Compatissant','Le Propriétaire','Le Seigneur de Majesté','L\'Équitable','Le Rassembleur','Le Riche','L\'Enrichisseur','Celui qui empêche','Celui qui nuit','Celui qui profite','La Lumière','Le Guide','L\'Incomparable','L\'Éternel','L\'Héritier','Le Juste','Le Patient'],
   de: ['Der Höchste Name','Der Allerbarmer','Der Barmherzige','Der König','Der Heilige','Der Friede','Der Hüter des Glaubens','Der Wächter','Der Allmächtige','Der Zwingherr','Der Hocherhabene','Der Schöpfer','Der Urheber','Der Gestalter','Der Allverzeihende','Der Überwältiger','Der Schenker','Der Versorger','Der Öffner','Der Allwissende','Der Zurückhalter','Der Freigebige','Der Erniedrigende','Der Erhöhende','Der Ehrende','Der Entehrende','Der Allhörende','Der Allsehende','Der Richter','Der Gerechte','Der Gütige','Der Allkundige','Der Sanftmütige','Der Großartige','Der Allvergebende','Der Dankbare','Der Erhabene','Der Große','Der Bewahrer','Der Ernährer','Der Rechnungsführer','Der Majestätische','Der Großzügige','Der Wachsame','Der Antwortende','Der Weitreichende','Der Weise','Der Liebende','Der Ruhmreiche','Der Erwecker','Der Zeuge','Die Wahrheit','Der Treuhänder','Der Starke','Der Standfeste','Der Beschützer','Der Lobenswürdige','Der Rechnungsführer','Der Erschaffer','Der Wiederhersteller','Der Lebensgeber','Der Todgeber','Der Lebendige','Der Beständige','Der Findende','Der Ruhmreiche','Der Eine','Der Einzige','Der Ewige','Der Fähige','Der Mächtige','Der Voransteller','Der Zurücksteller','Der Erste','Der Letzte','Der Offensichtliche','Der Verborgene','Der Verwalter','Der Hocherhaben','Der Gütige','Der Reueannehmer','Der Rächer','Der Vergebende','Der Mitfühlende','Der Eigentümer','Der Herr der Majestät','Der Gerechte','Der Sammler','Der Reiche','Der Bereichernde','Der Verhindernde','Der Schädigende','Der Nützliche','Das Licht','Der Führende','Der Einzigartige','Der Ewigwährende','Der Erbe','Der Rechtschaffene','Der Geduldige'],
   ru: ['Величайшее Имя','Всемилостивый','Милосердный','Царь','Пресвятой','Источник Мира','Хранитель Веры','Хранитель','Всемогущий','Принудитель','Величественный','Творец','Созидатель','Формирователь','Всепрощающий','Подавляющий','Дарующий','Кормилец','Открывающий','Всезнающий','Удерживающий','Дающий','Унижающий','Возвышающий','Почитающий','Умаляющий','Всеслышащий','Всевидящий','Судья','Справедливый','Тонкий','Осведомлённый','Кроткий','Великий','Прощающий','Благодарный','Возвышенный','Великий','Хранитель','Питатель','Счётчик','Величавый','Щедрый','Наблюдатель','Отвечающий','Обширный','Мудрый','Любящий','Славный','Воскреситель','Свидетель','Истина','Попечитель','Сильный','Крепкий','Покровитель','Достохвальный','Считающий','Зачинатель','Восстановитель','Дарующий жизнь','Умерщвляющий','Живой','Самодостаточный','Находящий','Великолепный','Единственный','Единый','Вечный','Способный','Мощный','Опережающий','Откладывающий','Первый','Последний','Явный','Скрытый','Правящий','Превознесённый','Добродетельный','Принимающий покаяние','Мститель','Прощающий','Сострадательный','Владыка царства','Властелин','Справедливый','Собирающий','Богатый','Обогащающий','Препятствующий','Причиняющий вред','Приносящий пользу','Свет','Ведущий','Несравненный','Вечный','Наследник','Праведный','Терпеливый'],
   ko: ['위대한 이름','가장 자비로운','매우 자비로운','왕','성스러운','평화의 원천','신앙의 수호자','보존자','전능한','강압자','최고 위대한','창조자','창시자','형태부여자','거듭 용서하는','압도하는','선물하는','공급자','열어주는','전지(全知)','억제하는','베풀어주는','낮추는','높이는','존귀하게 하는','굴욕주는','다 듣는','다 보는','심판자','공정한','미묘한','정통한','인내하는','장엄한','용서하는','감사하는','높은','위대한','보존자','양육자','계산자','위엄있는','관대한','감시자','응답하는','넓은','현명한','사랑하는','영광스러운','부활시키는','증인','진리','보증인','강한','굳건한','보호자','칭찬받는','계산하는','창시자','회복자','생명 부여자','죽음 부여자','영원히 사는','자존하는','찾는','영광스러운','유일한','하나인','영원한','가능한','강력한','앞세우는','뒤로 미루는','처음','마지막','명백한','숨은','통치자','최고 높은','선한','참회 받는','복수하는','용서하는','자비로운','왕권 소유자','위엄의 주','공평한','모으는','부유한','부유하게 하는','방해하는','해 끼치는','유익한','빛','인도하는','유일무이한','영원한','상속자','의로운','참을성 있는'],
@@ -1249,6 +1542,109 @@ function renderNames() {
 }
 
 // ==================== ATHKAR ====================
+
+// ==================== ATHKAR MEANINGS ====================
+const ATHKAR_MEANINGS = {
+  morning: {
+    0: {ar:'أصبحنا وأصبح الملك لله وحده، سبحانه وبحمده.',
+        en:'We have reached the morning and with it all the dominion belongs to Allah alone. Praise be to Allah.',
+        ko:'우리가 아침을 맞이했고 모든 왕권은 알라께만 속합니다. 알라를 찬양합니다.',
+        ja:'私たちは朝を迎え、すべての支配はアッラーのみのものです。アッラーを称えます。',
+        fr:'Nous avons atteint le matin et tout le règne appartient à Allah. Louange à Allah.',
+        de:'Wir haben den Morgen erreicht und alle Herrschaft gehört nur Allah. Lob sei Allah.',
+        tr:'Sabaha kavuştuk, mülk yalnızca Allaha aittir. Allaha hamd olsun.',
+        ru:'Мы встретили утро, и вся власть принадлежит только Аллаху. Хвала Аллаху.',
+        zh:'我们迎来了早晨，一切主权归于真主。赞美真主。',
+        ur:'ہم نے صبح کی اور تمام بادشاہت اللہ ہی کی ہے۔ اللہ کی حمد ہو۔'},
+    1: {ar:'اللهم بك أصبحنا وبك أمسينا وبك نحيا وبك نموت وإليك النشور.',
+        en:'O Allah, by You we enter the morning, by You we enter the evening, by You we live and by You we die, and to You is the resurrection.',
+        ko:'오 알라여, 당신으로 인해 우리는 아침을 맞고, 당신으로 인해 저녁을 맞습니다. 당신으로 살고 죽으며, 당신께로 돌아갑니다.',
+        ja:'おおアッラーよ、あなたによって私たちは朝を迎え、あなたによって夕べを迎えます。あなたによって生き、あなたによって死に、あなたのもとに復活します。',
+        fr:'Ô Allah, cest par Toi que nous entrons dans le matin, cest par Toi que nous entrons dans le soir, cest par Toi que nous vivons et mourons, et cest vers Toi que nous ressusciterons.',
+        de:'O Allah, durch Dich beginnen wir den Morgen, durch Dich den Abend, durch Dich leben und sterben wir, und zu Dir ist die Auferstehung.',
+        tr:'Allahim, seninle sabahladik, seninle aksamladik, seninle yasar ve seninle oluruz, donus de sanadir.',
+        ru:'О Аллах, с Тобой мы встречаем утро, с Тобой вечер, Тобой живём и умираем, и к Тебе воскресение.',
+        zh:'啊，安拉，因您我们迎来早晨，因您迎来傍晚，因您我们生存和死亡，复活归于您。',
+        ur:'اے اللہ! تیری وجہ سے ہم نے صبح کی اور تیری وجہ سے شام کی، تجھ سے جیتے ہیں اور تجھ سے مرتے ہیں اور تیری طرف لوٹنا ہے۔'},
+    2: {ar:'سيد الاستغفار: أنت ربي لا إله إلا أنت، خلقتني وأنا عبدك على عهدك ووعدك ما استطعت، أعوذ بك من شر ما صنعت.',
+        en:'The master supplication: You are my Lord, there is no god but You. You created me and I am Your servant, faithful to Your covenant to the best of my ability. I seek refuge in You from the evil I have done.',
+        ko:'용서의 주인 기도: 당신은 나의 주님이시고 당신 외에는 신이 없습니다. 당신이 나를 창조하셨고 나는 당신의 종입니다. 제 능력껏 당신의 언약을 지킵니다. 제가 저지른 악으로부터 당신께 피신합니다.',
+        ja:'最高の懺悔の祈り: あなたは私の主であり、あなた以外に神はいません。あなたが私を創られ、私はあなたの僕です。力の及ぶ限りあなたとの誓いを守ります。私がした悪からあなたに避難します。',
+        fr:'La supplication maîtresse: Vous êtes mon Seigneur, il ny a pas de dieu sauf Vous. Vous mavez créé et je suis Votre serviteur, fidèle à Votre pacte autant que je le peux. Je cherche refuge en Vous contre le mal que jai fait.',
+        de:'Das Meistergebet: Du bist mein Herr, es gibt keinen Gott außer Dir. Du hast mich erschaffen und ich bin Dein Diener, so gut ich kann Deinem Bund treu. Ich suche Zuflucht bei Dir vor dem Bösen, das ich getan habe.',
+        tr:'İstiğfarın efendisi: Sen benim Rabbimsin, senden başka ilah yoktur. Beni sen yarattın ve ben senin kulunum, gucum yettigince ahdine bagliyim. Isledigim kotulukten sana sigiinirim.',
+        ru:'Господин истигфара: Ты мой Господь, нет бога кроме Тебя. Ты создал меня, я Твой раб, верен Твоему завету по мере сил. Прибегаю к Тебе от зла, что я совершил.',
+        zh:'忏悔之主: 您是我的主，除您外没有神。您创造了我，我是您的仆人，尽力遵守您的誓约。我向您寻求保护，免受我所做之恶。',
+        ur:'استغفار کا سردار: تو میرا رب ہے، تیرے سوا کوئی معبود نہیں۔ تو نے مجھے پیدا کیا اور میں تیرا بندہ ہوں، جتنا ہو سکے تیرے عہد پر قائم ہوں۔ میں نے جو برائی کی اس سے تیری پناہ مانگتا ہوں۔'},
+    3: {ar:'سبحان الله وبحمده مئة مرة، تمحى خطاياه.',
+        en:'Glory be to Allah and His is the praise, 100 times. Sins are wiped away.',
+        ko:'알라에게 영광과 찬양이 있습니다, 100번. 죄가 씻겨집니다.',
+        ja:'アッラーに栄光と称賛あれ、100回。罪が消されます。',
+        fr:'Gloire à Allah et Sa louange, 100 fois. Les péchés sont effacés.',
+        de:'Ehre sei Allah und Ihm gebührt Lob, 100 Mal. Sünden werden getilgt.',
+        tr:'Allahi tespih ve hamd ederim, 100 defa. Gunahlar silinir.',
+        ru:'Слава Аллаху и Хвала Ему, 100 раз. Грехи стираются.',
+        zh:'赞主清净并归美于真主，100次。罪孽被消除。',
+        ur:'سبحان اللہ وبحمده، سو بار۔ گناہ مٹا دیے جاتے ہیں۔'},
+    4: {ar:'أعوذ بكلمات الله التامات من شر ما خلق - ثلاث مرات.',
+        en:'I seek refuge in the perfect words of Allah from the evil of what He has created - 3 times.',
+        ko:'나는 그가 창조한 것의 악으로부터 알라의 완전한 말씀에 피신합니다 - 3번.',
+        ja:'アッラーの完全な御言葉によって、彼が創ったものの悪からの避難を求めます - 3回。',
+        fr:'Je cherche refuge dans les paroles parfaites dAllah contre le mal de ce quIl a cree - 3 fois.',
+        de:'Ich suche Zuflucht in Allahs vollkommenen Worten vor dem Bösen dessen, was Er erschaffen hat - 3 Mal.',
+        tr:'Allahin eksiksiz kelimeleriyle yaratiklarinin şerrinden Allaha sığınırım - 3 defa.',
+        ru:'Прибегаю к совершенным словам Аллаха от зла того, что Он создал - 3 раза.',
+        zh:'我借助真主完美的话语，寻求保护免受他所创造之物的害处 - 3次。',
+        ur:'میں اللہ کے کامل کلمات کی پناہ مانگتا ہوں اس کی تمام مخلوق کے شر سے - تین بار۔'},
+  },
+  evening: {
+    0: {ar:'أمسينا وأمسى الملك لله والحمد لله لا إله إلا الله وحده لا شريك له.',
+        en:'We have reached the evening and with it all the dominion belongs to Allah. Praise be to Allah.',
+        ko:'우리가 저녁을 맞이했고 모든 왕권은 알라께 속합니다. 알라를 찬양합니다.',
+        ja:'私たちは夕べを迎え、すべての支配はアッラーのものです。アッラーを称えます。',
+        fr:'Nous avons atteint le soir et tout le règne appartient à Allah. Louange à Allah.',
+        de:'Wir haben den Abend erreicht und alle Herrschaft gehört Allah. Lob sei Allah.',
+        tr:'Akşama kavuştuk, mülk yalnızca Allaha aittir. Hamd Allaha aittir.',
+        ru:'Мы встретили вечер, и вся власть принадлежит Аллаху. Хвала Аллаху.',
+        zh:'我们迎来了傍晚，一切主权归于真主。赞美真主。',
+        ur:'ہم نے شام کی اور تمام بادشاہت اللہ کی ہے اور اللہ کی تعریف ہے۔'},
+    1: {ar:'اللهم بك أمسينا وبك أصبحنا وبك نحيا وبك نموت وإليك المصير.',
+        en:'O Allah, by You we enter the evening, by You the morning, by You we live and die, and to You is the final destination.',
+        ko:'오 알라여, 당신으로 저녁을 맞고 아침을 맞습니다. 당신으로 살고 죽으며, 당신이 최종 목적지입니다.',
+        ja:'おおアッラーよ、あなたによって夕べを迎え、あなたによって朝を迎えます。あなたによって生き死に、あなたが最終の帰還先です。',
+        fr:'Ô Allah, par Toi nous entrons dans le soir, par Toi dans le matin, par Toi nous vivons et mourons, et cest vers Toi que nous retournons.',
+        de:'O Allah, durch Dich beginnen wir den Abend, durch Dich den Morgen, durch Dich leben und sterben wir, und zu Dir ist die endgültige Rückkehr.',
+        tr:'Allahim, seninle aksamladik, seninle sabahladik, seninle yasa ve oluruz, donus de sanadir.',
+        ru:'О Аллах, с Тобой мы встречаем вечер, с Тобой утро, Тобой живём и умираем, и к Тебе возвращение.',
+        zh:'啊，安拉，因您我们迎来傍晚和早晨，因您我们生存和死亡，归宿在您那里。',
+        ur:'اے اللہ! تیری وجہ سے ہم نے شام کی اور صبح کی، تجھ سے جیتے اور مرتے ہیں اور تیری طرف لوٹنا ہے۔'},
+  },
+  prayer: {
+    0: {ar:'سبحان الله 33 مرة، والحمد لله 33 مرة، والله أكبر 33 مرة.',
+        en:'SubhanAllah 33 times, Alhamdulillah 33 times, Allahu Akbar 33 times.',
+        ko:'수바한알라 33번, 알함두릴라 33번, 알라후 아크바르 33번.',
+        ja:'スブハーナッラー33回、アルハムドゥリッラー33回、アッラーフアクバル33回。',
+        fr:'Subhan Allah 33 fois, Alhamdulillah 33 fois, Allahu Akbar 33 fois.',
+        de:'Subhan Allah 33 Mal, Alhamdulillah 33 Mal, Allahu Akbar 33 Mal.',
+        tr:'Subhanallah 33 defa, Elhamdulillah 33 defa, Allahu Ekber 33 defa.',
+        ru:'СубханАллах 33 раза, АльхамдулиЛлях 33 раза, АллахуАкбар 33 раза.',
+        zh:'سبحان الله 33次，الحمد لله 33次，الله أكبر 33次。',
+        ur:'سبحان اللہ 33 بار، الحمد للہ 33 بار، اللہ اکبر 33 بار۔'},
+  },
+  sleep: {
+    0: {ar:'باسمك اللهم أموت وأحيا - قبل النوم.',
+        en:'In Your name, O Allah, I die and live - before sleeping.',
+        ko:'당신의 이름으로, 오 알라여, 저는 죽고 삽니다 - 잠자기 전.',
+        ja:'あなたの御名において、おおアッラーよ、私は死に生きます - 眠る前。',
+        fr:'En Ton nom, ô Allah, je meurs et je vis - avant de dormir.',
+        de:'In Deinem Namen, o Allah, sterbe und lebe ich - vor dem Schlafen.',
+        tr:'Bismike Allahim olur ve yasarim - uyumadan önce.',
+        ru:'Во имя Твоё, о Аллах, умираю и живу - перед сном.',
+        zh:'以您的名义，啊安拉，我死去和活着 - 睡前。',
+        ur:'تیرے نام کے ساتھ اے اللہ! مرتا اور جیتا ہوں - سونے سے پہلے۔'},
+  },
+};
+
 function showAthkar(type) {
   appState.currentAthkarSection = type;
   const tabLabels = [T('morning'), T('evening'), T('after_prayer'), T('sleep')];
@@ -1260,15 +1656,20 @@ function showAthkar(type) {
   const timesLbl = T('times_lbl');
   const dhikrLbl = T('dhikr_lbl');
   const srcLbl = T('source_lbl');
-  document.getElementById('athkar-content').innerHTML = list.map((a,idx) =>
-    `<div class="content-item">
+  const athkarMeanings = ATHKAR_MEANINGS[type] || {};
+  document.getElementById('athkar-content').innerHTML = list.map((a,idx) => {
+    const meaning = athkarMeanings[idx] ? (athkarMeanings[idx][currentLang] || athkarMeanings[idx]['en'] || '') : '';
+    const transDir = ['ar','ur'].includes(currentLang) ? 'rtl' : 'ltr';
+    return `<div class="content-item">
       <div class="content-title">
         <span>${dhikrLbl} ${idx+1}</span>
         <span style="background:var(--primary);color:white;padding:2px 8px;border-radius:10px;font-size:0.8rem">${a.count} ${timesLbl}</span>
       </div>
       <div class="content-text" style="direction:rtl">${a.text}</div>
+      ${meaning && currentLang !== 'ar' ? `<div style="margin-top:8px;padding:8px 10px;background:var(--light-gray);border-radius:8px;font-size:0.85rem;color:var(--primary);direction:${transDir};border-${transDir==='rtl'?'right':'left'}:3px solid var(--secondary)">${T('meaning_lbl')}: ${meaning}</div>` : ''}
       <div class="content-source">${srcLbl}: ${a.source}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 function renderAthkar(t) { showAthkar(t); }
 
@@ -1443,32 +1844,194 @@ function searchContent(query) {
 }
 
 // ==================== AI ASSISTANT ====================
+
+const AI_ERROR_MSGS = {
+  ar: 'عذراً، لم أتمكن من الإجابة.',
+  en: 'Sorry, I could not answer.',
+  ko: '죄송합니다, 답변드리지 못했습니다.',
+  ja: '申し訳ありませんが、回答できませんでした。',
+  fr: 'Desole, je nai pas pu repondre.',
+  de: 'Entschuldigung, ich konnte nicht antworten.',
+  tr: 'Uzgunum, yanit veremedim.',
+  ru: 'Извините, я не смог ответить.',
+  zh: '抱歉，我无法回答。',
+  ur: 'معذرت، میں جواب دینے سے قاصر ہوں۔',
+};
+const AI_CONN_ERROR_MSGS = {
+  ar: '⚠️ تعذّر الاتصال. تأكد من الإنترنت.',
+  en: '⚠️ Connection failed. Check your internet.',
+  ko: '⚠️ 연결 실패. 인터넷을 확인하세요.',
+  ja: '⚠️ 接続失敗。インターネットを確認してください。',
+  fr: '⚠️ Connexion echouee. Verifiez votre internet.',
+  de: '⚠️ Verbindung fehlgeschlagen. Pruefen Sie das Internet.',
+  tr: '⚠️ Baglanti basarisiz. Interneti kontrol edin.',
+  ru: '⚠️ Соединение не установлено. Проверьте интернет.',
+  zh: '⚠️ 连接失败。请检查网络。',
+  ur: '⚠️ کنکشن ناکام۔ انٹرنیٹ چیک کریں۔',
+};
+const AI_TYPING_MSGS = {
+  ar: '⏳ يكتب...',
+  en: '⏳ Typing...',
+  ko: '⏳ 입력 중...',
+  ja: '⏳ 入力中...',
+  fr: '⏳ En train d ecrire...',
+  de: '⏳ Schreibt...',
+  tr: '⏳ Yaziyor...',
+  ru: '⏳ Пишет...',
+  zh: '⏳ 输入中...',
+  ur: '⏳ لکھ رہا ہے...',
+};
+
+const AI_SYSTEM_PROMPTS = {
+  ar: 'أنت مساعد إسلامي ذكي اسمك "المساعد الإسلامي". تجيب على أي سؤال بالعربية بدقة ووضوح. للأسئلة الدينية استند للقرآن والسنة الصحيحة.',
+  en: 'You are an intelligent Islamic assistant named "Islamic Assistant". Answer any question in English clearly and accurately. For religious questions, refer to the Quran and authentic Sunnah.',
+  ko: '당신은 "이슬람 도우미"라는 이름의 지능형 이슬람 도우미입니다. 모든 질문에 한국어로 명확하고 정확하게 답변하세요. 종교적 질문에는 꾸란과 진정한 순나를 참조하세요.',
+  ja: 'あなたは「イスラムアシスタント」という名前の知的なイスラムアシスタントです。すべての質問に日本語で明確かつ正確に答えてください。宗教的な質問にはクルアーンと真正なスンナを参照してください。',
+  fr: 'Vous êtes un assistant islamique intelligent nommé "Assistant Islamique". Répondez à toutes les questions en français avec clarté et précision. Pour les questions religieuses, référez-vous au Coran et à la Sunna authentique.',
+  de: 'Sie sind ein intelligenter islamischer Assistent namens "Islamischer Assistent". Beantworten Sie alle Fragen auf Deutsch klar und präzise. Bei religiösen Fragen beziehen Sie sich auf den Quran und die authentische Sunna.',
+  tr: 'Siz "İslam Asistanı" adında akıllı bir İslam asistanısınız. Tüm soruları Türkçe olarak açık ve doğru bir şekilde yanıtlayın. Dini sorular için Kuran ve sahih Sünnete başvurun.',
+  ru: 'Вы умный исламский помощник по имени "Исламский помощник". Отвечайте на все вопросы на русском языке чётко и точно. По религиозным вопросам обращайтесь к Корану и достоверной Сунне.',
+  zh: '您是一位名为"伊斯兰助手"的智能伊斯兰助手。请用中文清晰准确地回答任何问题。对于宗教问题，请参考古兰经和真实圣训。',
+  ur: 'آپ "اسلامی مددگار" نامی ذہین اسلامی مددگار ہیں۔ کسی بھی سوال کا اردو میں واضح اور درست جواب دیں۔ مذہبی سوالات کے لیے قرآن اور صحیح سنت کا حوالہ دیں۔',
+};
+const AI_WELCOME_MSGS = {
+  ar: "اسألني عن أي شيء — القرآن، الفقه، التاريخ، أو أي سؤال عام",
+  en: "Ask me anything — Quran, Fiqh, History, or any general question",
+  ko: "무엇이든 물어보세요 — 꾸란, 피크, 역사 또는 일반적인 질문",
+  ja: "何でもお聞きください — クルアーン、フィクフ、歴史、または一般的な質問",
+  fr: "Posez-moi toute question — Coran, Fiqh, Histoire ou question generale",
+  de: "Fragen Sie mich alles — Quran, Fiqh, Geschichte oder allgemeine Fragen",
+  tr: "Her seyi sorabilirsiniz — Kuran, Fikih, Tarih veya genel sorular",
+  ru: "Спрашивайте о чём угодно — Коран, Фикх, История или общие вопросы",
+  zh: "问我任何问题 — 古兰经、教法、历史或一般问题",
+  ur: "کچھ بھی پوچھیں — قرآن، فقہ، تاریخ یا کوئی بھی عام سوال"
+};
+
+let _aiHistory = [];
+function clearAIHistory() {
+  _aiHistory = [];
+  var b = document.getElementById('ai-chat-body');
+  if(b) { b.innerHTML = ''; var d = document.createElement('div'); d.style.textAlign='center'; d.style.padding='25px 10px'; d.innerHTML = '<div style="font-size:3.5rem;margin-bottom:10px">\u{1F54C}</div><div style="font-family:Amiri,serif;font-size:1.1rem;color:green;margin-bottom:8px">\u0628\u0650\u0633\u0645\u0650 \u0627\u0644\u0644\u0651\u064e\u0647\u0650 \u0627\u0644\u0631\u0651\u064e\u062d\u0645\u064e\u0651\u0646\u0650 \u0627\u0644\u0631\u0651\u064e\u062d\u0650\u064a\u0645\u0650</div><div style="font-size:0.88rem;color:#666">\u0645\u062d\u0627\u062f\u062b\u0629 \u062c\u062f\u064a\u062f\u0629</div>'; b.appendChild(d); }
+}
 async function sendAIQuestion() {
-  const input = document.getElementById('ai-input');
-  const q = input.value.trim();
+  var input = document.getElementById('ai-input');
+  var q = input ? input.value.trim() : '';
   if (!q) return;
-  input.value = '';
-  const body = document.getElementById('ai-chat-body');
-  body.innerHTML += `<div class="ai-message user">${q}</div>`;
-  body.innerHTML += `<div class="ai-message bot" id="ai-typing">⏳ جاري الإجابة...</div>`;
+  if(input){ input.value=''; input.style.height='auto'; }
+  var body = document.getElementById('ai-chat-body');
+  if(!body) return;
+
+  // User message
+  var uWrap = document.createElement('div');
+  uWrap.style.cssText = 'display:flex;gap:8px;flex-direction:row-reverse;align-items:flex-end;margin-bottom:4px';
+  var uAvatar = document.createElement('div');
+  uAvatar.style.cssText = 'width:30px;height:30px;background:#d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0';
+  uAvatar.textContent = '👤';
+  var uBubble = document.createElement('div');
+  uBubble.style.cssText = 'max-width:78%;padding:11px 15px;border-radius:18px 18px 4px 18px;background:var(--primary);color:white;font-size:0.93rem;line-height:1.6;font-family:Tajawal,sans-serif;white-space:pre-wrap';
+  uBubble.textContent = q;
+  uWrap.appendChild(uBubble); uWrap.appendChild(uAvatar);
+  body.appendChild(uWrap);
+  _aiHistory.push({role:'user', content:q});
+
+  // Typing indicator
+  var tWrap = document.createElement('div');
+  tWrap.id = '_ai_typing';
+  tWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-end;margin-bottom:4px';
+  var tAvatar = document.createElement('div');
+  tAvatar.style.cssText = 'width:30px;height:30px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0';
+  tAvatar.textContent = '🤖';
+  var tBubble = document.createElement('div');
+  tBubble.style.cssText = 'padding:11px 15px;border-radius:4px 18px 18px 18px;background:white;font-family:Tajawal,sans-serif;font-size:0.9rem';
+  var _lang = typeof currentLang !== 'undefined' ? currentLang : 'ar'; tBubble.textContent = AI_TYPING_MSGS[_lang] || AI_TYPING_MSGS['ar'];
+  tWrap.appendChild(tAvatar); tWrap.appendChild(tBubble);
+  body.appendChild(tWrap);
   body.scrollTop = body.scrollHeight;
+
+  var btn = document.getElementById('ai-send-btn');
+  if(btn) btn.disabled = true;
+
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        system: 'أنت مساعد إسلامي متخصص. أجب بالعربية بشكل موجز ودقيق ومستند إلى القرآن والسنة الصحيحة. ابدأ ردودك بـ "بسم الله" أو سلام.',
-        messages: [{role:'user',content:q}]
-      })
-    });
-    const data = await res.json();
-    const answer = data.content?.[0]?.text || 'عذراً، لم أتمكن من الإجابة.';
-    document.getElementById('ai-typing').textContent = answer;
-  } catch {
-    document.getElementById('ai-typing').textContent = 'عذراً، حدث خطأ في الاتصال. تأكد من الإنترنت.';
+    var _lang = typeof currentLang !== 'undefined' ? currentLang : 'ar';
+    var _apiKey = localStorage.getItem('ai_api_key') || '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';
+    var _apiProvider = localStorage.getItem('ai_provider') || 'groq';
+    var answer = AI_ERROR_MSGS[_lang] || AI_ERROR_MSGS['ar'];
+
+    if (!_apiKey) {
+      answer = _lang === 'ko' ? '⚙️ 설정에서 API 키를 입력해주세요.' :
+               _lang === 'ja' ? '⚙️ 設定でAPIキーを入力してください。' :
+               _lang === 'en' ? '⚙️ Please enter your API key in Settings.' :
+               '⚙️ أدخل مفتاح API في الإعدادات لتفعيل المساعد.';
+    } else {
+      var _sysPrompt = AI_SYSTEM_PROMPTS[_lang] || AI_SYSTEM_PROMPTS['ar'];
+      var _res, _data;
+
+      if (_apiProvider === 'groq') {
+        // Groq API - Free & Fast
+        _res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json','Authorization':'Bearer '+_apiKey},
+          body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [{role:'system',content:_sysPrompt}].concat(_aiHistory),
+            max_tokens: 1500
+          })
+        });
+        _data = await _res.json();
+        if (_data.choices && _data.choices[0]) answer = _data.choices[0].message.content;
+        else if (_data.error) answer = '❌ ' + (_data.error.message || 'API Error');
+
+      } else if (_apiProvider === 'openai') {
+        // OpenAI API
+        _res = await fetch('https://api.openai.com/v1/chat/completions', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json','Authorization':'Bearer '+_apiKey},
+          body: JSON.stringify({
+            model: 'gpt-4o-mini',
+            messages: [{role:'system',content:_sysPrompt}].concat(_aiHistory),
+            max_tokens: 1500
+          })
+        });
+        _data = await _res.json();
+        if (_data.choices && _data.choices[0]) answer = _data.choices[0].message.content;
+        else if (_data.error) answer = '❌ ' + (_data.error.message || 'API Error');
+
+      } else if (_apiProvider === 'gemini') {
+        // Google Gemini API - Free tier available
+        _res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+_apiKey, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            system_instruction: {parts:[{text:_sysPrompt}]},
+            contents: _aiHistory.map(m => ({role: m.role==='assistant'?'model':'user', parts:[{text:m.content}]}))
+          })
+        });
+        _data = await _res.json();
+        if (_data.candidates && _data.candidates[0]) answer = _data.candidates[0].content.parts[0].text;
+        else if (_data.error) answer = '❌ ' + (_data.error.message || 'API Error');
+      }
+    }
+    var res = {ok: true}; // dummy
+    var data = {content:[{text:answer}]};
+    var lang = _lang;
+    var td = document.getElementById('_ai_typing');
+    if(td) td.remove();
+    var bWrap = document.createElement('div');
+    bWrap.style.cssText = 'display:flex;gap:8px;align-items:flex-end;margin-bottom:4px';
+    var bAvatar = document.createElement('div');
+    bAvatar.style.cssText = 'width:30px;height:30px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.9rem;flex-shrink:0';
+    bAvatar.textContent = '🤖';
+    var bBubble = document.createElement('div');
+    bBubble.style.cssText = 'max-width:78%;padding:11px 15px;border-radius:4px 18px 18px 18px;background:white;color:var(--text);font-size:0.93rem;line-height:1.6;font-family:Tajawal,sans-serif;white-space:pre-wrap;box-shadow:0 1px 3px rgba(0,0,0,0.08)';
+    bBubble.textContent = answer;
+    bWrap.appendChild(bAvatar); bWrap.appendChild(bBubble);
+    body.appendChild(bWrap);
+    _aiHistory.push({role:'assistant', content:answer});
+  } catch(e) {
+    var td2 = document.getElementById('_ai_typing');
+    var _clang = typeof currentLang !== 'undefined' ? currentLang : 'ar'; if(td2) { var tb = td2.querySelector('div:last-child'); if(tb) tb.textContent = AI_CONN_ERROR_MSGS[_clang] || AI_CONN_ERROR_MSGS['ar']; }
   }
+  if(btn) btn.disabled = false;
   body.scrollTop = body.scrollHeight;
 }
 
@@ -2375,6 +2938,15 @@ function changeLanguage(lang) {
   // AI chat
   const aiInput = document.getElementById('ai-input');
   if (aiInput) aiInput.placeholder = T('ai_placeholder');
+  // Update AI welcome message
+  const aiBody = document.getElementById('ai-chat-body');
+  if (aiBody && aiBody.children.length <= 1) {
+    const welcomeDiv = aiBody.querySelector('div[style*="text-align:center"]');
+    if (welcomeDiv) {
+      const msgDiv = welcomeDiv.querySelector('div:last-child');
+      if (msgDiv) msgDiv.textContent = AI_WELCOME_MSGS[lang] || AI_WELCOME_MSGS['en'];
+    }
+  }
   const aiSendBtn = document.querySelector('.ai-chat-input button');
   if (aiSendBtn) aiSendBtn.textContent = T('send');
   const aiHeader = document.querySelector('.ai-chat-header span');
@@ -2396,6 +2968,40 @@ function changeLanguage(lang) {
   const clearBtn = document.querySelector('#settings .tab-btn[style*="danger"]');
   if (clearBtn) clearBtn.textContent = T('clear_data_btn');
 
+  // Usage count labels
+  const usageLabels = {
+    ar:'عدد مرات الاستخدام:', en:'Usage Count:', ko:'사용 횟수:',
+    ja:'使用回数:', fr:'Nb utilisations:', de:'Nutzungsanzahl:',
+    tr:'Kullanım Sayısı:', ru:'Кол-во использований:', zh:'使用次数:', ur:'استعمال کی تعداد:'
+  };
+  const lastUsedLabels = {
+    ar:'آخر استخدام:', en:'Last Used:', ko:'마지막 사용:',
+    ja:'最終使用:', fr:'Dernière utilisation:', de:'Zuletzt genutzt:',
+    tr:'Son Kullanım:', ru:'Последнее использование:', zh:'上次使用:', ur:'آخری استعمال:'
+  };
+  const ulEl = document.getElementById('label-usage');
+  if (ulEl) {
+    const usageVal = document.getElementById('app-usage');
+    ulEl.textContent = (usageLabels[lang] || usageLabels['en']) + ' ';
+    if (usageVal) ulEl.appendChild(usageVal);
+  }
+  const luEl = document.getElementById('label-last-usage');
+  if (luEl) {
+    const lastVal = document.getElementById('last-usage');
+    luEl.textContent = (lastUsedLabels[lang] || lastUsedLabels['en']) + ' ';
+    if (lastVal) luEl.appendChild(lastVal);
+  }
+
+  // Admin button text
+  const adminBtnLabels = {
+    ar:'🛡️ لوحة الإدارة', en:'🛡️ Admin Panel', ko:'🛡️ 관리자 패널',
+    ja:'🛡️ 管理パネル', fr:'🛡️ Panneau Admin', de:'🛡️ Admin-Panel',
+    tr:'🛡️ Yönetici Paneli', ru:'🛡️ Панель администратора',
+    zh:'🛡️ 管理面板', ur:'🛡️ ایڈمن پینل'
+  };
+  const adminBtn = document.getElementById('admin-open-btn');
+  if (adminBtn) adminBtn.textContent = adminBtnLabels[lang] || adminBtnLabels['en'];
+
   // Mosques
   const mosquesDesc = document.querySelector('#mosques .card p');
   if (mosquesDesc) mosquesDesc.textContent = T('mosques_desc');
@@ -2412,7 +3018,21 @@ function changeLanguage(lang) {
     c.style.borderLeft  = dir === 'ltr' ? '3px solid var(--secondary)' : 'none';
   });
 
-  // Re-render all dynamic content with new language/translations
+
+  // Tasbih button labels
+  const tasbihLabels = {
+    'tb-tasbih':   {ar:'تسبيح',en:'Tasbih',ko:'타스비흐',ja:'タスビーフ',fr:'Tasbih',de:'Tasbih',tr:'Tesbih',ru:'Тасбих',zh:'赞主清净',ur:'تسبیح'},
+    'tb-tahmid':   {ar:'تحميد',en:'Tahmid',ko:'타흐미드',ja:'タフミード',fr:'Tahmid',de:'Tahmid',tr:'Tahmid',ru:'Тахмид',zh:'感赞',ur:'تحمید'},
+    'tb-takbir':   {ar:'تكبير',en:'Takbir',ko:'타크비르',ja:'タクビール',fr:'Takbir',de:'Takbir',tr:'Tekbir',ru:'Такбир',zh:'颂主至大',ur:'تکبیر'},
+    'tb-istighfar':{ar:'استغفار',en:'Istighfar',ko:'이스티그파르',ja:'イスティグファール',fr:'Istighfar',de:'Istighfar',tr:'İstiğfar',ru:'Истигфар',zh:'求饶',ur:'استغفار'},
+    'tb-tahlil':   {ar:'تهليل',en:'Tahlil',ko:'타흐릴',ja:'タフリール',fr:'Tahlil',de:'Tahlil',tr:'Tahlil',ru:'Тахлиль',zh:'颂主独一',ur:'تہلیل'},
+  };
+  Object.entries(tasbihLabels).forEach(([id, labels]) => {
+    const btn = document.getElementById(id);
+    if(btn) btn.textContent = labels[lang] || labels['en'];
+  });
+
+  // Re-render all dynamic content
   renderSurahs();
   renderHadiths(appState.currentHadithFilter || 'all');
   renderAqeedah();
@@ -2547,7 +3167,7 @@ function switchAdminTab(tab) {
 }
 
 function switchContentTab(tab) {
-  ['hadith','dua','athkar','quran','audio','reminder'].forEach(t => {
+  ['hadith','dua','athkar','quran','trans','audio','reminder'].forEach(t => {
     const el = document.getElementById('content-' + t);
     if(el) el.style.display = t === tab ? 'block' : 'none';
     const btn = document.getElementById('ctab-' + t);
@@ -2555,6 +3175,7 @@ function switchContentTab(tab) {
   });
   if(tab === 'quran') { renderAdminAyahs(); populateAudioSurahSelect(); }
   if(tab === 'audio') { populateAudioSurahSelect(); renderAdminAudioList(); }
+  if(tab === 'trans') { transRenderSaved(); }
 }
 
 // ==================== TOAST ====================
@@ -4077,18 +4698,8 @@ window.renderCustomSectionContent = renderCustomSectionContent;
 <!-- ==================== ADMIN PANEL ==================== -->
 <style>
 /* Admin Button */
-.admin-fab {
-  position: fixed; bottom: 90px; right: 20px;
-  width: 52px; height: 52px;
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  border-radius: 50%; border: 2px solid #d4af37;
-  color: #d4af37; font-size: 1.3rem;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; z-index: 1800;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  transition: all 0.3s;
-}
-.admin-fab:hover { transform: scale(1.1); box-shadow: 0 6px 25px rgba(212,175,55,0.4); }
+/* admin-fab removed */
+
 
 /* Admin Overlay */
 .admin-overlay {
@@ -4421,7 +5032,6 @@ window.renderCustomSectionContent = renderCustomSectionContent;
 </div>
 
 
-<div class="admin-fab" onclick="openAdmin()" title="لوحة الإدارة">⚙️</div>
 
 <!-- Admin Panel Overlay -->
 <div class="admin-overlay" id="admin-overlay">
@@ -4579,6 +5189,7 @@ window.renderCustomSectionContent = renderCustomSectionContent;
             <button class="admin-btn admin-btn-secondary admin-btn-sm" id="ctab-dua" onclick="switchContentTab('dua')">🤲 الأدعية</button>
             <button class="admin-btn admin-btn-secondary admin-btn-sm" id="ctab-athkar" onclick="switchContentTab('athkar')">📿 الأذكار</button>
             <button class="admin-btn admin-btn-secondary admin-btn-sm" id="ctab-quran" onclick="switchContentTab('quran')">📖 القرآن</button>
+            <button class="admin-btn admin-btn-secondary admin-btn-sm" id="ctab-trans" onclick="switchContentTab('trans')">🌍 ترجمة القرآن</button>
             <button class="admin-btn admin-btn-secondary admin-btn-sm" id="ctab-audio" onclick="switchContentTab('audio')">🎵 الصوت</button>
             <button class="admin-btn admin-btn-secondary admin-btn-sm" id="ctab-reminder" onclick="switchContentTab('reminder')">📜 التذكير</button>
           </div>
@@ -4830,6 +5441,90 @@ window.renderCustomSectionContent = renderCustomSectionContent;
                 <textarea class="admin-textarea" id="full-surah-text-input" placeholder="الآية 1&#10;الآية 2&#10;..." style="min-height:120px;font-family:'Amiri',serif;font-size:1rem;line-height:2"></textarea>
                 <button class="admin-btn admin-btn-primary" style="width:100%;justify-content:center" onclick="saveFullSurahText()">
                   💾 حفظ السورة كاملة
+                </button>
+              </div>
+            </div>
+          </div>
+
+
+          <!-- ===== QURAN TRANSLATION UPLOAD ===== -->
+          <div id="content-trans" style="display:none">
+            <div class="admin-card">
+              <div class="admin-card-title">🌍 رفع ترجمة القرآن الكريم</div>
+              <p style="color:#8b949e;font-size:0.82rem;margin-bottom:14px">
+                ارفع ملف JSON فيه ترجمة كاملة أو جزئية للقرآن — سيتم حفظها وعرضها تلقائياً على كل السور لأي لغة.
+              </p>
+
+              <!-- اختيار اللغة -->
+              <label class="admin-label">اللغة المستهدفة</label>
+              <select class="admin-input" id="trans-upload-lang" style="margin-bottom:12px">
+                <option value="ar">🇸🇦 العربية</option>
+                <option value="en">🇬🇧 الإنجليزية</option>
+                <option value="ko" selected>🇰🇷 الكورية</option>
+                <option value="ja">🇯🇵 اليابانية</option>
+                <option value="fr">🇫🇷 الفرنسية</option>
+                <option value="de">🇩🇪 الألمانية</option>
+                <option value="tr">🇹🇷 التركية</option>
+                <option value="ru">🇷🇺 الروسية</option>
+                <option value="zh">🇨🇳 الصينية</option>
+                <option value="ur">🇵🇰 الأردية</option>
+                <option value="custom">✏️ لغة مخصصة</option>
+              </select>
+              <input class="admin-input" id="trans-custom-lang" placeholder="رمز اللغة مثال: es, id, tr" style="display:none;margin-bottom:12px">
+
+              <!-- تنسيق الملف -->
+              <div style="background:#161b22;border-radius:8px;padding:12px;margin-bottom:14px;font-size:0.78rem;color:#8b949e">
+                <div style="color:#d4af37;font-weight:700;margin-bottom:8px">📋 تنسيق الملف المطلوب (JSON)</div>
+                <div style="font-family:monospace;color:#79c0ff">
+                  {<br>
+                  &nbsp;"1": ["الآية 1", "الآية 2", ...],<br>
+                  &nbsp;"2": ["الآية 1", "الآية 2", ...],<br>
+                  &nbsp;...<br>
+                  }<br><br>
+                  <span style="color:#3fb950">أو للسورة الواحدة:</span><br>
+                  { "surah": 1, "verses": ["الآية 1", "الآية 2"] }
+                </div>
+              </div>
+
+              <!-- رفع الملف -->
+              <label class="admin-label">ارفع ملف JSON</label>
+              <div style="border:2px dashed #30363d;border-radius:10px;padding:20px;text-align:center;cursor:pointer;margin-bottom:12px;transition:0.2s"
+                id="trans-drop-zone"
+                ondragover="event.preventDefault();this.style.borderColor='#d4af37'"
+                ondragleave="this.style.borderColor='#30363d'"
+                ondrop="transHandleDrop(event)"
+                onclick="document.getElementById('trans-file-input').click()">
+                <div style="font-size:2rem;margin-bottom:8px">📂</div>
+                <div style="color:#8b949e;font-size:0.85rem">اسحب الملف هنا أو اضغط للاختيار</div>
+                <div style="color:#d4af37;font-size:0.75rem;margin-top:4px">JSON / PDF / TXT / CSV — حجم غير محدود</div>
+              </div>
+              <input type="file" id="trans-file-input" accept=".json,.pdf,.txt,.csv" style="display:none" onchange="transLoadFile(this)">
+
+              <!-- إدخال يدوي لسورة واحدة -->
+              <div style="border-top:1px solid #30363d;margin:14px 0;padding-top:14px">
+                <div style="color:#d4af37;font-weight:700;font-size:0.85rem;margin-bottom:10px">✍️ أو أضف ترجمة سورة واحدة يدوياً</div>
+                <div style="display:flex;gap:8px;margin-bottom:8px">
+                  <div style="flex:1">
+                    <label class="admin-label">رقم السورة</label>
+                    <input class="admin-input" id="trans-single-surah" type="number" min="1" max="114" placeholder="1-114" style="margin:0">
+                  </div>
+                </div>
+                <label class="admin-label">الترجمة (آية في كل سطر)</label>
+                <textarea class="admin-textarea" id="trans-single-verses" placeholder="الآية الأولى&#10;الآية الثانية&#10;الآية الثالثة..." style="min-height:100px;direction:ltr"></textarea>
+                <button class="admin-btn admin-btn-gold" style="width:100%;justify-content:center;margin-top:8px" onclick="transSaveSingle()">
+                  💾 حفظ ترجمة السورة
+                </button>
+              </div>
+
+              <!-- نتيجة الرفع -->
+              <div id="trans-upload-result" style="display:none;margin-top:12px;padding:12px;border-radius:8px"></div>
+
+              <!-- عرض الترجمات المحفوظة -->
+              <div style="border-top:1px solid #30363d;margin-top:14px;padding-top:14px">
+                <div style="color:#d4af37;font-weight:700;font-size:0.85rem;margin-bottom:10px">📚 الترجمات المحفوظة حالياً</div>
+                <div id="trans-saved-list" style="font-size:0.82rem;color:#8b949e">جاري التحميل...</div>
+                <button class="admin-btn admin-btn-danger admin-btn-sm" style="margin-top:10px" onclick="transClearAll()">
+                  🗑️ مسح كل الترجمات المرفوعة
                 </button>
               </div>
             </div>
@@ -5193,5 +5888,766 @@ window.renderCustomSectionContent = renderCustomSectionContent;
 </div><!-- end admin-overlay -->
 
 
+
+<script>
+;
+</script>
+
+
+<script>
+// ===== ترجمة لوحة الأدمن =====
+const ADMIN_LANG = {"ar": {"panel": "لوحة الإدارة", "login": "تسجيل الدخول", "enter_pass": "أدخل كلمة المرور", "pass_placeholder": "كلمة المرور...", "enter_btn": "دخول", "wrong_pass": "❌ كلمة المرور غير صحيحة", "default_pass": "كلمة المرور الافتراضية: admin123", "logout": "تسجيل الخروج"}, "en": {"panel": "Admin Panel", "login": "Login", "enter_pass": "Enter Password", "pass_placeholder": "Password...", "enter_btn": "Enter", "wrong_pass": "❌ Wrong password", "default_pass": "Default password: admin123", "logout": "Logout"}, "ko": {"panel": "관리자 패널", "login": "로그인", "enter_pass": "비밀번호 입력", "pass_placeholder": "비밀번호...", "enter_btn": "입력", "wrong_pass": "❌ 비밀번호가 틀렸습니다", "default_pass": "기본 비밀번호: admin123", "logout": "로그아웃"}, "ja": {"panel": "管理パネル", "login": "ログイン", "enter_pass": "パスワードを入力", "pass_placeholder": "パスワード...", "enter_btn": "入力", "wrong_pass": "❌ パスワードが間違っています", "default_pass": "デフォルトパスワード: admin123", "logout": "ログアウト"}, "fr": {"panel": "Panneau Admin", "login": "Connexion", "enter_pass": "Entrez le mot de passe", "pass_placeholder": "Mot de passe...", "enter_btn": "Entrer", "wrong_pass": "❌ Mot de passe incorrect", "default_pass": "Mot de passe par défaut: admin123", "logout": "Déconnexion"}, "de": {"panel": "Admin-Panel", "login": "Anmelden", "enter_pass": "Passwort eingeben", "pass_placeholder": "Passwort...", "enter_btn": "Eingabe", "wrong_pass": "❌ Falsches Passwort", "default_pass": "Standardpasswort: admin123", "logout": "Abmelden"}, "tr": {"panel": "Yönetici Paneli", "login": "Giriş", "enter_pass": "Şifreyi girin", "pass_placeholder": "Şifre...", "enter_btn": "Giriş", "wrong_pass": "❌ Yanlış şifre", "default_pass": "Varsayılan şifre: admin123", "logout": "Çıkış"}, "ru": {"panel": "Панель администратора", "login": "Вход", "enter_pass": "Введите пароль", "pass_placeholder": "Пароль...", "enter_btn": "Войти", "wrong_pass": "❌ Неверный пароль", "default_pass": "Пароль по умолчанию: admin123", "logout": "Выйти"}, "zh": {"panel": "管理面板", "login": "登录", "enter_pass": "输入密码", "pass_placeholder": "密码...", "enter_btn": "进入", "wrong_pass": "❌ 密码错误", "default_pass": "默认密码: admin123", "logout": "退出"}, "ur": {"panel": "ایڈمن پینل", "login": "لاگ ان", "enter_pass": "پاس ورڈ درج کریں", "pass_placeholder": "پاس ورڈ...", "enter_btn": "داخل", "wrong_pass": "❌ غلط پاس ورڈ", "default_pass": "ڈیفالٹ پاس ورڈ: admin123", "logout": "لاگ آؤٹ"}};
+
+function getAdminT(key) {
+  const lang = typeof currentLang !== "undefined" ? currentLang : "ar";
+  return (ADMIN_LANG[lang] && ADMIN_LANG[lang][key]) || ADMIN_LANG["ar"][key] || key;
+}
+
+function translateAdminPanel() {
+  const lang = typeof currentLang !== "undefined" ? currentLang : "ar";
+  const dir = ["ar","ur"].includes(lang) ? "rtl" : "ltr";
+  
+  // Admin panel direction
+  const panel = document.getElementById("admin-panel");
+  if(panel) { panel.style.direction = dir; panel.style.fontFamily = "Tajawal, sans-serif"; }
+  
+  // Login screen elements
+  const loginTitle = document.querySelector(".admin-title");
+  if(loginTitle) loginTitle.textContent = getAdminT("panel");
+  const loginSubtitle = document.querySelector(".admin-subtitle");
+  if(loginSubtitle) loginSubtitle.textContent = getAdminT("login");
+  const passInput = document.getElementById("admin-pass-input");
+  if(passInput) passInput.placeholder = getAdminT("pass_placeholder");
+  const loginBtn = document.querySelector(".admin-login-btn");
+  if(loginBtn) loginBtn.textContent = getAdminT("enter_btn");
+  const loginError = document.getElementById("admin-login-error");
+  if(loginError) loginError.textContent = getAdminT("wrong_pass");
+  const defaultPassHint = document.querySelector(".admin-default-pass");
+  if(defaultPassHint) defaultPassHint.textContent = getAdminT("default_pass");
+  
+  // Main screen logout
+  const logoutBtn = document.querySelector(".admin-logout-btn, [onclick*=adminLogout]");
+  if(logoutBtn) logoutBtn.textContent = getAdminT("logout");
+  
+  // Admin tabs translation
+  const tabLabels = {
+    "dashboard": {ar:"الرئيسية",en:"Dashboard",ko:"대시보드",ja:"ダッシュボード",fr:"Tableau",de:"Dashboard",tr:"Ana Sayfa",ru:"Главная",zh:"仪表板",ur:"ڈیش بورڈ"},
+    "content":   {ar:"المحتوى",en:"Content",ko:"콘텐츠",ja:"コンテンツ",fr:"Contenu",de:"Inhalt",tr:"İçerik",ru:"Контент",zh:"内容",ur:"مواد"},
+    "design":    {ar:"التصميم",en:"Design",ko:"디자인",ja:"デザイン",fr:"Design",de:"Design",tr:"Tasarım",ru:"Дизайн",zh:"设计",ur:"ڈیزائن"},
+    "prayers":   {ar:"الصلاة",en:"Prayers",ko:"기도",ja:"礼拝",fr:"Prières",de:"Gebete",tr:"Namaz",ru:"Молитвы",zh:"礼拜",ur:"نماز"},
+    "sections":  {ar:"الأقسام",en:"Sections",ko:"섹션",ja:"セクション",fr:"Sections",de:"Abschnitte",tr:"Bölümler",ru:"Разделы",zh:"板块",ur:"حصے"},
+    "ai":        {ar:"مساعد AI",en:"AI Assistant",ko:"AI 도우미",ja:"AIアシスタント",fr:"Assistant IA",de:"KI-Assistent",tr:"AI Yardımcı",ru:"ИИ Помощник",zh:"AI助手",ur:"AI مددگار"},
+    "settings":  {ar:"إعدادات",en:"Settings",ko:"설정",ja:"設定",fr:"Paramètres",de:"Einstellungen",tr:"Ayarlar",ru:"Настройки",zh:"设置",ur:"ترتیبات"},
+  };
+  document.querySelectorAll(".admin-tab").forEach(tab => {
+    const onclick = tab.getAttribute("onclick") || "";
+    const match = onclick.match(/switchAdminTab\("(\w+)"\)/);
+    if(match && tabLabels[match[1]]) {
+      const key = match[1];
+      const icon = tab.textContent.match(/^[^\w؀-ۿ]*/)?.[0] || "";
+      tab.textContent = icon + (tabLabels[key][lang] || tabLabels[key]["en"]);
+    }
+  });
+}
+
+// Hook into openAdmin to translate
+const _origOpenAdmin = window.openAdmin;
+window.openAdmin = function() {
+  if(typeof _origOpenAdmin === "function") _origOpenAdmin();
+  setTimeout(translateAdminPanel, 100);
+};
+
+// Hook into language change
+const _origChangeLang = window.changeLanguage;
+window.changeLanguage = function(lang) {
+  if(typeof _origChangeLang === "function") _origChangeLang(lang);
+  translateAdminPanel();
+};
+
+// Translate on first load if non-Arabic
+document.addEventListener("DOMContentLoaded", function() {
+  if(typeof currentLang !== "undefined" && currentLang !== "ar") {
+    setTimeout(translateAdminPanel, 500);
+  }
+});
+</script>
+
+
+<script>
+// ===== AI API Settings =====
+function saveAIKey() {
+  var key = document.getElementById('ai-key-input').value.trim();
+  var status = document.getElementById('ai-key-status');
+  if (!key) {
+    status.textContent = '❌ أدخل المفتاح أولاً';
+    status.style.color = 'var(--danger)';
+    status.style.display = 'block';
+    return;
+  }
+  localStorage.setItem('ai_api_key', key);
+  status.textContent = '✅ تم حفظ المفتاح — المساعد جاهز!';
+  status.style.color = 'var(--success)';
+  status.style.display = 'block';
+  document.getElementById('ai-key-input').type = 'password';
+  setTimeout(function(){ status.style.display='none'; }, 3000);
+}
+
+function saveAIProvider(val) {
+  localStorage.setItem('ai_provider', val);
+  var hint = document.querySelector('#ai-key-input').placeholder;
+  if (val === 'groq') document.getElementById('ai-key-input').placeholder = 'gsk_...';
+  else if (val === 'openai') document.getElementById('ai-key-input').placeholder = 'sk-...';
+  else if (val === 'gemini') document.getElementById('ai-key-input').placeholder = 'AIza...';
+}
+
+// Load saved settings on page load
+document.addEventListener('DOMContentLoaded', function() {
+  var savedKey = localStorage.getItem('ai_api_key');
+  var savedProvider = localStorage.getItem('ai_provider') || 'groq';
+  if (savedKey) {
+    var inp = document.getElementById('ai-key-input');
+    if (inp) inp.value = savedKey;
+  }
+  var sel = document.getElementById('ai-provider-select');
+  if (sel) sel.value = savedProvider;
+});
+</script>
+
+<script>
+// ============================================================
+// RECITATION TRAINER - تسميع تفاعلي
+// ============================================================
+const _RECITERS = [
+  {name:'عبد الباسط عبد الصمد', key:'Abdul_Basit_Murattal_64kbps'},
+  {name:'محمود خليل الحصري',     key:'Husary_64kbps'},
+  {name:'مشاري راشد العفاسي',    key:'Mishary_Rashid_Alafasy_128kbps'},
+  {name:'سعد الغامدي',           key:'Saad_al-Ghamdi_128kbps'},
+];
+let _apReciter = _RECITERS[2], _apCurrent = null, _apDlPage = 0;
+function _apUrl(n){ return 'https://download.quranicaudio.com/quran/'+_apReciter.key+'/'+String(n).padStart(3,'0')+'.mp3'; }
+
+function recTab(tab, btn){
+  ['listen','recite','dl'].forEach(t=>{
+    const el=document.getElementById('rec-tab-'+t); if(el) el.style.display=t===tab?'block':'none';
+  });
+  document.querySelectorAll('[id^="rec-tab-btn-"]').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  if(tab==='dl') _apRenderDl();
+}
+
+// ---- Listening tab ----
+function _apRenderSurahs(){
+  const el=document.getElementById('ap-surah-grid'); if(!el) return;
+  el.innerHTML=(SURAHS_DATA||[]).map(s=>`
+    <div onclick="apPlay(${s.n})" style="background:var(--white);border:1px solid var(--light-gray);border-radius:10px;padding:9px;cursor:pointer;text-align:center;transition:0.2s"
+      onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--light-gray)'">
+      <div style="width:28px;height:28px;background:var(--primary);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;margin:0 auto 4px">${s.n}</div>
+      <div style="font-family:'Amiri',serif;font-size:0.9rem">${s.name}</div>
+      <div style="font-size:0.68rem;color:var(--gray)">${s.ayahs} آية</div>
+    </div>`).join('');
+}
+function apPlay(n){
+  const sel=document.getElementById('ap-reciter');
+  _apReciter=_RECITERS[parseInt(sel?sel.value:2)||2];
+  _apCurrent=n;
+  const s=(SURAHS_DATA||[]).find(x=>x.n===n);
+  const pl=document.getElementById('main-audio');
+  pl.src=_apUrl(n); pl.load(); pl.play().catch(()=>{});
+  document.getElementById('ap-title').textContent='سورة '+(s?s.name:n);
+  document.getElementById('ap-sub').textContent=_apReciter.name;
+  showSection('audio-player');
+}
+function apToggle(){const p=document.getElementById('main-audio'),b=document.getElementById('ap-btn');if(p.paused){p.play();if(b)b.textContent='⏸';}else{p.pause();if(b)b.textContent='▶';}}
+function apNext(){if(_apCurrent&&_apCurrent<114)apPlay(_apCurrent+1);}
+function apPrev(){if(_apCurrent&&_apCurrent>1)apPlay(_apCurrent-1);}
+
+// ---- Download tab ----
+function _apRenderDl(){if(_apDlPage===0)apLoadMoreDl();}
+function apLoadMoreDl(){
+  const el=document.getElementById('ap-dl-list'),cnt=document.getElementById('ap-dl-count');
+  if(!el) return;
+  const batch=10, all=SURAHS_DATA||[];
+  const items=[];
+  for(let i=0;i<batch;i++){const s=all[(_apDlPage*batch+i)%all.length];if(!s)continue;items.push(s);}
+  _apDlPage++;
+  el.innerHTML+=items.map(s=>{
+    const url=_apUrl(s.n);
+    return `<div style="display:flex;align-items:center;gap:10px;padding:10px;background:var(--white);border-radius:10px;margin-bottom:7px;border:1px solid var(--light-gray)">
+      <div style="width:30px;height:30px;background:var(--secondary);color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700;flex-shrink:0">${s.n}</div>
+      <div style="flex:1"><div style="font-weight:600">سورة ${s.name}</div><div style="font-size:0.73rem;color:var(--gray)">${s.ayahs} آية</div></div>
+      <a href="${url}" download="surah_${String(s.n).padStart(3,'0')}_${s.name}.mp3"
+        style="background:var(--info);color:white;padding:7px 12px;border-radius:12px;text-decoration:none;font-size:0.8rem;font-family:'Tajawal',sans-serif">⬇️</a>
+    </div>`;
+  }).join('');
+  if(cnt) cnt.textContent='✅ '+(_apDlPage*batch)+' ملف — اضغط للمزيد (بلا حد)';
+}
+
+// ============================================================
+// RECITATION TRAINER ENGINE
+// ============================================================
+let _recSurah = null, _recAyahs = [], _recIdx = 0, _recRecog = null;
+let _recErrors = 0, _recTotal = 0, _recCorrect = 0;
+let _recSession = []; // {ayah, spoken, errors}
+
+function recSelectSurah(val){
+  if(!val) return;
+  const n = parseInt(val);
+  const s = (SURAHS_DATA||[]).find(x=>x.n===n);
+  if(!s) return;
+  _recSurah = s; _recIdx = 0; _recErrors = 0; _recTotal = 0; _recCorrect = 0; _recSession = [];
+  document.getElementById('rec-ayah-card').style.display='block';
+  document.getElementById('rec-summary').style.display='none';
+  // Load ayahs
+  fetch('https://api.alquran.cloud/v1/surah/'+n)
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.code===200){ _recAyahs=d.data.ayahs; _recShowAyah(0); }
+    }).catch(()=>{
+      // Fallback: use Arabic text from SURAHS_DATA
+      _recAyahs=[]; _recShowAyah(0);
+    });
+}
+
+function _recShowAyah(idx){
+  if(!_recAyahs.length && idx===0){
+    document.getElementById('rec-ayah-text').textContent='جاري التحميل...';
+    return;
+  }
+  if(idx >= _recAyahs.length){
+    _recShowSummary(); return;
+  }
+  _recIdx = idx;
+  const a = _recAyahs[idx];
+  const txt = a.text;
+  document.getElementById('rec-ayah-num').textContent = a.numberInSurah;
+  document.getElementById('rec-progress-txt').textContent = 'آية '+(idx+1)+' من '+_recAyahs.length;
+  document.getElementById('rec-progress-bar').style.width = ((idx/_recAyahs.length)*100)+'%';
+  document.getElementById('rec-result-box').style.display='none';
+  // Show ayah with word spans for coloring
+  const words = txt.split(' ');
+  document.getElementById('rec-ayah-text').innerHTML = words.map((w,i)=>
+    `<span id="rw-${i}" style="cursor:default;padding:2px 3px;border-radius:4px;transition:background 0.3s">${w}</span>`
+  ).join(' ');
+  document.getElementById('rec-mic-btn').textContent='🎤 ابدأ التسميع';
+  document.getElementById('rec-mic-btn').style.background='var(--primary)';
+}
+
+function recStart(){
+  const btn = document.getElementById('rec-mic-btn');
+  if(_recRecog){
+    _recRecog.stop(); _recRecog=null;
+    btn.textContent='🎤 ابدأ التسميع'; btn.style.background='var(--primary)'; return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if(!SR){ alert('المتصفح لا يدعم التسميع الصوتي. استخدم Chrome أو Edge'); return; }
+  _recRecog = new SR();
+  _recRecog.lang = 'ar-SA';
+  _recRecog.continuous = false;
+  _recRecog.interimResults = true;
+  btn.textContent='🔴 جاري الاستماع...'; btn.style.background='var(--danger)';
+
+  _recRecog.onresult = function(e){
+    let spoken = '';
+    for(let i=e.resultIndex;i<e.results.length;i++) spoken+=e.results[i][0].transcript;
+    _recHighlight(spoken, false);
+    if(e.results[e.resultIndex] && e.results[e.resultIndex].isFinal){
+      _recAnalyze(spoken);
+    }
+  };
+  _recRecog.onend = function(){
+    btn.textContent='🎤 ابدأ التسميع'; btn.style.background='var(--primary)'; _recRecog=null;
+  };
+  _recRecog.onerror = function(e){
+    btn.textContent='🎤 ابدأ التسميع'; btn.style.background='var(--primary)'; _recRecog=null;
+    if(e.error!=='no-speech') showNotification('⚠️ خطأ في الميكروفون: '+e.error);
+  };
+  _recRecog.start();
+}
+
+function _normalize(t){
+  return t.replace(/[\u064B-\u065F\u0670]/g,'') // remove tashkeel
+          .replace(/أ|إ|آ/g,'ا')
+          .replace(/ة/g,'ه')
+          .replace(/ى/g,'ي')
+          .replace(/\s+/g,' ').trim();
+}
+
+function _recHighlight(spoken, isFinal){
+  const a = _recAyahs[_recIdx];
+  if(!a) return;
+  const refWords = a.text.split(' ');
+  const spokenWords = spoken.trim().split(' ');
+  refWords.forEach((w,i)=>{
+    const el = document.getElementById('rw-'+i);
+    if(!el) return;
+    const normRef = _normalize(w);
+    const normSpoken = _normalize(spokenWords[i]||'');
+    if(!spokenWords[i]) { el.style.background=''; return; }
+    if(normRef === normSpoken){ el.style.background='#c8f7c5'; el.style.color='#1a5c1a'; }
+    else if(isFinal){ el.style.background='#ffc8c8'; el.style.color='#8b0000'; }
+    else { el.style.background='#fff3cd'; }
+  });
+}
+
+function _recAnalyze(spoken){
+  const a = _recAyahs[_recIdx];
+  if(!a) return;
+  const refWords = _normalize(a.text).split(' ');
+  const spokenWords = _normalize(spoken).split(' ');
+  let correct=0, errors=[], errorCount=0;
+  refWords.forEach((w,i)=>{
+    if(spokenWords[i]===w) correct++;
+    else { errors.push({word:a.text.split(' ')[i], spoken:spokenWords[i]||'(لم يُنطق)'}); errorCount++; }
+  });
+  _recHighlight(spoken, true);
+  _recTotal += refWords.length;
+  _recCorrect += correct;
+  _recErrors += errorCount;
+  _recSession.push({ayah:a.numberInSurah, text:a.text, spoken, errors:errorCount, errorWords:errors});
+  // Show result
+  const box = document.getElementById('rec-result-box');
+  const pct = Math.round((correct/refWords.length)*100);
+  const isGood = pct >= 80;
+  box.style.display='block';
+  box.style.background = isGood ? '#e8f5e9' : '#fff3e0';
+  box.style.borderRight = '4px solid '+(isGood?'var(--success)':'var(--warning)');
+  let html = `<div style="font-weight:700;color:${isGood?'var(--success)':'var(--warning)'}">
+    ${isGood?'✅ أحسنت!':'⚠️ يوجد أخطاء'} — دقة: ${pct}%
+  </div>`;
+  if(errors.length){
+    html += `<div style="margin-top:8px;font-size:0.85rem">
+      <strong>الكلمات الخاطئة (${errors.length}):</strong><br>`;
+    errors.slice(0,5).forEach(e=>{
+      html += `<span style="background:#ffe0e0;padding:2px 6px;border-radius:4px;margin:2px;display:inline-block">
+        ❌ ${e.word} <span style="color:var(--gray);font-size:0.8rem">← قلت: ${e.spoken}</span>
+      </span>`;
+    });
+    html += '</div>';
+  }
+  html += `<div style="margin-top:10px;display:flex;gap:8px">
+    <button onclick="_recNext()" style="flex:1;padding:9px;background:var(--primary);color:white;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700">التالي ➡️</button>
+    <button onclick="recStart()" style="padding:9px 16px;background:var(--secondary);color:white;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif">🔄 كرر</button>
+  </div>`;
+  box.innerHTML = html;
+}
+
+function _recNext(){
+  if(_recIdx+1 < _recAyahs.length) _recShowAyah(_recIdx+1);
+  else _recShowSummary();
+}
+function recSkip(){ _recNext(); }
+
+function recPlayAyah(){
+  const a = _recAyahs[_recIdx];
+  if(!a||!_recSurah) return;
+  if('speechSynthesis' in window){
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(a.text);
+    u.lang='ar-SA'; u.rate=0.75;
+    const v=window.speechSynthesis.getVoices().find(x=>x.lang&&x.lang.startsWith('ar'));
+    if(v) u.voice=v;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+function _recShowSummary(){
+  document.getElementById('rec-ayah-card').style.display='none';
+  const el=document.getElementById('rec-summary');
+  el.style.display='block';
+  const pct = _recTotal>0?Math.round((_recCorrect/_recTotal)*100):0;
+  const stars = pct>=90?'⭐⭐⭐':pct>=70?'⭐⭐':pct>=50?'⭐':'';
+  let html=`
+    <div style="text-align:center;padding:15px 0">
+      <div style="font-size:3rem">${stars||'📖'}</div>
+      <div style="font-size:2rem;font-weight:700;color:var(--primary);margin:8px 0">${pct}%</div>
+      <div style="color:var(--gray)">دقة التسميع</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:12px 0">
+      <div style="text-align:center;background:var(--light-gray);padding:12px;border-radius:10px">
+        <div style="font-size:1.4rem;font-weight:700;color:var(--success)">${_recCorrect}</div>
+        <div style="font-size:0.75rem;color:var(--gray)">كلمة صحيحة</div>
+      </div>
+      <div style="text-align:center;background:var(--light-gray);padding:12px;border-radius:10px">
+        <div style="font-size:1.4rem;font-weight:700;color:var(--danger)">${_recErrors}</div>
+        <div style="font-size:0.75rem;color:var(--gray)">كلمة خاطئة</div>
+      </div>
+      <div style="text-align:center;background:var(--light-gray);padding:12px;border-radius:10px">
+        <div style="font-size:1.4rem;font-weight:700;color:var(--primary)">${_recSession.length}</div>
+        <div style="font-size:0.75rem;color:var(--gray)">آيات</div>
+      </div>
+    </div>`;
+  // أكثر الأخطاء
+  const allErr = _recSession.flatMap(s=>s.errorWords||[]);
+  if(allErr.length){
+    html+=`<div style="margin-top:8px"><strong>أكثر الكلمات خطأً:</strong><br>`;
+    allErr.slice(0,8).forEach(e=>{
+      html+=`<span style="background:#ffe0e0;padding:3px 8px;border-radius:6px;margin:3px;display:inline-block;font-family:'Amiri',serif">${e.word}</span>`;
+    });
+    html+='</div>';
+  }
+  el.querySelector('#rec-summary-content').innerHTML=html;
+}
+
+function recRestart(){
+  _recIdx=0; _recErrors=0; _recTotal=0; _recCorrect=0; _recSession=[];
+  document.getElementById('rec-summary').style.display='none';
+  document.getElementById('rec-ayah-card').style.display='block';
+  _recShowAyah(0);
+}
+
+// Init recitation surah select
+function _recInitSelect(){
+  const sel=document.getElementById('rec-surah-select');
+  if(!sel||sel.options.length>1) return;
+  (SURAHS_DATA||[]).forEach(s=>{
+    const o=document.createElement('option');
+    o.value=s.n; o.textContent='سورة '+s.name+' ('+s.ayahs+' آية)';
+    sel.appendChild(o);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',function(){
+  _apRenderSurahs();
+  _recInitSelect();
+  const pl=document.getElementById('main-audio');
+  if(pl){
+    pl.addEventListener('play',()=>{const b=document.getElementById('ap-btn');if(b)b.textContent='⏸';});
+    pl.addEventListener('pause',()=>{const b=document.getElementById('ap-btn');if(b)b.textContent='▶';});
+    pl.addEventListener('ended',()=>apNext());
+  }
+});
+
+</script>
+<script>
+
+// ============================================================
+// QURAN TRANSLATION UPLOAD SYSTEM
+// ============================================================
+const TRANS_STORAGE_KEY = 'admin_quran_translations';
+
+function transGetLang(){
+  const sel = document.getElementById('trans-upload-lang');
+  if(!sel) return 'ko';
+  if(sel.value === 'custom'){
+    return document.getElementById('trans-custom-lang').value.trim() || 'custom';
+  }
+  return sel.value;
+}
+
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id === 'trans-upload-lang'){
+    const custom = document.getElementById('trans-custom-lang');
+    if(custom) custom.style.display = e.target.value === 'custom' ? 'block' : 'none';
+  }
+});
+
+function transLoadFile(input){
+  const file = input.files[0];
+  if(!file) return;
+  const name = file.name.toLowerCase();
+  if(name.endsWith('.pdf')){
+    transLoadPDF(file); return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const text = e.target.result;
+    if(name.endsWith('.json')){
+      try { transProcessData(JSON.parse(text)); }
+      catch(err){ transShowResult('❌ خطأ JSON: ' + err.message, false); }
+    } else if(name.endsWith('.txt') || name.endsWith('.csv')){
+      transProcessText(text);
+    } else {
+      // Try JSON first, then text
+      try { transProcessData(JSON.parse(text)); }
+      catch(e){ transProcessText(text); }
+    }
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function transLoadPDF(file){
+  transShowResult('⏳ جاري استخراج النص من PDF...', true);
+  const reader = new FileReader();
+  reader.onload = function(e){
+    const arr = new Uint8Array(e.target.result);
+    // Extract text from PDF manually (basic approach)
+    let pdfText = '';
+    try {
+      // Decode PDF text streams
+      const decoder = new TextDecoder('latin1');
+      const raw = decoder.decode(arr);
+      // Extract text between BT/ET markers and Tj/TJ operators
+      const matches = raw.match(/[(][^)]{2,200}[)]\s*Tj/g) || [];
+      const matches2 = raw.match(/[[][^\]]{2,500}[]]\s*TJ/g) || [];
+      const allText = [...matches, ...matches2].map(function(m){
+        // Extract text from PDF operators
+        var t = m.replace(/^[(]|[)]\s*Tj$/g,'');
+        t = t.replace(/^[[]|[]]\s*TJ$/g,'');
+        return t;
+      });
+      pdfText = allText.join('\n');
+    } catch(pe) {}
+    
+    if(pdfText.trim().length > 50){
+      transProcessText(pdfText);
+    } else {
+      // Try reading as UTF-8 text fallback
+      const reader2 = new FileReader();
+      reader2.onload = function(ev){
+        transProcessText(ev.target.result);
+      };
+      reader2.readAsText(file, 'UTF-8');
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function transProcessText(text){
+  // Parse various text formats
+  var lines = text.split('\n').filter(function(l){ return l.trim(); });ng();
+  let saved = JSON.parse(localStorage.getItem(TRANS_STORAGE_KEY) || '{}');
+  if(!saved[lang]) saved[lang] = {};
+  let count = 0;
+
+  // Try to detect format
+  // Format 1: surah|ayah|text  or  surah,ayah,text
+  const hasPipe = lines.some(l => l.includes('|'));
+  const hasComma = lines.some(l => (l.match(/,/g)||[]).length >= 2);
+  
+  if(hasPipe || hasComma){
+    const sep = hasPipe ? '|' : ',';
+    const surahMap = {};
+    lines.forEach(line => {
+      const parts = line.split(sep).map(p => p.trim());
+      if(parts.length >= 3){
+        const sn = parseInt(parts[0]);
+        const an = parseInt(parts[1]);
+        const txt = parts.slice(2).join(sep).trim();
+        if(sn >= 1 && sn <= 114 && an >= 1 && txt){
+          if(!surahMap[sn]) surahMap[sn] = {};
+          surahMap[sn][an] = txt;
+        }
+      }
+    });
+    Object.entries(surahMap).forEach(([sn, ayahs]) => {
+      const sorted = Object.keys(ayahs).sort((a,b)=>a-b).map(k=>ayahs[k]);
+      saved[lang][parseInt(sn)] = sorted;
+      count++;
+    });
+  } else {
+    // Format 2: grouped by surah with separator lines
+    // Try: lines grouped in blocks of surah ayahs
+    // Detect surah headers like "سورة 1" or "Surah 1" or just numbers
+    let curSurah = null, curVerses = [];
+    const surahHeaderRe = /(?:سورة|surah|chapter|سوره)\s*(\d+)/i;
+    const numLineRe = /^\d+[\.\-\)]/;
+    
+    lines.forEach(line => {
+      const hm = line.match(surahHeaderRe);
+      if(hm){
+        if(curSurah && curVerses.length){
+          saved[lang][curSurah] = [...curVerses];
+          count++;
+        }
+        curSurah = parseInt(hm[1]);
+        curVerses = [];
+      } else if(numLineRe.test(line)){
+        // Line starts with number like "1. text" or "1- text"
+        const txt = line.replace(/^\d+[\.\-\)]\s*/, '').trim();
+        if(txt) curVerses.push(txt);
+      } else if(line.trim() && curSurah){
+        curVerses.push(line.trim());
+      }
+    });
+    if(curSurah && curVerses.length){
+      saved[lang][curSurah] = curVerses;
+      count++;
+    }
+    
+    // If still nothing, try to see if it's just a list of verses for one surah
+    if(count === 0){
+      const surahNum = parseInt(document.getElementById('trans-single-surah').value||'1');
+      const verses = lines.filter(l=>l.trim().length>5);
+      if(verses.length > 0){
+        saved[lang][surahNum] = verses;
+        count = 1;
+      }
+    }
+  }
+
+  if(count === 0){
+    transShowResult('❌ لم يتم التعرف على التنسيق. جرب JSON أو surah|ayah|text', false);
+    return;
+  }
+
+  localStorage.setItem(TRANS_STORAGE_KEY, JSON.stringify(saved));
+  transApplyToApp(lang, saved[lang]);
+  transShowResult('✅ تم استيراد ' + count + ' سورة بنجاح!', true);
+  transRenderSaved();
+}
+
+function transHandleDrop(e){
+  e.preventDefault();
+  document.getElementById('trans-drop-zone').style.borderColor = '#30363d';
+  const file = e.dataTransfer.files[0];
+  if(!file){ transShowResult('❌ لم يتم اختيار ملف', false); return; }
+  const fakeInput = {files:[file]};
+  transLoadFile(fakeInput);
+}
+
+function transProcessData(data){
+  const lang = transGetLang();
+  let saved = JSON.parse(localStorage.getItem(TRANS_STORAGE_KEY) || '{}');
+  if(!saved[lang]) saved[lang] = {};
+  let count = 0;
+
+  // Format 1: { "1": [...], "2": [...] }
+  if(typeof data === 'object' && !Array.isArray(data) && !data.surah){
+    Object.entries(data).forEach(([k, v]) => {
+      const n = parseInt(k);
+      if(n >= 1 && n <= 114 && Array.isArray(v)){
+        saved[lang][n] = v; count++;
+      }
+    });
+  }
+  // Format 2: { surah: 1, verses: [...] }
+  else if(data.surah && Array.isArray(data.verses)){
+    saved[lang][data.surah] = data.verses; count = 1;
+  }
+  // Format 3: Array of { surah: n, verses: [...] }
+  else if(Array.isArray(data)){
+    data.forEach(item => {
+      if(item.surah && Array.isArray(item.verses)){
+        saved[lang][item.surah] = item.verses; count++;
+      }
+    });
+  }
+
+  if(count === 0){ transShowResult('❌ لم يتم العثور على بيانات صالحة', false); return; }
+
+  localStorage.setItem(TRANS_STORAGE_KEY, JSON.stringify(saved));
+  transApplyToApp(lang, saved[lang]);
+  transShowResult('✅ تم رفع ' + count + ' سورة بنجاح للغة: ' + lang, true);
+  transRenderSaved();
+}
+
+function transSaveSingle(){
+  const n = parseInt(document.getElementById('trans-single-surah').value);
+  const txt = document.getElementById('trans-single-verses').value.trim();
+  if(!n || n < 1 || n > 114){ adminToast('أدخل رقم سورة صحيح (1-114)', true); return; }
+  if(!txt){ adminToast('أدخل نص الترجمة', true); return; }
+  const verses = txt.split('\n').map(v => v.trim()).filter(v => v);
+  const lang = transGetLang();
+  let saved = JSON.parse(localStorage.getItem(TRANS_STORAGE_KEY) || '{}');
+  if(!saved[lang]) saved[lang] = {};
+  saved[lang][n] = verses;
+  localStorage.setItem(TRANS_STORAGE_KEY, JSON.stringify(saved));
+  transApplyToApp(lang, saved[lang]);
+  transShowResult('✅ تم حفظ ترجمة سورة ' + n + ' بنجاح للغة: ' + lang, true);
+  transRenderSaved();
+  document.getElementById('trans-single-surah').value = '';
+  document.getElementById('trans-single-verses').value = '';
+}
+
+function transApplyToApp(lang, data){
+  // Apply uploaded translations to app - merge with embedded
+  if(lang === 'ko'){
+    Object.entries(data).forEach(([n, v]) => { KO_EMBEDDED[parseInt(n)] = v; });
+  } else if(lang === 'ja'){
+    Object.entries(data).forEach(([n, v]) => { JA_EMBEDDED[parseInt(n)] = v; });
+  } else {
+    // Store in window for other languages
+    if(!window.CUSTOM_TRANS) window.CUSTOM_TRANS = {};
+    if(!window.CUSTOM_TRANS[lang]) window.CUSTOM_TRANS[lang] = {};
+    Object.entries(data).forEach(([n, v]) => { window.CUSTOM_TRANS[lang][parseInt(n)] = v; });
+  }
+}
+
+function transLoadFromStorage(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(TRANS_STORAGE_KEY) || '{}');
+    Object.entries(saved).forEach(([lang, data]) => transApplyToApp(lang, data));
+    console.log('✅ Loaded translations from storage:', Object.keys(saved));
+  } catch(e) {}
+}
+
+function transRenderSaved(){
+  const el = document.getElementById('trans-saved-list');
+  if(!el) return;
+  try {
+    const saved = JSON.parse(localStorage.getItem(TRANS_STORAGE_KEY) || '{}');
+    if(Object.keys(saved).length === 0){
+      el.textContent = 'لا توجد ترجمات مرفوعة';
+      return;
+    }
+    const langNames = {ar:'العربية',en:'الإنجليزية',ko:'الكورية',ja:'اليابانية',fr:'الفرنسية',de:'الألمانية',tr:'التركية',ru:'الروسية',zh:'الصينية',ur:'الأردية'};
+    var rows = Object.entries(saved).map(function(entry) {
+      var lang = entry[0], data = entry[1];
+      var count = Object.keys(data).length;
+      var name = langNames[lang] || lang;
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;background:#0d1117;border-radius:8px;margin-bottom:6px">'
+        + '<div><span style="color:#d4af37;font-weight:700">'+name+' ('+lang+')</span>'
+        + '<span style="color:#8b949e;font-size:0.78rem;margin-right:8px">'+count+' سورة مترجمة</span></div>'
+        + '<button onclick="transDeleteLang(this.dataset.lang)" data-lang="'+lang+'" style="background:#da3633;color:white;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:0.75rem">حذف</button>'
+        + '</div>';
+    });
+    el.innerHTML = rows.join('');
+  } catch(e) {
+    el.textContent = 'خطأ في تحميل البيانات';
+  }
+}
+
+function transDeleteLang(langOrEl){
+  var lang = typeof langOrEl === "string" ? langOrEl : langOrEl.dataset.lang;
+  if(!confirm('حذف كل ترجمات اللغة ' + lang + '؟')) return;
+  const saved = JSON.parse(localStorage.getItem(TRANS_STORAGE_KEY) || '{}');
+  delete saved[lang];
+  localStorage.setItem(TRANS_STORAGE_KEY, JSON.stringify(saved));
+  // Remove from app
+  if(lang === 'ko') Object.keys(KO_EMBEDDED).forEach(k => {});
+  if(window.CUSTOM_TRANS) delete window.CUSTOM_TRANS[lang];
+  transRenderSaved();
+  adminToast('تم حذف ترجمات ' + lang);
+}
+
+function transClearAll(){
+  if(!confirm('مسح كل الترجمات المرفوعة؟')) return;
+  localStorage.removeItem(TRANS_STORAGE_KEY);
+  window.CUSTOM_TRANS = {};
+  transRenderSaved();
+  adminToast('تم مسح كل الترجمات');
+}
+
+function transShowResult(msg, isOk){
+  const el = document.getElementById('trans-upload-result');
+  if(!el) return;
+  el.style.display = 'block';
+  el.style.background = isOk ? '#1a3d1a' : '#3d1a1a';
+  el.style.color = isOk ? '#3fb950' : '#f85149';
+  el.style.border = '1px solid ' + (isOk ? '#3fb950' : '#f85149');
+  el.textContent = msg;
+  setTimeout(() => el.style.display = 'none', 4000);
+}
+
+// Load saved translations on startup
+document.addEventListener('DOMContentLoaded', function(){
+  transLoadFromStorage();
+  transRenderSaved();
+});
+
+// Also load when admin opens
+const _origOpenAdmin2 = window.openAdmin;
+window.openAdmin = function(){
+  if(typeof _origOpenAdmin2 === 'function') _origOpenAdmin2();
+  setTimeout(function(){
+    transRenderSaved();
+    transLoadFromStorage();
+  }, 200);
+};
+
+// Hook into openSurah to use custom translations
+const _origOpenSurah = window.openSurah;
+
+</script>
 </body>
 </html>
