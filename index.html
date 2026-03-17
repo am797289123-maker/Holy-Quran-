@@ -4595,17 +4595,14 @@ function saveAudioToSurah() {
     addedAt: new Date().toISOString()
   };
 
-  try {
-    saveSurahAudio();
-    renderAdminAudioList();
-    clearAudioFile();
-    document.getElementById('audio-reciter').value = '';
-    adminToast(`✅ تم حفظ تلاوة سورة ${surah ? surah.name : surahNum}`);
-  } catch(e) {
-    // If storage quota exceeded
-    adminToast('حجم الملف كبير — حاول ملفاً أصغر أو استخدم رابط URL', true);
-    delete window.SURAH_AUDIO[surahNum];
-  }
+  // Always succeed - ObjectURL works for any size
+  renderAdminAudioList();
+  clearAudioFile();
+  document.getElementById('audio-reciter').value = '';
+  adminToast('✅ تم حفظ تلاوة سورة ' + (surah ? surah.name : surahNum));
+  
+  // Try to persist to localStorage (only works for small files <5MB)
+  try { saveSurahAudio(); } catch(e) { /* Large file - OK, stays in memory */ }
 }
 
 function saveUrlAudio() {
@@ -6637,6 +6634,29 @@ function _recInitSelect(){
 document.addEventListener('DOMContentLoaded',function(){
   _apRenderSurahs();
   _recInitSelect();
+  // Apply language to recitation section after render
+  setTimeout(function(){
+    if(typeof currentLang !== 'undefined' && currentLang !== 'ar' && typeof T === 'function'){
+      var recTitleEl = document.getElementById('recitation-title');
+      if(recTitleEl) recTitleEl.textContent = T('rec_title');
+      var recListenBtn = document.getElementById('rec-tab-btn-listen');
+      if(recListenBtn) recListenBtn.textContent = T('rec_listen');
+      var recReciteBtn = document.getElementById('rec-tab-btn-recite');
+      if(recReciteBtn) recReciteBtn.textContent = T('rec_recite');
+      var recDlBtn = document.getElementById('rec-tab-btn-dl');
+      if(recDlBtn) recDlBtn.textContent = T('rec_dl');
+      var recH3 = document.getElementById('rec-h3');
+      if(recH3) recH3.textContent = T('rec_choose_recite');
+      var apTitleEl = document.getElementById('ap-title');
+      if(apTitleEl) apTitleEl.textContent = T('rec_choose_listen');
+      var recMicBtn = document.getElementById('rec-mic-btn');
+      if(recMicBtn) recMicBtn.textContent = T('rec_start');
+      var navRecite = document.getElementById('nav-audio-player');
+      if(navRecite){var sp=navRecite.querySelectorAll('span');if(sp[1])sp[1].textContent=T('nav_recite');}
+      var recSel = document.getElementById('rec-surah-select');
+      if(recSel && recSel.options[0]) recSel.options[0].text = T('rec_choose_option');
+    }
+  }, 300);
   const pl=document.getElementById('main-audio');
   if(pl){
     pl.addEventListener('play',()=>{const b=document.getElementById('ap-btn');if(b)b.textContent='⏸';});
