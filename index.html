@@ -4604,6 +4604,31 @@ function clearAudioFile() {
   document.getElementById('audio-file-input').value = '';
 }
 
+
+function saveSurahAudio() {
+  // Save audio links to localStorage (URLs only, not large files)
+  if (!window.SURAH_AUDIO) return;
+  var toSave = {};
+  Object.entries(window.SURAH_AUDIO).forEach(function(entry) {
+    var n = entry[0], data = entry[1];
+    // Only save URL-based audio, not ObjectURLs (blob: URLs)
+    if (data.isUrl || (data.src && !data.src.startsWith('blob:'))) {
+      toSave[n] = data;
+    }
+  });
+  localStorage.setItem('surah_audio_links', JSON.stringify(toSave));
+}
+
+function loadSurahAudio() {
+  try {
+    var saved = JSON.parse(localStorage.getItem('surah_audio_links') || '{}');
+    if (!window.SURAH_AUDIO) window.SURAH_AUDIO = {};
+    Object.entries(saved).forEach(function(entry) {
+      window.SURAH_AUDIO[parseInt(entry[0])] = entry[1];
+    });
+  } catch(e) {}
+}
+
 function saveAudioToSurah() {
   if (!currentAudioBlob) { adminToast('اختر ملفاً صوتياً أولاً', true); return; }
   const surahNum = parseInt(document.getElementById('audio-surah-select').value);
@@ -7003,6 +7028,7 @@ function transShowResult(msg, isOk){
 
 // Load saved translations on startup
 document.addEventListener('DOMContentLoaded', function(){
+  loadSurahAudio();
   transLoadFromStorage();
   transRenderSaved();
 });
