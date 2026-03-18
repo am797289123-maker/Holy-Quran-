@@ -3431,21 +3431,25 @@ function showAdminMain() {
   // Load Firebase config into fields
   setTimeout(function(){
     try {
-      var cfg = JSON.parse(localStorage.getItem('firebase_config')||'null');
-      if(cfg){
-        ['apiKey','authDomain','databaseURL','projectId','storageBucket','messagingSenderId','appId'].forEach(function(k){
-          var el = document.getElementById('fb-'+k);
-          if(el && cfg[k]) el.value = cfg[k];
-        });
-        var status = document.getElementById('fb-status');
-        if(status && _firebaseReady){
+      var cfg = JSON.parse(localStorage.getItem('firebase_config')||'null') || FIREBASE_CONFIG;
+      ['apiKey','authDomain','databaseURL','projectId','storageBucket','messagingSenderId','appId'].forEach(function(k){
+        var el = document.getElementById('fb-'+k);
+        if(el && cfg[k]) el.value = cfg[k];
+      });
+      var status = document.getElementById('fb-status');
+      if(status){
+        if(_firebaseReady){
           status.style.background='#1a3d1a';
           status.style.color='#3fb950';
-          status.textContent='🟢 متصل بـ Firebase';
+          status.textContent='🟢 متصل بـ Firebase — البيانات مشتركة مع الجميع';
+        } else {
+          status.style.background='#3d1a1a';
+          status.style.color='#f85149';
+          status.textContent='🔴 غير متصل — تحقق من الإنترنت';
         }
       }
     } catch(e){}
-  }, 200);
+  }, 500);
   renderAdminHadiths();
   renderAdminDuas();
   renderAdminPrayerTimes();
@@ -3540,6 +3544,7 @@ function addNewHadith() {
   refreshDashboard();
   ['new-hadith-title','new-hadith-text','new-hadith-source','new-hadith-en'].forEach(id => document.getElementById(id).value = '');
   adminToast('تم إضافة الحديث بنجاح');
+  if(typeof syncAdminDataToFirebase==='function') setTimeout(syncAdminDataToFirebase,500);
 }
 
 function deleteHadith(id) {
@@ -3591,6 +3596,7 @@ function addNewDua() {
   refreshDashboard();
   ['new-dua-title','new-dua-text','new-dua-source','new-dua-en'].forEach(id => document.getElementById(id).value = '');
   adminToast('تم إضافة الدعاء بنجاح');
+  if(typeof syncAdminDataToFirebase==='function') setTimeout(syncAdminDataToFirebase,500);
 }
 
 function deleteDua(idx) {
@@ -7322,13 +7328,13 @@ document.addEventListener('DOMContentLoaded', function(){
 // 5. فعّل Realtime Database في وضع test
 
 const FIREBASE_CONFIG = {
-  apiKey: "REPLACE_WITH_YOUR_API_KEY",
-  authDomain: "REPLACE_WITH_YOUR_AUTH_DOMAIN",
-  databaseURL: "REPLACE_WITH_YOUR_DATABASE_URL",
-  projectId: "REPLACE_WITH_YOUR_PROJECT_ID",
-  storageBucket: "REPLACE_WITH_YOUR_STORAGE_BUCKET",
-  messagingSenderId: "REPLACE_WITH_YOUR_MESSAGING_SENDER_ID",
-  appId: "REPLACE_WITH_YOUR_APP_ID"
+  apiKey: "AIzaSyDXd7Ev1lbiBkPn3Y1qyu5ATcb1hjmPTyA",
+  authDomain: "kweeb-719cc.firebaseapp.com",
+  databaseURL: "https://kweeb-719cc-default-rtdb.firebaseio.com",
+  projectId: "kweeb-719cc",
+  storageBucket: "kweeb-719cc.firebasestorage.app",
+  messagingSenderId: "693210676729",
+  appId: "1:693210676729:web:207360fa273baaed5b1128"
 };
 
 let _firebaseApp = null;
@@ -7478,13 +7484,14 @@ function saveFirebaseConfig() {
     adminToast(result ? '✅ تم الاتصال بـ Firebase' : '❌ فشل الاتصال — تحقق من البيانات', !result);
 }
 
-// Load Firebase config on startup
+// Auto-initialize Firebase on startup
 document.addEventListener('DOMContentLoaded', function() {
+  // Try saved config first, then use built-in config
   var savedConfig = null;
   try { savedConfig = JSON.parse(localStorage.getItem('firebase_config')||'null'); } catch(e) {}
-  if (savedConfig && savedConfig.apiKey && !savedConfig.apiKey.startsWith('REPLACE')) {
-    initFirebase(savedConfig);
-  }
+  var configToUse = (savedConfig && savedConfig.apiKey && !savedConfig.apiKey.startsWith('REPLACE'))
+    ? savedConfig : FIREBASE_CONFIG;
+  initFirebase(configToUse);
 });
 </script>
 
