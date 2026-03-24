@@ -549,6 +549,7 @@
             <option value="fr">🇫🇷 Français (الفرنسية)</option>
             <option value="de">🇩🇪 Deutsch (الألمانية)</option>
             <option value="tr">🇹🇷 Türkçe (التركية)</option>
+            <option value="es">🇪🇸 Español (الإسبانية)</option>
             <option value="ur">🇵🇰 اردو (الأردية)</option>
         </select>
     </div>
@@ -572,24 +573,24 @@
     </div>
     <!-- إعدادات AI -->
     <div class="card" style="margin-top:15px;border-right:4px solid var(--purple)">
-        <h3 id="ai-settings-title" style="color:var(--purple)">🤖 إعدادات المساعد الذكي</h3>
-        <p id="ai-settings-desc" style="font-size:0.82rem;color:var(--gray);margin-bottom:12px">أدخل مفتاح API لتفعيل المساعد — Groq مجاني 100%</p>
+        <h3 style="color:var(--purple)">🤖 إعدادات المساعد الذكي</h3>
+        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:12px">أدخل مفتاح API لتفعيل المساعد — Groq مجاني 100%</p>
         
-        <label id="ai-provider-label" style="font-weight:600;font-size:0.88rem;display:block;margin-bottom:6px">مزود الـ AI</label>
+        <label style="font-weight:600;font-size:0.88rem;display:block;margin-bottom:6px">مزود الـ AI</label>
         <select id="ai-provider-select" onchange="saveAIProvider(this.value)" style="width:100%;padding:10px;border:1px solid var(--light-gray);border-radius:8px;font-family:'Tajawal',sans-serif;background:var(--white);color:var(--text);margin-bottom:10px">
             <option value="groq">🆓 Groq (مجاني - groq.com)</option>
             <option value="gemini">🆓 Google Gemini (مجاني - aistudio.google.com)</option>
             <option value="openai">💰 OpenAI (مدفوع)</option>
         </select>
         
-        <label id="ai-key-label" style="font-weight:600;font-size:0.88rem;display:block;margin-bottom:6px">مفتاح API</label>
+        <label style="font-weight:600;font-size:0.88rem;display:block;margin-bottom:6px">مفتاح API</label>
         <div style="display:flex;gap:8px">
             <input type="password" id="ai-key-input" placeholder="gsk_..." 
                 style="flex:1;padding:10px;border:1px solid var(--light-gray);border-radius:8px;font-family:monospace;font-size:0.85rem;background:var(--white);color:var(--text)"
                 value="">
-            <button id="ai-save-btn" onclick="saveAIKey()" style="background:var(--purple);color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700">حفظ</button>
+            <button onclick="saveAIKey()" style="background:var(--purple);color:white;border:none;padding:10px 16px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700">حفظ</button>
         </div>
-        <div id="ai-settings-tip" style="margin-top:8px;padding:8px 10px;background:var(--light-gray);border-radius:6px;font-size:0.78rem;color:var(--gray)">
+        <div style="margin-top:8px;padding:8px 10px;background:var(--light-gray);border-radius:6px;font-size:0.78rem;color:var(--gray)">
             💡 للحصول على مفتاح Groq مجاني: اذهب إلى <strong>console.groq.com</strong> → API Keys → Create API Key
         </div>
         <div id="ai-key-status" style="margin-top:8px;font-size:0.82rem;display:none"></div>
@@ -622,12 +623,12 @@
     <div style="display:flex;align-items:center;gap:10px">
       <div style="width:38px;height:38px;background:rgba(255,255,255,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.4rem">🤖</div>
       <div>
-        <div id="ai-header-title" style="color:white;font-weight:700;font-size:1rem;font-family:'Tajawal',sans-serif">المساعد الإسلامي</div>
-        <div id="ai-header-sub" style="color:rgba(255,255,255,0.8);font-size:0.72rem;font-family:'Tajawal',sans-serif">جاهز للإجابة على أي سؤال</div>
+        <div style="color:white;font-weight:700;font-size:1rem;font-family:'Tajawal',sans-serif">المساعد الإسلامي</div>
+        <div style="color:rgba(255,255,255,0.8);font-size:0.72rem;font-family:'Tajawal',sans-serif">جاهز للإجابة على أي سؤال</div>
       </div>
     </div>
     <div style="display:flex;gap:8px">
-      <button id="ai-clear-btn" onclick="clearAIHistory()" style="background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 11px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem">🗑️ مسح</button>
+      <button onclick="clearAIHistory()" style="background:rgba(255,255,255,0.15);border:none;color:white;padding:6px 11px;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.78rem">🗑️ مسح</button>
       <button onclick="toggleAIChat()" style="background:rgba(255,255,255,0.15);border:none;color:white;width:35px;height:35px;border-radius:50%;cursor:pointer;font-size:1.2rem">×</button>
     </div>
   </div>
@@ -635,7 +636,7 @@
     <div style="text-align:center;padding:25px 10px">
       <div style="font-size:3.5rem;margin-bottom:10px">🕌</div>
       <div style="font-family:'Amiri',serif;font-size:1.15rem;color:var(--primary);margin-bottom:8px">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-      <div id="ai-welcome-sub" style="font-size:0.88rem;color:#666;font-family:'Tajawal',sans-serif">اسألني عن أي شيء — القرآن، الفقه، العلوم، أو أي سؤال عام</div>
+      <div style="font-size:0.88rem;color:#666;font-family:'Tajawal',sans-serif">اسألني عن أي شيء — القرآن، الفقه، العلوم، أو أي سؤال عام</div>
     </div>
   </div>
   <div style="padding:10px 12px;background:var(--white);border-top:1px solid #e0e0e0;display:flex;gap:8px;align-items:flex-end;flex-shrink:0">
@@ -1264,6 +1265,7 @@ function toggleGoal(id, el) {
 }
 
 // ==================== SURAHS ====================
+// Spanish surah names use transliteration similar to English
 const SURAH_NAMES_LOCALIZED = {"ko": ["알-파티하", "알-바까라", "알루 이므란", "안-니사", "알-마이다", "알-안암", "알-아으라프", "알-안팔", "앗-타우바", "유누스", "후드", "유수프", "아르-라으드", "이브라힘", "알-히즈르", "안-나흘", "알-이스라", "알-카흐프", "마르얌", "따하", "알-안비야", "알-하즈", "알-무으미눈", "안-누르", "알-푸르깐", "앗-슈아라", "안-나믈", "알-까싸쓰", "알-안카부트", "아르-룸", "루끄만", "앗-싸즈다", "알-아흐잡", "싸바", "파티르", "야신", "앗-싸파트", "싸드", "아즈-주마르", "가피르", "풋쓰시라트", "앗-슈라", "아즈-주크루프", "아드-두칸", "알-자씨야", "알-아흐까프", "무함마드", "알-팟흐", "알-후즈라트", "까프", "아즈-자리야트", "앗-뚜르", "안-나즘", "알-까마르", "아르-라흐만", "알-와끼아", "알-하디드", "알-무자딜라", "알-하쉬르", "알-뭄타하나", "앗-싸프", "알-주무아", "알-무나피꾼", "앗-따가분", "앗-딸라끄", "앗-따흐림", "알-물크", "알-까람", "알-핫까", "알-마아리즈", "누흐", "알-진", "알-뭇잠밀", "알-뭇닷씨르", "알-끼야마", "알-인산", "알-무르살라트", "안-나바", "안-나지아트", "아바사", "앗-따크위르", "알-인피따르", "알-뭇파피핀", "알-인쉬깍", "알-부루즈", "앗-따리끄", "알-아으라", "알-가쉬야", "알-파즈르", "알-발라드", "앗-샴스", "알-라일", "앗-두하", "알-인쉬라흐", "앗-띤", "알-알라끄", "알-까드르", "알-바이야나", "아즈-질잘라", "알-아디야트", "알-까리아", "앗-따카수르", "알-아스르", "알-후마자", "알-필", "꾸라이쉬", "알-마운", "알-카우사르", "알-카피룬", "안-나스르", "알-마싸드", "알-이클라스", "알-팔라끄", "안-나스"], "ja": ["開端章", "雌牛章", "イムラーン家章", "婦人章", "食卓章", "家畜章", "高壁章", "戦利品章", "悔悟章", "ユーヌス章", "フード章", "ユースフ章", "雷鳴章", "イブラーヒーム章", "岩山章", "蜜蜂章", "夜の旅章", "洞窟章", "マルヤム章", "ター・ハー章", "預言者章", "巡礼章", "信徒章", "光章", "識別章", "詩人章", "蟻章", "物語章", "蜘蛛章", "ローマ人章", "ルクマーン章", "礼拝章", "連合軍章", "サバア章", "創造主章", "ヤースィーン章", "整列章", "サード章", "群れ章", "赦す者章", "詳解章", "協議章", "装飾章", "煙章", "跪く者章", "砂丘章", "ムハンマド章", "勝利章", "部屋章", "カーフ章", "風を散らす者章", "山章", "星章", "月章", "慈悲深き者章", "起こる出来事章", "鉄章", "論争する女章", "集結章", "試される女章", "隊列章", "金曜日章", "偽善者章", "欺瞞章", "離婚章", "禁止章", "統治章", "筆章", "確実なこと章", "高みへの道章", "ヌーフ章", "ジン章", "衣を纏う者章", "覆いを被る者章", "復活章", "人間章", "遣わされた者章", "大いなる知らせ章", "引き抜く者章", "顔をしかめた者章", "巻き上げられる章", "裂ける章", "目方を欺く者章", "割れる章", "星座章", "夜やって来るもの章", "最高の章", "圧倒する者章", "夜明け章", "都市章", "太陽章", "夜章", "午前章", "胸を開く章", "いちじく章", "血の塊章", "威光の夜章", "明証章", "大地震章", "駆ける馬章", "大災害章", "競い合い章", "時章", "陰口章", "象章", "クライシュ族章", "小さな親切章", "豊潤章", "不信者章", "援助章", "なつめ椰子章", "純正章", "夜明け章", "人々章"], "en": ["Al-Fatiha", "Al-Baqarah", "Ali Imran", "An-Nisa", "Al-Maidah", "Al-Anam", "Al-Araf", "Al-Anfal", "At-Tawbah", "Yunus", "Hud", "Yusuf", "Ar-Rad", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbya", "Al-Hajj", "Al-Muminun", "An-Nur", "Al-Furqan", "Ash-Shuara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Ash-Shura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jathiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqiah", "Al-Hadid", "Al-Mujadila", "Al-Hashr", "Al-Mumtahanah", "As-Saf", "Al-Jumuah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Maarij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Naziat", "Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inshiqaq", "Al-Buruj", "At-Tariq", "Al-Ala", "Al-Ghashiyah", "Al-Fajr", "Al-Balad", "Ash-Shams", "Al-Layl", "Ad-Duha", "Ash-Sharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat", "Al-Qariah", "At-Takathur", "Al-Asr", "Al-Humazah", "Al-Fil", "Quraysh", "Al-Maun", "Al-Kawthar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"], "fr": ["Al-Fatiha", "Al-Baqara", "Al-Imran", "An-Nissa", "Al-Maida", "Al-Anam", "Al-Araf", "Al-Anfal", "At-Tawba", "Younes", "Houd", "Youssouf", "Ar-Raad", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya", "Al-Hajj", "Al-Mouminoune", "An-Nour", "Al-Fourqane", "Ach-Chouara", "An-Naml", "Al-Qassas", "Al-Ankaboute", "Ar-Roum", "Louqmane", "As-Sajda", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zoumar", "Ghafir", "Foussilat", "Ach-Choura", "Az-Zokhrof", "Ad-Doukhan", "Al-Jathiya", "Al-Ahqaf", "Mohammed", "Al-Fath", "Al-Houjourat", "Qaf", "Adh-Dhariyat", "At-Tour", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqia", "Al-Hadid", "Al-Moudjadila", "Al-Hachr", "Al-Momtahana", "As-Saf", "Al-Joumoa", "Al-Monafiqoune", "At-Taghaboune", "At-Talaq", "At-Tahrim", "Al-Moulk", "Al-Qalam", "Al-Haqqa", "Al-Maarij", "Nouh", "Al-Djinn", "Al-Mouzammil", "Al-Mouddathir", "Al-Qiyama", "Al-Insan", "Al-Moursalat", "An-Naba", "An-Naziat", "Abasa", "At-Takwir", "Al-Infitar", "Al-Moutaffifine", "Al-Inchiqaq", "Al-Burouj", "At-Tariq", "Al-Ala", "Al-Ghachiya", "Al-Fajr", "Al-Balad", "Ach-Chams", "Al-Layl", "Ad-Douha", "Ach-Charh", "At-Tine", "Al-Alaq", "Al-Qadr", "Al-Bayyina", "Az-Zalzala", "Al-Adiyat", "Al-Qaria", "At-Takathour", "Al-Asr", "Al-Houmazat", "Al-Fil", "Qouraych", "Al-Maoun", "Al-Kawthar", "Al-Kafiroune", "An-Nasr", "Al-Masad", "Al-Ikhlas", "Al-Falaq", "An-Nas"], "de": ["Al-Fatiha", "Al-Baqara", "Al-Imran", "An-Nisa", "Al-Maida", "Al-Anam", "Al-Araf", "Al-Anfal", "At-Tauba", "Yunus", "Hud", "Yusuf", "Ar-Rad", "Ibrahim", "Al-Hidschr", "An-Nahl", "Al-Isra", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya", "Al-Hadsch", "Al-Muminun", "An-Nur", "Al-Furqan", "Asch-Schuara", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sadschda", "Al-Ahzab", "Saba", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Asch-Schura", "Az-Zuchruf", "Ad-Duchan", "Al-Dschatschia", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hudschurat", "Qaf", "Adh-Dhariyat", "At-Tur", "An-Nadschm", "Al-Qamar", "Ar-Rahman", "Al-Waqia", "Al-Hadid", "Al-Mudschadalah", "Al-Haschr", "Al-Mumtahana", "As-Saff", "Al-Dschumua", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqa", "Al-Maaridsch", "Nuh", "Al-Dschinn", "Al-Muzzammil", "Al-Muddaththir", "Al-Qiyama", "Al-Insan", "Al-Mursalat", "An-Naba", "An-Naziat", "Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Inschiqaq", "Al-Burudsch", "At-Tariq", "Al-Ala", "Al-Ghaschiyah", "Al-Fajr", "Al-Balad", "Asch-Schams", "Al-Lail", "Ad-Duha", "Asch-Scharh", "At-Tin", "Al-Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-Adiyat", "Al-Qaria", "At-Takathur", "Al-Asr", "Al-Humaza", "Al-Fil", "Quraisch", "Al-Maun", "Al-Kautar", "Al-Kafirun", "An-Nasr", "Al-Masad", "Al-Ichlas", "Al-Falaq", "An-Nas"], "tr": ["El-Fatiha", "El-Bakara", "Al-i İmran", "En-Nisa", "El-Maide", "El-Enam", "El-Araf", "El-Enfal", "Et-Tevbe", "Yunus", "Hud", "Yusuf", "Er-Rad", "İbrahim", "El-Hicr", "En-Nahl", "El-İsra", "El-Kehf", "Meryem", "Taha", "El-Enbiya", "El-Hac", "El-Müminun", "En-Nur", "El-Furkan", "Eş-Şuara", "En-Neml", "El-Kasas", "El-Ankebut", "Er-Rum", "Lokman", "Es-Secde", "El-Ahzab", "Sebe", "Fatır", "Yasin", "Es-Saffat", "Sad", "Ez-Zümer", "Ğafir", "Fussilet", "Eş-Şura", "Ez-Zuhruf", "Ed-Duhan", "El-Casiye", "El-Ahkaf", "Muhammed", "El-Feth", "El-Hucurat", "Kaf", "Ez-Zariyat", "Et-Tur", "En-Necm", "El-Kamer", "Er-Rahman", "El-Vakıa", "El-Hadid", "El-Mücadele", "El-Haşr", "El-Mümtehine", "Es-Saf", "El-Cuma", "El-Münafikun", "Et-Teğabun", "Et-Talak", "Et-Tahrim", "El-Mülk", "El-Kalem", "El-Hakka", "El-Mearic", "Nuh", "El-Cin", "El-Müzzemmil", "El-Müddessir", "El-Kıyame", "El-İnsan", "El-Mürselat", "En-Nebe", "En-Naziat", "Abese", "Et-Tekvir", "El-İnfitar", "El-Mutaffifin", "El-İnşikak", "El-Buruc", "Et-Tarık", "El-Ala", "El-Ğaşiye", "El-Fecr", "El-Beled", "Eş-Şems", "El-Leyl", "Ed-Duha", "El-İnşirah", "Et-Tin", "El-Alak", "El-Kadr", "El-Beyyine", "Ez-Zilzal", "El-Adiyat", "El-Karia", "Et-Tekasür", "El-Asr", "El-Hümeze", "El-Fil", "Kureyş", "El-Maun", "El-Kevser", "El-Kafirun", "En-Nasr", "El-Mesed", "El-İhlas", "El-Felek", "En-Nas"], "ru": ["Аль-Фатиха", "Аль-Бакара", "Аль Имран", "Ан-Ниса", "Аль-Маида", "Аль-Анам", "Аль-Аараф", "Аль-Анфаль", "Ат-Тауба", "Юнус", "Худ", "Юсуф", "Ар-Раад", "Ибрахим", "Аль-Хиджр", "Ан-Нахль", "Аль-Исра", "Аль-Кахф", "Марьям", "Та-Ха", "Аль-Анбийа", "Аль-Хадж", "Аль-Муминун", "Ан-Нур", "Аль-Фуркан", "Аш-Шуара", "Ан-Намль", "Аль-Касас", "Аль-Анкабут", "Ар-Рум", "Лукман", "Ас-Саджда", "Аль-Ахзаб", "Саба", "Фатир", "Йа-Син", "Ас-Саффат", "Сад", "Аз-Зумар", "Гафир", "Фуссилат", "Аш-Шура", "Аз-Зухруф", "Ад-Духан", "Аль-Джасия", "Аль-Ахкаф", "Мухаммад", "Аль-Фатх", "Аль-Худжурат", "Каф", "Аз-Зарийат", "Ат-Тур", "Ан-Наджм", "Аль-Камар", "Ар-Рахман", "Аль-Вакиа", "Аль-Хадид", "Аль-Муджадала", "Аль-Хашр", "Аль-Мумтахана", "Ас-Сафф", "Аль-Джумуа", "Аль-Мунафикун", "Ат-Тагабун", "Ат-Талак", "Ат-Тахрим", "Аль-Мульк", "Аль-Калам", "Аль-Хакка", "Аль-Мааридж", "Нух", "Аль-Джинн", "Аль-Муззаммиль", "Аль-Муддассир", "Аль-Кийама", "Аль-Инсан", "Аль-Мурсалат", "Ан-Наба", "Ан-Назиат", "Абаса", "Ат-Такуир", "Аль-Инфитар", "Аль-Мутаффифин", "Аль-Иншикак", "Аль-Бурудж", "Ат-Тарик", "Аль-Аала", "Аль-Гашия", "Аль-Фаджр", "Аль-Балад", "Аш-Шамс", "Аль-Лайль", "Ад-Духа", "Аш-Шарх", "Ат-Тин", "Аль-Алак", "Аль-Кадр", "Аль-Баййина", "Аз-Зальзала", "Аль-Адийат", "Аль-Кариа", "Ат-Такасур", "Аль-Аср", "Аль-Хумаза", "Аль-Филь", "Курайш", "Аль-Маун", "Аль-Каусар", "Аль-Кафирун", "Ан-Наср", "Аль-Масад", "Аль-Ихлас", "Аль-Фалак", "Ан-Нас"], "zh": ["开端章", "黄牛章", "仪姆兰家属章", "妇女章", "筵席章", "牲畜章", "高坎章", "战利品章", "忏悔章", "优努斯章", "胡德章", "优素福章", "雷霆章", "易卜拉欣章", "石谷章", "蜜蜂章", "夜行章", "山洞章", "麦尔彦章", "塔哈章", "众先知章", "朝觐章", "信士章", "光明章", "准则章", "诗人章", "蚂蚁章", "故事章", "蜘蛛章", "罗马人章", "鲁格曼章", "叩头章", "同盟军章", "赛伯仪章", "创造主章", "雅辛章", "成排者章", "萨德章", "队群章", "赦宥者章", "详述章", "协商章", "装饰章", "烟雾章", "跪下章", "沙丘章", "穆罕默德章", "胜利章", "寝室章", "嗒章", "播散者章", "山岳章", "星宿章", "月亮章", "至仁主章", "大事章", "铁章", "争辩者章", "集合章", "试验妇女章", "列阵章", "聚礼章", "伪信者章", "互相欺骗章", "离婚章", "禁止章", "国权章", "笔章", "确实章", "天梯章", "努哈章", "精灵章", "蒙衣者章", "蒙头者章", "复活章", "人章", "派遣者章", "消息章", "强夺者章", "皱眉章", "卷折章", "破裂章", "亏折者章", "裂开章", "星座章", "夜行星章", "至高者章", "遮盖章", "黎明章", "城市章", "太阳章", "夜间章", "上午章", "开怀章", "无花果章", "血块章", "高贵夜章", "证明章", "地震章", "奔驰者章", "大祸章", "争多章", "时代章", "诽谤者章", "象章", "古莱氏章", "小惠章", "水源章", "不信道者章", "胜利章", "棕榈纤维章", "忠诚章", "黎明章", "众人章"], "ur": ["الفاتحہ", "البقرہ", "آل عمران", "النساء", "المائدہ", "الانعام", "الاعراف", "الانفال", "التوبہ", "یونس", "ہود", "یوسف", "الرعد", "ابراہیم", "الحجر", "النحل", "الاسراء", "الکہف", "مریم", "طہ", "الانبیاء", "الحج", "المومنون", "النور", "الفرقان", "الشعراء", "النمل", "القصص", "العنکبوت", "الروم", "لقمان", "السجدہ", "الاحزاب", "سبا", "فاطر", "یٰسین", "الصافات", "صاد", "الزمر", "غافر", "فصلت", "الشوری", "الزخرف", "الدخان", "الجاثیہ", "الاحقاف", "محمد", "الفتح", "الحجرات", "ق", "الذاریات", "الطور", "النجم", "القمر", "الرحمن", "الواقعہ", "الحدید", "المجادلہ", "الحشر", "الممتحنہ", "الصف", "الجمعہ", "المنافقون", "التغابن", "الطلاق", "التحریم", "الملک", "القلم", "الحاقہ", "المعارج", "نوح", "الجن", "المزمل", "المدثر", "القیامہ", "الانسان", "المرسلات", "النبا", "النازعات", "عبس", "التکویر", "الانفطار", "المطففین", "الانشقاق", "البروج", "الطارق", "الاعلی", "الغاشیہ", "الفجر", "البلد", "الشمس", "اللیل", "الضحی", "الانشراح", "التین", "العلق", "القدر", "البینہ", "الزلزلہ", "العادیات", "القارعہ", "التکاثر", "العصر", "الہمزہ", "الفیل", "قریش", "الماعون", "الکوثر", "الکافرون", "النصر", "المسد", "الاخلاص", "الفلق", "الناس"]};
 
 function renderSurahs() {
@@ -1307,6 +1309,7 @@ function openSurah(n, name, type, ayahCount) {
     ru: { edition: 'ru.kuliev',      name: 'Elmir Kuliev' },
     zh: { edition: 'zh.majian',      name: 'Ma Jian' },
     ur: { edition: 'ur.jalandhry',   name: 'Jalandhry' },
+    es: { edition: 'es.cortes',          name: 'Muhammad Isa García' },
     ko: { edition: null,             name: '하미드 최 (Hamid Choi)', qenc: 'korean_hamid' },
     ja: { edition: null,             name: 'サイード・サトウ (Said Sato)', qenc: 'japanese_saeedsato' },
   };
@@ -1913,35 +1916,14 @@ const AI_SYSTEM_PROMPTS = {
   tr: "Siz Islam Asistani adinda akilli bir Islam asistanisiniz. KURALLAR: YALNIZCA Turkce yazin - baska dilden kelime yasak. Yabanci kelimeyi hemen Turkce ile degistirin. Dini konularda Kuran ve Sunnete dayanin. Kesinlikle dil karistirmayin.",
   ru: "Вы исламский помощник по имени Исламский помощник. ПРАВИЛА: Пишите ТОЛЬКО на русском - никаких иностранных слов. Замените иностранное слово русским эквивалентом. Отвечайте точно ссылаясь на Коран и Сунну. Никогда не смешивайте языки.",
   zh: "您是伊斯兰助手。严格规则：仅用中文写作——绝对禁止使用任何其他语言的词汇。如果将要写外语词汇立即用中文替换。对宗教问题准确引用古兰经和圣训回答。绝不混用语言。",
+  es: "Eres un asistente islámico inteligente llamado Asistente Islámico. REGLAS ESTRICTAS: Escribe SOLO en español - absolutamente ninguna palabra de otro idioma. Si vas a escribir una palabra no española reemplazala inmediatamente con su equivalente español. Responde con precisión refiriendote al Coran y la Sunna autentica para asuntos religiosos. Nunca mezcles idiomas.",
   ur: "آپ اسلامی مددگار ہیں۔ سخت اصول: صرف اردو میں لکھیں - کسی بھی دوسری زبان کا لفظ بالکل ممنوع۔ غیر اردو لفظ آنے پر فوری اردو متبادل استعمال کریں۔ مذہبی سوالات میں قرآن اور سنت کی بنیاد پر جواب دیں۔ ہرگز زبانیں مت ملائیں۔",
 };
 let _aiHistory = [];
 function clearAIHistory() {
   _aiHistory = [];
   var b = document.getElementById('ai-chat-body');
-  if (b) {
-    var _lang = typeof currentLang !== 'undefined' ? currentLang : 'ar';
-    var _welcomeMap = {
-      ar:'اسألني عن أي شيء — القرآن، الفقه، العلوم، أو أي سؤال عام',
-      en:'Ask me anything — Quran, Fiqh, Science, or any general question',
-      ko:'무엇이든 물어보세요 — 꾸란, 피끄흐, 과학 또는 일반 질문',
-      ja:'何でも聞いてください — クルアーン、フィクフ、科学、その他',
-      zh:'请随意提问 — 古兰经、费格赫、科学或任何问题',
-      ru:'Задайте любой вопрос — Коран, фикх, наука или общие вопросы',
-      fr:"Posez n'importe quelle question — Coran, Fiqh, Science ou général",
-      de:'Stellen Sie jede Frage — Koran, Fiqh, Wissenschaft oder allgemein',
-      tr:'Her şeyi sorun — Kuran, Fıkıh, Bilim veya genel sorular',
-      ur:'کچھ بھی پوچھیں — قرآن، فقہ، سائنس یا کوئی بھی سوال',
-    };
-    b.innerHTML = '';
-    var d = document.createElement('div');
-    d.style.textAlign = 'center';
-    d.style.padding = '25px 10px';
-    d.innerHTML = '<div style="font-size:3.5rem;margin-bottom:10px">🕌</div>'
-      + '<div style="font-family:Amiri,serif;font-size:1.15rem;color:var(--primary);margin-bottom:8px">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>'
-      + '<div id="ai-welcome-sub" style="font-size:0.88rem;color:#666;font-family:Tajawal,sans-serif">' + (_welcomeMap[_lang] || _welcomeMap['en']) + '</div>';
-    b.appendChild(d);
-  }
+  if(b) { b.innerHTML = ''; var d = document.createElement('div'); d.style.textAlign='center'; d.style.padding='25px 10px'; d.innerHTML = '<div style="font-size:3.5rem;margin-bottom:10px">\u{1F54C}</div><div style="font-family:Amiri,serif;font-size:1.1rem;color:green;margin-bottom:8px">\u0628\u0650\u0633\u0645\u0650 \u0627\u0644\u0644\u0651\u064e\u0647\u0650 \u0627\u0644\u0631\u0651\u064e\u062d\u0645\u064e\u0651\u0646\u0650 \u0627\u0644\u0631\u0651\u064e\u062d\u0650\u064a\u0645\u0650</div><div style="font-size:0.88rem;color:#666">\u0645\u062d\u0627\u062f\u062b\u0629 \u062c\u062f\u064a\u062f\u0629</div>'; b.appendChild(d); }
 }
 async function sendAIQuestion() {
   var input = document.getElementById('ai-input');
@@ -2467,6 +2449,21 @@ const LANG_DATA = {
     send: 'Gönder', ai_placeholder: 'Sorunuzu yazın...',
     ai_welcome: 'Esselamu Aleykum! 👋\nİslam hakkında her şeyi sorabilirsiniz.',
     notify_lang: '✅ Dil Türkçe olarak değiştirildi'
+  },
+  es: {
+    dir: 'ltr',
+    title: 'Enciclopedia Islámica Completa',
+    search: 'Buscar Corán, Hadith, Fiqh...',
+    home: 'Inicio', quran: 'Corán', athkar: 'Dhikr',
+    tasbih: 'Tasbih', duas: 'Duas', names: 'Nombres', qibla: 'Qibla',
+    morning: 'Mañana', evening: 'Tarde', after_prayer: 'Tras Oración', sleep: 'Sueño',
+    all: 'Todo', bukhari: 'Bujari', muslim: 'Muslim',
+    detect: '📍 Detectar Ubicación', search_btn: '🔍 Buscar',
+    settings: '⚙️ Ajustes', dark_mode: '🌓 Modo Oscuro',
+    prayer_alerts: '🔔 Alertas Oración', athkar_alerts: '📱 Alertas Dhikr',
+    send: 'Enviar', ai_placeholder: 'Escribe tu pregunta...',
+    ai_welcome: 'Assalamu Alaikum! 👋\nPregúntame cualquier cosa sobre el Islam.',
+    notify_lang: '✅ Idioma cambiado a Español'
   },
   ur: {
     dir: 'rtl',
@@ -3136,6 +3133,75 @@ const UI_TEXT = {
     clear_data_btn:'🗑️ 清除数据',
     rec_title:'🎤 古兰经诵读',rec_listen:'🎧 收听',rec_recite:'🎤 诵读',rec_dl:'⬇️ 下载',rec_choose_listen:'选择要收听的章节',rec_choose_recite:'选择要诵读的章节',rec_choose_option:'-- 选择章节 --',rec_start:'🎤 开始诵读',rec_listening:'🔴 正在聆听...',rec_play:'🔊 收听',rec_skip:'跳过 ⏭',rec_restart:'🔄 重新开始',rec_score:'诵读结果',rec_correct:'正确单词',rec_wrong:'错误单词',rec_ayahs:'节',rec_of:'/',rec_ayah:'节',rec_next:'下一个 ➡️',rec_retry:'🔄 重试',rec_result_good:'✅ 优秀！',rec_result_bad:'⚠️ 有错误',rec_accuracy:'准确率',nav_recite:'诵读',
   },
+  es: {
+    app_subtitle: 'Tu App Islámica Completa',
+    prayers_today: 'Oraciones de Hoy', athkar_lbl: 'Dhikr', tasbih_lbl: 'Tasbih',
+    daily_reminder_title: '📜 Recordatorio Diario', share_btn: '📤 Compartir',
+    prayer_times_title: '📅 Horarios de Oración', next_prayer_lbl: 'Próxima Oración',
+    goals_title: '🎯 Objetivos de Hoy', sections_title: '📚 Secciones Principales',
+    sec_quran: 'Corán', sec_hadith: 'Hadith', sec_aqeedah: 'Aqida',
+    sec_fiqh: 'Fiqh', sec_seerah: 'Sira', sec_ethics: 'Ética',
+    sec_quiz: 'Quiz', sec_mosques: 'Mezquitas',
+    quran_title: '📖 Sagrado Corán', hadith_title: '📚 Hadiths Proféticos',
+    aqeedah_title: '🕌 Fe y Creencia', fiqh_title: '⚖️ Fiqh y Normas',
+    seerah_title: '🕋 Sira e Historia', ethics_title: '🤲 Ética y Moral',
+    quiz_title: '📝 Quiz Islámico', calendar_title: '📅 Calendario Islámico',
+    achievements_title: '🏆 Mis Logros', athkar_title: '📿 Dhikr Diario',
+    tasbih_title: '🔢 Tasbih Electrónico', duas_title: '🤲 Súplicas',
+    names_title: '✨ Nombres de Alá', qibla_title: '🧭 Dirección Qibla',
+    mosques_title: '🕌 Mezquitas Cercanas', settings_title: '⚙️ Ajustes',
+    all_surahs: 'Todas las Suras', quran_info: '📊 Info', meccan: 'Mequí', medinan: 'Medinés',
+    juz: 'Yuz', ayah_word: 'Versículo', surah_word: 'Sura',
+    individual_verses: 'Versículos Individuales', translation_lbl: 'Traducción',
+    loading_txt: 'Cargando...', retry_txt: 'Reintentar', tafseer_lbl: '📖 Tafsir',
+    all: 'Todo', bukhari: 'Bujari', muslim: 'Muslim', akhlak: 'Ética', ibadah: 'Adoración',
+    meaning_lbl: 'Significado', source_lbl: 'Fuente',
+    morning: 'Mañana', evening: 'Tarde', after_prayer: 'Tras Oración', sleep: 'Sueño',
+    times_lbl: 'vez/veces', dhikr_lbl: 'Dhikr',
+    tasbih_target: 'Meta', tasbih_total: 'Total General', reset_btn: '↺ Reiniciar',
+    tap_btn: 'Toca para Glorificar',
+    dua_morning: 'Mañana', dua_night: 'Noche', dua_general: 'General', dua_hardship: 'Dificultad',
+    names_verse: 'Alá tiene los nombres más bellos; invocadle por ellos',
+    qibla_desc: 'Apunta tu teléfono hacia la Kaaba',
+    qibla_kaaba: '🕋 Dirección de la Santa Kaaba', detect_btn: '📍 Detectar Mi Ubicación',
+    north: 'N', south: 'S', east: 'E', west: 'O',
+    mosques_desc: 'Pulsa para encontrar mezquitas cercanas',
+    mosques_search_btn: '🔍 Buscar Mezquitas',
+    quiz_q_of: 'Pregunta', quiz_of: 'de', quiz_score: 'Puntos',
+    quiz_restart: 'Reiniciar', quiz_done: 'Quiz Terminado!',
+    quiz_result_great: 'Excelente! Eres un erudito islámico 🌟',
+    quiz_result_good: 'Bien! Sigue aprendiendo 📚', quiz_result_try: 'Sigue estudiando 💪',
+    islamic_events: '🎉 Eventos Islámicos',
+    unlocked: '✅', locked: '🔒 Bloqueado',
+    lang_label: '🌍 Seleccionar Idioma', dark_mode: '🌓 Modo Oscuro',
+    prayer_alerts: '🔔 Alertas de Oración', athkar_alerts: '📱 Alertas Dhikr',
+    city_label: '🌍 Ciudad', app_stats: '📊 Estadísticas',
+    usage_count: 'Usos:', last_usage: 'Último uso:',
+    clear_data_btn: '🗑️ Borrar Datos',
+    ai_title: '🤖 Asistente Islámico',
+    ai_welcome: 'Assalamu Alaikum! 👋\nPregúntame sobre el Islam.',
+    ai_placeholder: 'Escribe tu pregunta...', send: 'Enviar',
+    home: 'Inicio', quran: 'Corán', athkar: 'Dhikr',
+    tasbih: 'Tasbih', duas: 'Duas', names: 'Nombres', qibla: 'Qibla',
+    notify_lang: '✅ Idioma cambiado a Español',
+    search_placeholder: 'Buscar Corán, Hadith, Fiqh...',
+    dir: 'ltr',
+    goal_fajr: 'Oración Fajr a tiempo', goal_quran: 'Recitación diaria del Corán',
+    goal_athkar: 'Dhikr mañana y tarde', goal_mosque: 'Oración en congregación',
+    goal_tasbih: 'Tasbih 100 veces', goal_istighfar: 'Istighfar 100 veces',
+    fajr: 'Fajr', sunrise: 'Amanecer', dhuhr: 'Dhuhr', asr: 'Asr', maghrib: 'Maghrib', isha: 'Isha',
+    next_prayer_after: 'en', hours_lbl: 'h', mins_lbl: 'min',
+    fiqh_all: 'Todo', fiqh_taharah: 'Purificación', fiqh_salah: 'Oración', fiqh_sawm: 'Ayuno', fiqh_zakat: 'Zakat',
+    rec_title:'🎤 Recitación del Corán', rec_listen:'🎧 Escuchar', rec_recite:'🎤 Recitar', rec_dl:'⬇️ Descargar',
+    rec_choose_listen:'Elige una sura para escuchar', rec_choose_recite:'Elige una sura para recitar',
+    rec_choose_option:'-- Elegir Sura --', rec_start:'🎤 Iniciar Recitación', rec_listening:'🔴 Escuchando...',
+    rec_play:'🔊 Escuchar', rec_skip:'Saltar ⏭', rec_restart:'🔄 Reiniciar',
+    rec_score:'Resultado', rec_correct:'palabras correctas', rec_wrong:'palabras incorrectas',
+    rec_ayahs:'versículos', rec_of:'de', rec_ayah:'Versículo',
+    rec_next:'Siguiente ➡️', rec_retry:'🔄 Reintentar',
+    rec_result_good:'✅ Excelente!', rec_result_bad:'⚠️ Errores encontrados',
+    rec_accuracy:'Precisión', nav_recite:'Recitar',
+  },
   ur: {
     app_subtitle: 'آپ کی جامع اسلامی ایپ',
     prayers_today: 'آج کی نمازیں', athkar_lbl: 'اذکار', tasbih_lbl: 'تسبیح',
@@ -3211,198 +3277,199 @@ function T(key) {
   return (UI_TEXT[lang] && UI_TEXT[lang][key]) || (UI_TEXT['ar'] && UI_TEXT['ar'][key]) || key;
 }
 
-
 function changeLanguage(lang) {
-  if (!UI_TEXT[lang]) lang = 'ar';
   currentLang = lang;
-  const dir = UI_TEXT[lang].dir || 'ltr';
+  const dir = UI_TEXT[lang]?.dir || 'rtl';
 
   // Document direction
   document.documentElement.setAttribute('dir', dir);
   document.documentElement.setAttribute('lang', lang);
-  document.body.style.textAlign = dir === 'rtl' ? 'right' : 'left';
 
   // Header
   const titleEl = document.getElementById('app-title');
-  if (titleEl) titleEl.textContent = '🕌 ' + (UI_TEXT[lang].app_subtitle || 'Islamic Assistant');
-  const searchEl = document.querySelector('.search-bar input');
-  if (searchEl) searchEl.placeholder = UI_TEXT[lang].search_placeholder || 'Search...';
+  if (titleEl) titleEl.textContent = '🕌 ' + (LANG_DATA[lang]?.title || UI_TEXT['ar'].app_subtitle);
+  const searchEl = document.getElementById('search-input');
+  if (searchEl) searchEl.placeholder = T('search_placeholder');
 
   // Bottom nav
-  const navItems = [
-    {id: 'nav-home', key: 'home'},
-    {id: 'nav-quran', key: 'quran'},
-    {id: 'nav-audio-player', key: 'nav_recite'},
-    {id: 'nav-athkar', key: 'athkar'},
-    {id: 'nav-tasbih', key: 'tasbih'},
-    {id: 'nav-duas', key: 'duas'},
-    {id: 'nav-names', key: 'names'},
-    {id: 'nav-qibla', key: 'qibla'}
-  ];
-  navItems.forEach(item => {
-    const btn = document.getElementById(item.id);
-    if (btn) {
-      const spans = btn.querySelectorAll('span');
-      if (spans[1]) spans[1].textContent = UI_TEXT[lang][item.key] || item.key;
-    }
+  const navMap = {
+    'nav-home': T('home'), 'nav-quran': T('quran'), 'nav-athkar': T('athkar'),
+    'nav-tasbih': T('tasbih'), 'nav-duas': T('duas'), 'nav-names': T('names'), 'nav-qibla': T('qibla')
+  };
+  Object.entries(navMap).forEach(([id, label]) => {
+    const btn = document.getElementById(id);
+    if (btn) { const spans = btn.querySelectorAll('span'); if (spans[1]) spans[1].textContent = label; }
   });
 
-  // Section headings
-  const sections = ['quran', 'hadith', 'aqeedah', 'fiqh', 'seerah', 'ethics', 'quiz', 'calendar', 'achievements', 'athkar', 'tasbih', 'duas', 'names', 'qibla', 'mosques', 'settings'];
-  sections.forEach(secId => {
+  // Section headings (all h2 inside sections)
+  const secHeadings = {
+    'quran': T('quran_title'), 'hadith': T('hadith_title'), 'aqeedah': T('aqeedah_title'),
+    'fiqh': T('fiqh_title'), 'seerah': T('seerah_title'), 'ethics': T('ethics_title'),
+    'quiz': T('quiz_title'), 'calendar': T('calendar_title'), 'achievements': T('achievements_title'),
+    'athkar': T('athkar_title'), 'tasbih': T('tasbih_title'), 'duas': T('duas_title'),
+    'names': T('names_title'), 'qibla': T('qibla_title'), 'mosques': T('mosques_title'),
+    'settings': T('settings_title'),
+  };
+  Object.entries(secHeadings).forEach(([secId, heading]) => {
     const h2 = document.querySelector(`#${secId} h2`);
-    if (h2) h2.textContent = UI_TEXT[lang][secId + '_title'] || UI_TEXT[lang]['sec_' + secId] || h2.textContent;
+    if (h2) h2.textContent = heading;
   });
 
-  // Home Stats
+  // Home section stats labels
   const statLabels = document.querySelectorAll('#home .stat-label');
-  if (statLabels[0]) statLabels[0].textContent = UI_TEXT[lang].prayers_today;
-  if (statLabels[1]) statLabels[1].textContent = UI_TEXT[lang].athkar_lbl;
-  if (statLabels[2]) statLabels[2].textContent = UI_TEXT[lang].tasbih_lbl;
+  if (statLabels[0]) statLabels[0].textContent = T('prayers_today');
+  if (statLabels[1]) statLabels[1].textContent = T('athkar_lbl');
+  if (statLabels[2]) statLabels[2].textContent = T('tasbih_lbl');
 
-  // Home Cards
+  // Home card titles
   const homeCards = document.querySelectorAll('#home .card h3');
   homeCards.forEach(h3 => {
-    const txt = h3.textContent;
-    if (txt.includes('مواقيت') || txt.includes('Prayer') || txt.includes('Horaires') || txt.includes('Vakitleri') || txt.includes('Время')) h3.textContent = UI_TEXT[lang].prayer_times_title;
-    if (txt.includes('أهداف') || txt.includes('Goals') || txt.includes('Objectifs') || txt.includes('Ziele') || txt.includes('Цели')) h3.textContent = UI_TEXT[lang].goals_title;
-    if (txt.includes('الأقسام') || txt.includes('Sections') || txt.includes('Bölüm') || txt.includes('Разделы')) h3.textContent = UI_TEXT[lang].sections_title;
+    if (h3.textContent.includes('مواقيت') || h3.textContent.includes('Prayer') || h3.textContent.includes('Namaz')) h3.textContent = T('prayer_times_title');
+    else if (h3.textContent.includes('أهداف') || h3.textContent.includes('Goal') || h3.textContent.includes('Hedef')) h3.textContent = T('goals_title');
+    else if (h3.textContent.includes('الأقسام') || h3.textContent.includes('Section') || h3.textContent.includes('Bölüm')) h3.textContent = T('sections_title');
   });
 
-  // Daily Card
-  const dailyH4 = document.querySelector('.daily-card h4');
-  if (dailyH4) dailyH4.textContent = UI_TEXT[lang].daily_reminder_title;
-  const dailyBtn = document.querySelector('.daily-card button');
-  if (dailyBtn) dailyBtn.textContent = UI_TEXT[lang].share_btn;
+  // Daily card
+  const dailyCard = document.querySelector('.daily-card h4');
+  if (dailyCard) dailyCard.textContent = T('daily_reminder_title');
+  const shareBtn = document.querySelector('.daily-card .share-btn');
+  if (shareBtn) shareBtn.textContent = T('share_btn');
 
-  // Menu Grid
-  const menuLabels = ['sec_quran', 'sec_hadith', 'sec_aqeedah', 'sec_fiqh', 'sec_seerah', 'sec_ethics', 'sec_quiz', 'sec_mosques'];
-  const menuPs = document.querySelectorAll('#home .grid .menu-item p');
-  menuPs.forEach((p, i) => {
-    if (menuLabels[i]) p.textContent = UI_TEXT[lang][menuLabels[i]];
-  });
+  // Menu items in grid
+  const menuItems = document.querySelectorAll('.menu-item p');
+  const menuMap = ['sec_quran','sec_hadith','sec_aqeedah','sec_fiqh','sec_seerah','sec_ethics','sec_quiz','sec_mosques'];
+  menuItems.forEach((p, i) => { if (menuMap[i]) p.textContent = T(menuMap[i]); });
 
-  // Settings
-  const settingsH2 = document.getElementById('settings-h2');
-  if (settingsH2) settingsH2.textContent = UI_TEXT[lang].settings_title;
-  const langLbl = document.getElementById('lang-selector-label');
-  if (langLbl) langLbl.textContent = UI_TEXT[lang].lang_label;
-  const darkLbl = document.getElementById('lbl-dark-mode');
-  if (darkLbl) darkLbl.textContent = UI_TEXT[lang].dark_mode;
-  const prayerLbl = document.getElementById('lbl-prayer-alerts');
-  if (prayerLbl) prayerLbl.textContent = UI_TEXT[lang].prayer_alerts;
-  const athkarLbl = document.getElementById('lbl-athkar-alerts');
-  if (athkarLbl) athkarLbl.textContent = UI_TEXT[lang].athkar_alerts;
-  const statsLbl = document.getElementById('lbl-app-stats');
-  if (statsLbl) statsLbl.textContent = UI_TEXT[lang].app_stats;
-  const clearBtn = document.getElementById('lbl-clear-data');
-  if (clearBtn) clearBtn.textContent = UI_TEXT[lang].clear_data_btn;
+  // Tasbih page
+  const tapBtn = document.querySelector('.tasbih-circle');
+  const tapBtnText = document.querySelector('.tasbih-circle + button') || document.querySelector('#tasbih button.tap-btn');
+  if (tapBtnText) tapBtnText.textContent = T('tap_btn');
+  const resetBtns = document.querySelectorAll('#tasbih .tab-btn');
+  if (resetBtns[0]) resetBtns[0].textContent = T('reset_btn');
+  const totalLabel = document.querySelector('#tasbih .total-label');
+  if (totalLabel) totalLabel.textContent = T('tasbih_total');
 
-  // Login Overlay
-  const loginTitle = document.getElementById('login-title');
-  if (loginTitle) loginTitle.textContent = lang === 'ar' ? 'مرحباً بك' : (UI_TEXT[lang].ai_welcome ? UI_TEXT[lang].ai_welcome.split('!')[0] : 'Welcome');
-  const loginSub = document.getElementById('login-sub');
-  if (loginSub) loginSub.textContent = lang === 'ar' ? 'أدخل اسمك للبدء' : 'Enter your name to start';
-  const loginTab = document.getElementById('login-tab-btn');
-  if (loginTab) loginTab.textContent = lang === 'ar' ? 'تسجيل الدخول' : 'Login';
-  const regTab = document.getElementById('register-tab-btn');
-  if (regTab) regTab.textContent = lang === 'ar' ? 'إنشاء حساب' : 'Register';
-  
-  const userInp = document.getElementById('login-username');
-  if (userInp) userInp.placeholder = lang === 'ar' ? 'اسم المستخدم' : 'Username';
-  const passInp = document.getElementById('login-password');
-  if (passInp) passInp.placeholder = lang === 'ar' ? 'كلمة المرور' : 'Password';
-  const loginBtn = document.querySelector('#login-form button[onclick="doLogin()"]');
-  if (loginBtn) loginBtn.textContent = lang === 'ar' ? 'دخول 🚀' : 'Login 🚀';
-  const guestBtn = document.querySelector('#login-form button[onclick="doGuestLogin()"]');
-  if (guestBtn) guestBtn.textContent = lang === 'ar' ? 'دخول كضيف 👤' : 'Guest 👤';
-
-  // Tasbih
-  const tapBtn = document.querySelector('#tasbih .tap-btn');
-  if (tapBtn) tapBtn.textContent = UI_TEXT[lang].tap_btn;
-  const resetBtn = document.querySelector('#tasbih .tab-btn');
-  if (resetBtn) resetBtn.textContent = UI_TEXT[lang].reset_btn;
-  const totalLbl = document.querySelector('#tasbih .total-label');
-  if (totalLbl) totalLbl.textContent = UI_TEXT[lang].tasbih_total;
+  // Names verse
+  const namesVerse = document.querySelector('#names p');
+  if (namesVerse) namesVerse.textContent = T('names_verse');
 
   // Qibla
-  const qiblaDesc = document.querySelector('#qibla p[style*="color:var(--gray)"]');
-  if (qiblaDesc) qiblaDesc.textContent = UI_TEXT[lang].qibla_desc;
-  const qiblaBtn = document.querySelector('#qibla button.tab-btn');
-  if (qiblaBtn) qiblaBtn.textContent = UI_TEXT[lang].detect_btn;
+  const qiblaDesc = document.querySelector('#qibla [style*="color:var(--gray)"]');
+  if (qiblaDesc) qiblaDesc.textContent = T('qibla_desc');
+  const qiblaDetectBtn = document.querySelector('#qibla button.tab-btn');
+  if (qiblaDetectBtn) qiblaDetectBtn.textContent = T('detect_btn');
+  const qiblaTitle = document.querySelector('.qibla-direction-text');
+  if (qiblaTitle) qiblaTitle.textContent = T('qibla_kaaba');
 
-  // Recitation section - full translation
-  const _T = (k) => (UI_TEXT[lang] && UI_TEXT[lang][k]) || (UI_TEXT['ar'] && UI_TEXT['ar'][k]) || k;
+  // AI chat
+  const aiInput = document.getElementById('ai-input');
+  if (aiInput) aiInput.placeholder = T('ai_placeholder');
+  // Update AI welcome message
+  const aiBody = document.getElementById('ai-chat-body');
+  if (aiBody && aiBody.children.length <= 1) {
+    const welcomeDiv = aiBody.querySelector('div[style*="text-align:center"]');
+    if (welcomeDiv) {
+      const msgDiv = welcomeDiv.querySelector('div:last-child');
+      if (msgDiv) msgDiv.textContent = AI_WELCOME_MSGS[lang] || AI_WELCOME_MSGS['en'];
+    }
+  }
+  const aiSendBtn = document.querySelector('.ai-chat-input button');
+  if (aiSendBtn) aiSendBtn.textContent = T('send');
+  const aiHeader = document.querySelector('.ai-chat-header span');
+  if (aiHeader) aiHeader.textContent = T('ai_title');
+
+  // Settings labels
+  const settingLabels = document.querySelectorAll('.setting-label');
+  if (settingLabels[0]) settingLabels[0].textContent = T('dark_mode');
+  if (settingLabels[1]) settingLabels[1].textContent = T('prayer_alerts');
+  if (settingLabels[2]) settingLabels[2].textContent = T('athkar_alerts');
+  const langLabel = document.querySelector('.language-selector label');
+  if (langLabel) langLabel.textContent = T('lang_label');
+  const cityLabel = document.querySelector('#settings .setting-item:last-of-type .setting-label');
+  if (cityLabel && cityLabel.textContent.includes('مدينة')) cityLabel.textContent = T('city_label');
+
+  // Stats labels in settings
+  const appStatsH3 = document.querySelector('#settings .card h3');
+  if (appStatsH3) appStatsH3.textContent = T('app_stats');
+  const clearBtn = document.querySelector('#settings .tab-btn[style*="danger"]');
+  if (clearBtn) clearBtn.textContent = T('clear_data_btn');
+
+  // Usage count labels
+  const usageLabels = {
+    ar:'عدد مرات الاستخدام:', en:'Usage Count:', ko:'사용 횟수:',
+    ja:'使用回数:', fr:'Nb utilisations:', de:'Nutzungsanzahl:',
+    tr:'Kullanım Sayısı:', ru:'Кол-во использований:', zh:'使用次数:', ur:'استعمال کی تعداد:'
+  };
+  const lastUsedLabels = {
+    ar:'آخر استخدام:', en:'Last Used:', ko:'마지막 사용:',
+    ja:'最終使用:', fr:'Dernière utilisation:', de:'Zuletzt genutzt:',
+    tr:'Son Kullanım:', ru:'Последнее использование:', zh:'上次使用:', ur:'آخری استعمال:'
+  };
+  const ulEl = document.getElementById('label-usage');
+  if (ulEl) {
+    const usageVal = document.getElementById('app-usage');
+    ulEl.textContent = (usageLabels[lang] || usageLabels['en']) + ' ';
+    if (usageVal) ulEl.appendChild(usageVal);
+  }
+  const luEl = document.getElementById('label-last-usage');
+  if (luEl) {
+    const lastVal = document.getElementById('last-usage');
+    luEl.textContent = (lastUsedLabels[lang] || lastUsedLabels['en']) + ' ';
+    if (lastVal) luEl.appendChild(lastVal);
+  }
+
+  // Update recitation/audio section
   const recTitleEl = document.getElementById('recitation-title');
-  if (recTitleEl) recTitleEl.textContent = _T('rec_title');
+  if(recTitleEl) recTitleEl.textContent = T('rec_title');
   const recListenBtn = document.getElementById('rec-tab-btn-listen');
-  if (recListenBtn) recListenBtn.textContent = _T('rec_listen');
+  if(recListenBtn) recListenBtn.textContent = T('rec_listen');
   const recReciteBtn = document.getElementById('rec-tab-btn-recite');
-  if (recReciteBtn) recReciteBtn.textContent = _T('rec_recite');
+  if(recReciteBtn) recReciteBtn.textContent = T('rec_recite');
   const recDlBtn = document.getElementById('rec-tab-btn-dl');
-  if (recDlBtn) recDlBtn.textContent = _T('rec_dl');
+  if(recDlBtn) recDlBtn.textContent = T('rec_dl');
+  const recH3 = document.getElementById('rec-h3');
+  if(recH3) recH3.textContent = T('rec_choose_recite');
   const apTitleEl = document.getElementById('ap-title');
-  if (apTitleEl && (apTitleEl.textContent.includes('اختر') || apTitleEl.textContent.includes('Choose') || apTitleEl.textContent.includes('选择') || apTitleEl.textContent.includes('選択'))) {
-    apTitleEl.textContent = _T('rec_choose_listen');
-  }
-  const recH3El = document.getElementById('rec-h3');
-  if (recH3El) recH3El.textContent = _T('rec_choose_recite');
+  if(apTitleEl) apTitleEl.textContent = T('rec_choose_listen');
   const recMicBtn = document.getElementById('rec-mic-btn');
-  if (recMicBtn) recMicBtn.textContent = _T('rec_start');
-  const recSurahSel = document.getElementById('rec-surah-select');
-  if (recSurahSel && recSurahSel.options[0]) recSurahSel.options[0].textContent = _T('rec_choose_option');
-  const apSurahSel = document.getElementById('ap-surah-select');
-  if (apSurahSel && apSurahSel.options[0]) apSurahSel.options[0].textContent = _T('rec_choose_option');
+  if(recMicBtn && !recMicBtn.classList.contains('listening')) recMicBtn.textContent = T('rec_start');
+  // Surah select placeholder
+  const recSel = document.getElementById('rec-surah-select');
+  if(recSel && recSel.options[0]) recSel.options[0].text = T('rec_choose_option');
+  // Nav recite button
+  const navRecite = document.getElementById('nav-audio-player');
+  if(navRecite) { const sp = navRecite.querySelectorAll('span'); if(sp[1]) sp[1].textContent = T('nav_recite'); }
 
-  // AI Settings card - full translation
-  const _aiSettingsTrans = {
-    ar:  {title:'🤖 إعدادات المساعد الذكي', desc:'أدخل مفتاح API لتفعيل المساعد — Groq مجاني 100%', prov:'مزود الـ AI', key:'مفتاح API', save:'حفظ', groq:'🆓 Groq (مجاني - groq.com)', gemini:'🆓 Google Gemini (مجاني)', openai:'💰 OpenAI (مدفوع)', tip:'💡 للحصول على مفتاح Groq مجاني: اذهب إلى <strong>console.groq.com</strong> → API Keys → Create API Key'},
-    en:  {title:'🤖 AI Assistant Settings', desc:'Enter your API key to activate — Groq is 100% free', prov:'AI Provider', key:'API Key', save:'Save', groq:'🆓 Groq (Free - groq.com)', gemini:'🆓 Google Gemini (Free)', openai:'💰 OpenAI (Paid)', tip:'💡 Get a free Groq key at <strong>console.groq.com</strong> → API Keys → Create API Key'},
-    ko:  {title:'🤖 AI 어시스턴트 설정', desc:'API 키를 입력하여 어시스턴트를 활성화하세요 — Groq 100% 무료', prov:'AI 제공자', key:'API 키', save:'저장', groq:'🆓 Groq (무료)', gemini:'🆓 Google Gemini (무료)', openai:'💰 OpenAI (유료)', tip:'💡 무료 Groq 키: <strong>console.groq.com</strong> → API Keys → Create'},
-    ja:  {title:'🤖 AIアシスタント設定', desc:'APIキーを入力してアシスタントを有効にします — Groq無料', prov:'AIプロバイダー', key:'APIキー', save:'保存', groq:'🆓 Groq (無料)', gemini:'🆓 Google Gemini (無料)', openai:'💰 OpenAI (有料)', tip:'💡 無料Groqキー: <strong>console.groq.com</strong> → API Keys → Create'},
-    zh:  {title:'🤖 AI助手设置', desc:'输入API密钥以激活助手 — Groq 100%免费', prov:'AI提供商', key:'API密钥', save:'保存', groq:'🆓 Groq (免费)', gemini:'🆓 Google Gemini (免费)', openai:'💰 OpenAI (付费)', tip:'💡 获取免费Groq密钥: <strong>console.groq.com</strong> → API Keys → Create'},
-    ru:  {title:'🤖 Настройки ИИ-ассистента', desc:'Введите ключ API — Groq полностью бесплатный', prov:'Провайдер ИИ', key:'Ключ API', save:'Сохранить', groq:'🆓 Groq (Бесплатно)', gemini:'🆓 Google Gemini (Бесплатно)', openai:'💰 OpenAI (Платно)', tip:'💡 Ключ Groq: <strong>console.groq.com</strong> → API Keys → Create'},
-    fr:  {title:"🤖 Paramètres de l'Assistant IA", desc:"Entrez votre clé API — Groq est 100% gratuit", prov:'Fournisseur IA', key:'Clé API', save:'Enregistrer', groq:'🆓 Groq (Gratuit)', gemini:'🆓 Google Gemini (Gratuit)', openai:'💰 OpenAI (Payant)', tip:'💡 Clé Groq gratuite: <strong>console.groq.com</strong> → API Keys → Create'},
-    de:  {title:'🤖 KI-Assistent Einstellungen', desc:'API-Schlüssel eingeben — Groq ist kostenlos', prov:'KI-Anbieter', key:'API-Schlüssel', save:'Speichern', groq:'🆓 Groq (Kostenlos)', gemini:'🆓 Google Gemini (Kostenlos)', openai:'💰 OpenAI (Kostenpflichtig)', tip:'💡 Groq-Schlüssel: <strong>console.groq.com</strong> → API Keys → Create'},
-    tr:  {title:'🤖 Yapay Zeka Asistan Ayarları', desc:'API anahtarınızı girin — Groq %100 ücretsiz', prov:'Yapay Zeka Sağlayıcısı', key:'API Anahtarı', save:'Kaydet', groq:'🆓 Groq (Ücretsiz)', gemini:'🆓 Google Gemini (Ücretsiz)', openai:'💰 OpenAI (Ücretli)', tip:'💡 Groq anahtarı: <strong>console.groq.com</strong> → API Keys → Create'},
-    ur:  {title:'🤖 AI مددگار کی ترتیبات', desc:'API کلید درج کریں — Groq 100% مفت', prov:'AI فراہم کنندہ', key:'API کلید', save:'محفوظ کریں', groq:'🆓 Groq (مفت)', gemini:'🆓 Google Gemini (مفت)', openai:'💰 OpenAI (ادائیگی)', tip:'💡 Groq کلید: <strong>console.groq.com</strong> → API Keys → Create'},
+  // Settings section labels
+  var settingsLabels = {
+    'settings-h2':      {'ar':'⚙️ الإعدادات','en':'⚙️ Settings','ko':'⚙️ 설정','ja':'⚙️ 設定','fr':'⚙️ Paramètres','de':'⚙️ Einstellungen','tr':'⚙️ Ayarlar','ru':'⚙️ Настройки','zh':'⚙️ 设置','ur':'⚙️ ترتیبات'},
+    'lang-selector-label': {'ar':'🌍 اختر اللغة','en':'🌍 Select Language','ko':'🌍 언어 선택','ja':'🌍 言語を選択','fr':'🌍 Choisir la Langue','de':'🌍 Sprache wählen','tr':'🌍 Dil Seç','ru':'🌍 Выбрать Язык','zh':'🌍 选择语言','ur':'🌍 زبان منتخب کریں'},
+    'lbl-dark-mode':    {'ar':'🌓 الوضع الليلي','en':'🌓 Dark Mode','ko':'🌓 다크 모드','ja':'🌓 ダークモード','fr':'🌓 Mode Sombre','de':'🌓 Dunkelmodus','tr':'🌓 Karanlık Mod','ru':'🌓 Тёмный Режим','zh':'🌓 暗模式','ur':'🌓 ڈارک موڈ'},
+    'lbl-prayer-alerts':{'ar':'🔔 تنبيهات الصلاة','en':'🔔 Prayer Alerts','ko':'🔔 예배 알림','ja':'🔔 礼拝通知','fr':'🔔 Alertes Prières','de':'🔔 Gebet-Benachrichtigungen','tr':'🔔 Namaz Bildirimleri','ru':'🔔 Уведомления Намаза','zh':'🔔 礼拜提醒','ur':'🔔 نماز کی اطلاعات'},
+    'lbl-athkar-alerts':{'ar':'📱 تنبيهات الأذكار','en':'📱 Dhikr Alerts','ko':'📱 즈키르 알림','ja':'📱 ズィクル通知','fr':'📱 Alertes Dhikr','de':'📱 Dhikr-Benachrichtigungen','tr':'📱 Zikir Bildirimleri','ru':'📱 Уведомления Зикра','zh':'📱 赞念提醒','ur':'📱 اذکار کی اطلاعات'},
+    'lbl-app-stats':    {'ar':'📊 إحصائيات التطبيق','en':'📊 App Statistics','ko':'📊 앱 통계','ja':'📊 アプリ統計','fr':'📊 Statistiques','de':'📊 App-Statistiken','tr':'📊 Uygulama İstatistikleri','ru':'📊 Статистика','zh':'📊 应用统计','ur':'📊 ایپ کی اعداد و شمار'},
+    'lbl-clear-data':   {'ar':'🗑️ مسح البيانات','en':'🗑️ Clear Data','ko':'🗑️ 데이터 삭제','ja':'🗑️ データを消去','fr':'🗑️ Effacer les Données','de':'🗑️ Daten löschen','tr':'🗑️ Verileri Temizle','ru':'🗑️ Очистить Данные','zh':'🗑️ 清除数据','ur':'🗑️ ڈیٹا صاف کریں'},
   };
-  const _aiST = _aiSettingsTrans[lang] || _aiSettingsTrans['en'];
-  const _setEl = (id, v) => { const e = document.getElementById(id); if (e && v !== undefined) e.textContent = v; };
-  const _setHtml = (id, v) => { const e = document.getElementById(id); if (e && v !== undefined) e.innerHTML = v; };
-  _setEl('ai-settings-title', _aiST.title);
-  _setEl('ai-settings-desc', _aiST.desc);
-  _setEl('ai-provider-label', _aiST.prov);
-  _setEl('ai-key-label', _aiST.key);
-  _setEl('ai-save-btn', _aiST.save);
-  _setHtml('ai-settings-tip', _aiST.tip);
-  const _provSel = document.getElementById('ai-provider-select');
-  if (_provSel && _provSel.options.length >= 3) {
-    _provSel.options[0].textContent = _aiST.groq;
-    _provSel.options[1].textContent = _aiST.gemini;
-    _provSel.options[2].textContent = _aiST.openai;
-  }
+  Object.entries(settingsLabels).forEach(function(entry){
+    var el = document.getElementById(entry[0]);
+    if(el) el.textContent = entry[1][lang] || entry[1]['ar'];
+  });
 
-  // AI chat header + welcome
-  const _aiChatTrans = {
-    ar: {title:'المساعد الإسلامي', sub:'جاهز للإجابة على أي سؤال', clear:'🗑️ مسح', welcome:'اسألني عن أي شيء — القرآن، الفقه، العلوم، أو أي سؤال عام'},
-    en: {title:'Islamic Assistant', sub:'Ready to answer any question', clear:'🗑️ Clear', welcome:'Ask me anything — Quran, Fiqh, Science, or any general question'},
-    ko: {title:'이슬람 어시스턴트', sub:'모든 질문에 답할 준비가 됐습니다', clear:'🗑️ 지우기', welcome:'무엇이든 물어보세요 — 꾸란, 피끄흐, 과학 또는 일반 질문'},
-    ja: {title:'イスラムアシスタント', sub:'どんな質問にもお答えします', clear:'🗑️ クリア', welcome:'何でも聞いてください — クルアーン、フィクフ、科学、その他'},
-    zh: {title:'伊斯兰助手', sub:'随时准备回答您的问题', clear:'🗑️ 清除', welcome:'请随意提问 — 古兰经、费格赫、科学或任何问题'},
-    ru: {title:'Исламский Помощник', sub:'Готов ответить на любой вопрос', clear:'🗑️ Очист.', welcome:'Задайте любой вопрос — Коран, фикх, наука или общие вопросы'},
-    fr: {title:'Assistant Islamique', sub:'Prêt à répondre à toutes vos questions', clear:'🗑️ Effacer', welcome:"Posez n'importe quelle question — Coran, Fiqh, Science ou général"},
-    de: {title:'Islamischer Assistent', sub:'Bereit, jede Frage zu beantworten', clear:'🗑️ Löschen', welcome:'Stellen Sie jede Frage — Koran, Fiqh, Wissenschaft oder allgemein'},
-    tr: {title:'İslam Asistanı', sub:'Her soruyu yanıtlamaya hazır', clear:'🗑️ Temizle', welcome:'Her şeyi sorun — Kuran, Fıkıh, Bilim veya genel sorular'},
-    ur: {title:'اسلامی مددگار', sub:'ہر سوال کا جواب دینے کے لیے تیار', clear:'🗑️ صاف', welcome:'کچھ بھی پوچھیں — قرآن، فقہ، سائنس یا کوئی بھی سوال'},
+  // Admin button text
+  const adminBtnLabels = {
+    ar:'🛡️ لوحة الإدارة', en:'🛡️ Admin Panel', ko:'🛡️ 관리자 패널',
+    ja:'🛡️ 管理パネル', fr:'🛡️ Panneau Admin', de:'🛡️ Admin-Panel',
+    tr:'🛡️ Yönetici Paneli', ru:'🛡️ Панель администратора',
+    zh:'🛡️ 管理面板', ur:'🛡️ ایڈمن پینل'
   };
-  const _aiCT = _aiChatTrans[lang] || _aiChatTrans['en'];
-  _setEl('ai-header-title', _aiCT.title);
-  _setEl('ai-header-sub', _aiCT.sub);
-  _setEl('ai-clear-btn', _aiCT.clear);
-  _setEl('ai-welcome-sub', _aiCT.welcome);
-  const _aiCW = document.getElementById('ai-chat-window');
-  if (_aiCW) _aiCW.style.direction = (lang === 'ar' || lang === 'ur') ? 'rtl' : 'ltr';
+  const adminBtn = document.getElementById('admin-open-btn');
+  if (adminBtn) adminBtn.textContent = adminBtnLabels[lang] || adminBtnLabels['en'];
+
+  // Mosques
+  const mosquesDesc = document.querySelector('#mosques .card p');
+  if (mosquesDesc) mosquesDesc.textContent = T('mosques_desc');
+  const mosquesBtn = document.querySelector('#mosques button.tab-btn');
+  if (mosquesBtn) mosquesBtn.textContent = T('mosques_search_btn');
 
   // RTL/LTR border adjustments
   document.querySelectorAll('.card').forEach(c => {
@@ -3414,25 +3481,38 @@ function changeLanguage(lang) {
     c.style.borderLeft  = dir === 'ltr' ? '3px solid var(--secondary)' : 'none';
   });
 
-  // Re-render dynamic content
-  if (typeof renderSurahs === 'function') renderSurahs();
-  if (typeof renderHadiths === 'function') renderHadiths(window.appState?.currentHadithFilter || 'all');
-  if (typeof renderAqeedah === 'function') renderAqeedah();
-  if (typeof renderFiqh === 'function') renderFiqh(window.appState?.currentFiqhFilter || 'all');
-  if (typeof renderSeerah === 'function') renderSeerah();
-  if (typeof renderEthics === 'function') renderEthics();
-  if (typeof renderDuas === 'function') renderDuas(window.appState?.currentDuaFilter || 'all');
-  if (typeof renderNames === 'function') renderNames();
-  if (typeof renderAthkar === 'function') renderAthkar(window.appState?.currentAthkarSection || 'morning');
-  if (typeof renderPrayerTimes === 'function') renderPrayerTimes();
-  if (typeof renderGoals === 'function') renderGoals();
-  if (typeof renderAchievements === 'function') renderAchievements();
-  if (typeof renderQuiz === 'function') renderQuiz();
 
-  localStorage.setItem('app_lang', lang);
-  if (typeof showNotification === 'function' && !window._loading_initial_lang) showNotification(UI_TEXT[lang].notify_lang);
+  // Tasbih button labels
+  const tasbihLabels = {
+    'tb-tasbih':   {ar:'تسبيح',en:'Tasbih',ko:'타스비흐',ja:'タスビーフ',fr:'Tasbih',de:'Tasbih',tr:'Tesbih',ru:'Тасбих',zh:'赞主清净',ur:'تسبیح'},
+    'tb-tahmid':   {ar:'تحميد',en:'Tahmid',ko:'타흐미드',ja:'タフミード',fr:'Tahmid',de:'Tahmid',tr:'Tahmid',ru:'Тахмид',zh:'感赞',ur:'تحمید'},
+    'tb-takbir':   {ar:'تكبير',en:'Takbir',ko:'타크비르',ja:'タクビール',fr:'Takbir',de:'Takbir',tr:'Tekbir',ru:'Такбир',zh:'颂主至大',ur:'تکبیر'},
+    'tb-istighfar':{ar:'استغفار',en:'Istighfar',ko:'이스티그파르',ja:'イスティグファール',fr:'Istighfar',de:'Istighfar',tr:'İstiğfar',ru:'Истигфар',zh:'求饶',ur:'استغفار'},
+    'tb-tahlil':   {ar:'تهليل',en:'Tahlil',ko:'타흐릴',ja:'タフリール',fr:'Tahlil',de:'Tahlil',tr:'Tahlil',ru:'Тахлиль',zh:'颂主独一',ur:'تہلیل'},
+  };
+  Object.entries(tasbihLabels).forEach(([id, labels]) => {
+    const btn = document.getElementById(id);
+    if(btn) btn.textContent = labels[lang] || labels['en'];
+  });
+
+  // Re-render all dynamic content
+  renderSurahs();
+  renderHadiths(appState.currentHadithFilter || 'all');
+  renderAqeedah();
+  renderFiqh(appState.currentFiqhFilter || 'all');
+  renderSeerah();
+  renderEthics();
+  renderDuas(appState.currentDuaFilter || 'all');
+  renderNames();
+  renderAthkar(appState.currentAthkarSection || 'morning');
+  renderPrayerTimes();
+  renderGoals();
+  renderAchievements();
+  renderQuiz();
+
+  localStorage.setItem('lang', lang);
+  showNotification(T('notify_lang'));
 }
-
 
 function clearData() {
   if (confirm('هل تريد مسح جميع البيانات؟')) {
@@ -7114,9 +7194,6 @@ function transShowResult(msg, isOk){
 
 // Load saved translations on startup
 document.addEventListener('DOMContentLoaded', function(){
-  window._loading_initial_lang = true;
-  changeLanguage(localStorage.getItem('app_lang') || 'ar');
-  window._loading_initial_lang = false;
   loadSurahAudio();
   transLoadFromStorage();
   transRenderSaved();
@@ -7382,9 +7459,6 @@ function _updateUserStats(){
 
 // Check session on load
 document.addEventListener('DOMContentLoaded', function(){
-  window._loading_initial_lang = true;
-  changeLanguage(localStorage.getItem('app_lang') || 'ar');
-  window._loading_initial_lang = false;
   var session = getSession();
   if(session && session.username){
     var users = getUsers();
