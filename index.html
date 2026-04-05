@@ -4785,26 +4785,63 @@ if(e.error!=='no-speech') showNotification('⚠️ خطأ في الميكروف�
 _recRecog.start();
 }
 function _normalize(t){
-return t.replace(/[\u064B-\u065F\u0670]/g,'')
-.replace(/أ|إ|آ/g,'ا')
-.replace(/ة/g,'ه')
-.replace(/ى/g,'ي')
-.replace(/\s+/g,' ').trim();
+  if(!t) return '';
+  return t
+    .replace(/[ً-ٰٟـ]/g,'') // شيل كل التشكيل والشدة
+    .replace(/[أإآءؤئ]/g,'ا')                   // توحيد الهمزات
+    .replace(/ة/g,'ه')                           // تاء مربوطة
+    .replace(/ى/g,'ي')                           // ألف مقصورة
+    .replace(/ـ/g,'')                             // شيل التطويل
+    .replace(/\s+/g,' ').trim();
+}
+
+// حساب تشابه الكلمات (Levenshtein)
+function _similarity(a, b){
+  if(!a || !b) return 0;
+  if(a === b) return 1;
+  var la = a.length, lb = b.length;
+  // لو الفرق كبير جداً = مختلفتان
+  if(Math.abs(la - lb) > 3) return 0;
+  var dp = [];
+  for(var i=0;i<=la;i++){
+    dp[i]=[i];
+    for(var j=1;j<=lb;j++){
+      dp[i][j] = i===0 ? j :
+        Math.min(dp[i-1][j]+1, dp[i][j-1]+1,
+          dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+    }
+  }
+  var dist = dp[la][lb];
+  var maxLen = Math.max(la, lb);
+  return 1 - (dist / maxLen);
+}
+
+// هل الكلمتان متطابقتان بشكل كافٍ؟
+function _wordsMatch(ref, spoken){
+  var nr = _normalize(ref);
+  var ns = _normalize(spoken||'');
+  if(!ns) return false;
+  if(nr === ns) return true;
+  // تسامح: لو التشابه أكتر من 70%
+  if(_similarity(nr, ns) >= 0.7) return true;
+  // تسامح في النهايات: لو أحدهما يبدأ بالآخر
+  var shorter = nr.length < ns.length ? nr : ns;
+  var longer  = nr.length < ns.length ? ns : nr;
+  if(longer.startsWith(shorter) && shorter.length >= 3) return true;
+  return false;
 }
 function _recHighlight(spoken, isFinal){
 const a = _recAyahs[_recIdx];
 if(!a) return;
-const refWords = a.text.split(' ');
-const spokenWords = spoken.trim().split(' ');
-refWords.forEach((w,i)=>{
-const el = document.getElementById('rw-'+i);
+var refWords = a.text.split(' ');
+var spokenWords = spoken.trim().split(' ');
+refWords.forEach(function(w,i){
+var el = document.getElementById('rw-'+i);
 if(!el) return;
-const normRef = _normalize(w);
-const normSpoken = _normalize(spokenWords[i]||'');
-if(!spokenWords[i]) { el.style.background=''; return; }
-if(normRef === normSpoken){ el.style.background='#c8f7c5'; el.style.color='#1a5c1a'; }
+if(!spokenWords[i]) { el.style.background=''; el.style.color=''; return; }
+if(_wordsMatch(w, spokenWords[i])){ el.style.background='#c8f7c5'; el.style.color='#1a5c1a'; }
 else if(isFinal){ el.style.background='#ffc8c8'; el.style.color='#8b0000'; }
-else { el.style.background='#fff3cd'; }
+else { el.style.background='#fff3cd'; el.style.color=''; }
 });
 }
 function _recAnalyze(spoken){
@@ -5181,15 +5218,15 @@ transLoadFromStorage();
 }, 200);
 };
 const _origOpenSurah = window.openSurah;
-</script> <div id="user-login-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center"> <div style="background:var(--white);border-radius:20px;padding:28px 24px;width:90%;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4)"> <div style="font-size:3rem;margin-bottom:10px">🕌</div> <h2 id="login-title" style="color:var(--primary);margin-bottom:6px;font-size:1.3rem">مرحباً بك</h2> <p id="login-sub" style="color:var(--gray);font-size:0.85rem;margin-bottom:20px">أدخل اسمك للبدء</p> <div style="display:flex;background:var(--light-gray);border-radius:10px;padding:3px;margin-bottom:18px"> <button id="login-tab-btn" onclick="switchLoginTab('login')"
+</script> <div id="user-login-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:9999;align-items:center;justify-content:center"> <div style="background:var(--white);border-radius:20px;padding:28px 24px;width:90%;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.4)"> <div style="font-size:3rem;margin-bottom:10px">🕌</div> <h2 id="login-title" style="color:var(--primary);margin-bottom:6px;font-size:1.3rem">Welcome</h2> <p id="login-sub" style="color:var(--gray);font-size:0.85rem;margin-bottom:20px">Enter your details to get started</p> <div style="display:flex;background:var(--light-gray);border-radius:10px;padding:3px;margin-bottom:18px"> <button id="login-tab-btn" onclick="switchLoginTab('login')"
 style="flex:1;padding:8px;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.88rem;font-weight:700;background:var(--primary);color:white;transition:0.2s">
 تسجيل الدخول
 </button> <button id="register-tab-btn" onclick="switchLoginTab('register')"
 style="flex:1;padding:8px;border:none;border-radius:8px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.88rem;font-weight:700;background:transparent;color:var(--gray);transition:0.2s">
 إنشاء حساب
-</button> </div> <div id="login-form"> <input id="login-username" type="text" placeholder="اسم المستخدم"
+</button> </div> <div id="login-form"> <input id="login-username" type="text" placeholder="Username"
 style="width:100%;padding:12px 16px;border:2px solid var(--light-gray);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.95rem;margin-bottom:10px;background:var(--white);color:var(--text);box-sizing:border-box"
-onkeypress="if(event.key==='Enter')doLogin()"> <input id="login-password" type="password" placeholder="كلمة المرور"
+onkeypress="if(event.key==='Enter')doLogin()"> <input id="login-password" type="password" placeholder="Password"
 style="width:100%;padding:12px 16px;border:2px solid var(--light-gray);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.95rem;margin-bottom:16px;background:var(--white);color:var(--text);box-sizing:border-box"
 onkeypress="if(event.key==='Enter')doLogin()"> <button onclick="doLogin()"
 style="width:100%;padding:13px;background:var(--primary);color:white;border:none;border-radius:10px;cursor:pointer;font-family:'Tajawal',sans-serif;font-weight:700;font-size:1rem;margin-bottom:10px">
@@ -5197,7 +5234,7 @@ style="width:100%;padding:13px;background:var(--primary);color:white;border:none
 </button> <button onclick="doGuestLogin()"
 style="width:100%;padding:10px;background:transparent;color:var(--gray);border:1px solid var(--light-gray);border-radius:10px;cursor:pointer;font-family:'Tajawal',sans-serif;font-size:0.88rem">
 دخول كضيف 👤
-</button> </div> <div id="register-form" style="display:none"> <input id="reg-name" type="text" placeholder="الاسم الكامل"
+</button> </div> <div id="register-form" style="display:none"> <input id="reg-name" type="text" placeholder="Full Name"
 style="width:100%;padding:12px 16px;border:2px solid var(--light-gray);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.95rem;margin-bottom:10px;background:var(--white);color:var(--text);box-sizing:border-box"> <input id="reg-username" type="text" placeholder="اسم المستخدم"
 style="width:100%;padding:12px 16px;border:2px solid var(--light-gray);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.95rem;margin-bottom:10px;background:var(--white);color:var(--text);box-sizing:border-box"> <input id="reg-password" type="password" placeholder="كلمة المرور"
 style="width:100%;padding:12px 16px;border:2px solid var(--light-gray);border-radius:10px;font-family:'Tajawal',sans-serif;font-size:0.95rem;margin-bottom:16px;background:var(--white);color:var(--text);box-sizing:border-box"> <button onclick="doRegister()"
@@ -5239,11 +5276,11 @@ el.textContent = msg;
 function doLogin(){
 var username = document.getElementById('login-username').value.trim();
 var password = document.getElementById('login-password').value.trim();
-if(!username){ showLoginError('أدخل اسم المستخدم'); return; }
-if(!password){ showLoginError('أدخل كلمة المرور'); return; }
+if(!username){ showLoginError('Please enter your username'); return; }
+if(!password){ showLoginError('Please enter your password'); return; }
 var users = getUsers();
-if(!users[username]){ showLoginError('اسم المستخدم غير موجود — أنشئ حساباً جديداً'); return; }
-if(users[username].password !== btoa(password)){ showLoginError('كلمة المرور غير صحيحة'); return; }
+if(!users[username]){ showLoginError('Username not found — please register first'); return; }
+if(users[username].password !== btoa(password)){ showLoginError('Incorrect password'); return; }
 users[username].lastLogin = new Date().toISOString();
 users[username].loginCount = (users[username].loginCount||0) + 1;
 saveUsers(users);
@@ -5253,11 +5290,11 @@ function doRegister(){
 var name = document.getElementById('reg-name').value.trim();
 var username = document.getElementById('reg-username').value.trim();
 var password = document.getElementById('reg-password').value.trim();
-if(!name){ showLoginError('أدخل اسمك الكامل'); return; }
-if(!username || username.length < 3){ showLoginError('اسم المستخدم يجب أن يكون 3 أحرف على الأقل'); return; }
-if(!password || password.length < 4){ showLoginError('كلمة المرور يجب أن تكون 4 أحرف على الأقل'); return; }
+if(!name){ showLoginError('Please enter your full name'); return; }
+if(!username || username.length < 3){ showLoginError('Username must be at least 3 characters'); return; }
+if(!password || password.length < 4){ showLoginError('Password must be at least 4 characters'); return; }
 var users = getUsers();
-if(users[username]){ showLoginError('اسم المستخدم موجود بالفعل'); return; }
+if(users[username]){ showLoginError('Username already exists'); return; }
 users[username] = {
 name: name,
 username: username,
